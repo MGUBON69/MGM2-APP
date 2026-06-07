@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO APP MGM2</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .header {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+        }
+
+        .content {
+            padding: 20px;
+            /* เพิ่ม padding-bottom ด้านล่างเพื่อไม่ให้ปุ่มตรงกลางด้านล่างไปบังเนื้อหาหลักตอนเลื่อนจอค่ะ */
+            padding-bottom: 70px; 
+            flex-grow: 1;
+        }
+
+        /* ปุ่มหลักเดิมในแอป */
+        .app-button {
+            display: block;
+            background-color: #f8f9fa;
+            color: #333;
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            border: 1px solid #e9ecef;
+        }
+
+        .app-button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .action-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* 👑 1. โค้ดสไตล์ (CSS) สำหรับปุ่มเล็กตรงกลางด้านล่าง */
+        .small-center-btn {
+            position: fixed;            /* ตรึงตำแหน่งไว้กับหน้าจอ */
+            bottom: 15px;               /* ระยะห่างจากขอบล่างสุด 15 พิกเซล */
+            left: 50%;                  /* ดันปุ่มมาที่กึ่งกลางหน้าจอจากขอบซ้าย */
+            transform: translateX(-50%); /* ดึงตัวปุ่มย้อนกลับมาครึ่งหนึ่งของตัวเองเพื่อให้จุดศูนย์กลางอยู่ตรงกลางเป๊ะๆ */
+            
+            /* ดึงดีไซน์ที่คล้ายกับปุ่มหลักเดิมมาใช้ */
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            white-space: nowrap;        /* ป้องกันตัวหนังสือตัดบรรทัดใหม่ */
+
+            /* ปรับขนาดให้เล็กกว่าปุ่มหลัก */
+            padding: 8px 16px;          /* ลดระยะขอบในให้แคบลงและกะทัดรัดขึ้น */
+            font-size: 12px;            /* ลดขนาดตัวอักษรลงเหลือ 12 พิกเซล */
+            transition: 0.3s;
+        }
+
+        .small-center-btn:hover {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-container">
+        
+        <div class="header">
+            <div class="logo" style="background-color: transparent;">
+                <img src="MG_profile.png" alt="MG Ubon Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+            </div>
+            <h2>MG UBONRATCHATHANI</h2>
+            <p>by M2 MOTORSPORT</p>
+        </div>
+
+        <div class="content">
+            <a href="https://lin.ee/Ov20t55" target="_blank" class="app-button">💬 ติดต่อเราผ่าน Line</a>
+            <a href="tel:0996193126" class="app-button">📞 โทรหาเราทันที</a>
+            <a href="https://maps.app.goo.gl/6FhfXwfj7hvhgRFj9?g_st=al" target="_blank" class="app-button">📍 ดูแผนที่โชว์รูม</a>
+            
+            <button class="app-button action-btn" onclick="togglePromo()">🎉โปรโมชั่นวันนี้</button>
+            <div id="promo-box" style="display:none; padding: 15px; background: #e2f0d9; border-radius: 10px; text-align: center; margin-top: 10px;">
+                <strong>สมาชิกรับส่วนลด 10%!</strong> สำหรับสินค้าที่ร่วมรายการ(ติดต่อแอดมิน)
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2026 My Business App. All Rights Reserved.
+        </div>
+
+        <!-- 👑 2. โค้ดโครงสร้าง (HTML) สำหรับปุ่มเล็กตรงกลางด้านล่าง -->
+        <!-- คุณชินอิจิสามารถเปลี่ยนชื่อปุ่มและลิงก์ใน href ได้ตามต้องการเลยค่ะ -->
+        <a href="register.html" class="small-center-btn">📝 สมัครสมาชิกที่นี่</a>
+
+    </div>
+
+    <script>
+        function togglePromo() {
+            var x = document.getElementById("promo-box");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
