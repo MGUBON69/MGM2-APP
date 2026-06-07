@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG UBONRATCHATHANI - ลิงก์เข้าสู่ระบบ</title>
+    <!-- เรียกใช้งาน Tailwind CSS v4 Engine สำหรับโครงสร้างการโหลดระดับพรีเมียม -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Sarabun', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-950 flex flex-col items-center justify-center min-h-screen p-4 text-white">
+
+    <!-- สถาปัตยกรรมการแสดงผลหน้า Gateway โหลดดิ้งแบรนด์หรูหรา -->
+    <div class="text-center space-y-6 max-w-sm w-full">
+        <!-- โลโก้จำลองหรือตัวโหลดแบบสตรีมมิ่ง Dynamic Spinner -->
+        <div class="relative w-16 h-16 mx-auto">
+            <div class="absolute inset-0 rounded-full border-4 border-gray-800/80"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-t-red-600 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+        </div>
+        
+        <!-- ข้อความแจ้งสถานะแก่ผู้ใช้งาน (UX Reassurance) -->
+        <div class="space-y-2">
+            <h1 class="text-lg font-medium tracking-wider text-gray-200">กำลังเข้าสู่ระบบแอปพลิเคชัน</h1>
+            <p class="text-xs text-red-500 font-bold tracking-widest uppercase">MG UBONRATCHATHANI</p>
+        </div>
+    </div>
+
+    <!-- สคริปต์สถาปัตยกรรมจัดการย้ายเส้นทางข้อมูลไปยังหน้า index2.html ที่มีอยู่จริงในระบบ -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // หน่วงเวลา UX 400 มิลลิวินาทีเพื่อให้เบราว์เซอร์ล้างแคชหน้าจอเก่า
+            // จากนั้นสั่งย้ายหน้าจอเข้าสู่หน้า index2.html ของคุณชินอิจิทันที
+            setTimeout(function() {
+                window.location.href = "index2.html";
+            }, 400);
+        });
+    </script>
+</body>
+</html>
