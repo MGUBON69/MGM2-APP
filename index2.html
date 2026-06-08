@@ -254,7 +254,6 @@
             });
         }
 
-        // ฟังก์ชันควบคุมเปิด-ปิดกล่องป๊อปอัพพรีเมียม
         function openModal(title, message, isSuccess = true) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalMessage').innerHTML = message;
@@ -279,7 +278,7 @@
             setTimeout(() => { modal.classList.add('hidden'); }, 200);
         }
 
-        // ฟังก์ชันรับข้อมูลฟอร์มหน้าแรกและจัดการสถานะเปลี่ยนหน้าแบบ SPA
+        // ฟังก์ชันเมื่อกดลงทะเบียนหน้าแรก
         function handleSubmit(event) {
             event.preventDefault();
             const fullName = document.getElementById('fullName').value.trim();
@@ -290,25 +289,31 @@
                 return;
             }
 
-            // จัดเก็บข้อมูลเฟสแรกเข้าคลังเบราว์เซอร์
+            // บันทึกสถานะลงคลังข้อมูลเบราว์เซอร์อย่างถาวร
             localStorage.setItem('mg_user_name', fullName);
             localStorage.setItem('mg_user_phone', phoneNumber);
+            localStorage.setItem('mg_current_view', 'dashboard'); // บันทึกว่าปัจจุบันอยู่หน้า 2
 
-            // แมปปิ้งแสดงผลข้อมูลไปที่กล่องโปรไฟล์มุมขวาบนอย่างสมบูรณ์แบบ
-            document.getElementById('badgeName').innerText = fullName;
-            document.getElementById('badgePhone').innerText = phoneNumber;
-            if(fullName.length > 0) {
-                document.getElementById('userAvatar').innerText = fullName.charAt(0).toUpperCase();
-            }
+            // เรนเดอร์ข้อมูลขึ้นไปที่กล่องโปรไฟล์มุมขวาบน
+            renderBadge(fullName, phoneNumber);
 
-            // สลับสถานะหน้าจอไปขั้นตอนความปลอดภัยทันทีค๊า
+            // สลับหน้าจอ
             document.getElementById('registerView').classList.add('hidden');
             document.getElementById('dashboardView').classList.remove('hidden');
             
             document.getElementById('registerForm').reset();
         }
 
-        // ฟังก์ชันประมวลผลเซฟบันทึกรหัสผ่านและเชื่อมโยงข้อมูลอีเมล
+        // ฟังก์ชันช่วยเรนเดอร์ข้อมูลกล่อง Badge ขวาบน
+        function renderBadge(name, phone) {
+            document.getElementById('badgeName').innerText = name;
+            document.getElementById('badgePhone').innerText = phone;
+            if(name.length > 0) {
+                document.getElementById('userAvatar').innerText = name.charAt(0).toUpperCase();
+            }
+        }
+
+        // ฟังก์ชันประมวลผลเซฟบันทึกรหัสผ่าน
         function handleSecuritySubmit(event) {
             event.preventDefault();
             const email = document.getElementById('userEmail').value.trim();
@@ -320,16 +325,14 @@
                 return;
             }
 
-            // ทำการเชื่อมโยงจับคู่ข้อมูลทั้งหมด (Data Linking Schema)
             localStorage.setItem('mg_user_email', email);
             localStorage.setItem('mg_user_password', pass);
 
-            const successMessage = `🔒 ระบบได้ผูกข้อมูลบัญชีของ <b>คุณ ${name}</b> เข้ากับระบบเสร็จสิ้นแล้วค๊า!<br><br><span class="text-xs text-gray-400">ข้อมูลเชื่อมโยงสำเร็จ:<br>📧 Email: ${email}<br>🔑 รหัสผ่านได้รับการเข้ารหัสความปลอดภัยเรียบร้อยแล้วค่ะ</span>`;
-            
+            const successMessage = `🔒 ระบบได้ผูกข้อมูลบัญชีของ <b>คุณ ${name}</b> เข้ากับระบบเสร็จสิ้นแล้วค๊า!<br><br><span class="text-xs text-gray-400">ข้อมูลเชื่อมโยงสำเร็จ:<br>📧 Email: ${email}<br>🔑 รหัสผ่านปลอดภัยเรียบร้อยค่ะ</span>`;
             openModal("MG UBONRATCHATHANI", successMessage, true);
         }
 
-        // ฟังก์ชันควบคุมการทำงานของกลไกกรณี "ลืมรหัสผ่าน" (Forgot Password Scenario)
+        // ฟังก์ชันจำลองลืมรหัสผ่าน
         function triggerForgotPassword() {
             const currentEmail = document.getElementById('userEmail').value.trim();
             const name = localStorage.getItem('mg_user_name') || "ผู้สมัคร";
@@ -339,11 +342,11 @@
                 return;
             }
 
-            const forgotMessage = `📧 <b>ส่งลิงก์ลืมรหัสผ่านเรียบร้อย!</b><br><br>ระบบอัตโนมัติได้ส่งคู่มือตั้งค่ารหัสผ่านใหม่ ไปยังอีเมล <b>${currentEmail}</b> ของคุณ ${name} เรียบร้อยแล้วค๊า กรุณาเช็คที่กล่องจดหมายขาเข้าค่ะ`;
+            const forgotMessage = `📧 <b>ส่งลิงก์ลืมรหัสผ่านเรียบร้อย!</b><br><br>ระบบอัตโนมัติได้ส่งคู่มือตั้งค่ารหัสผ่านใหม่ ไปยังอีเมล <b>${currentEmail}</b> ของคุณ ${name} เรียบร้อยแล้วค๊า`;
             openModal("Forgot Password System", forgotMessage, true);
         }
 
-        // ฟังก์ชันคลิกปุ่มเปิด-ปิดตาดูรหัสผ่าน
+        // ฟังก์ชันเปิด-ปิดตาดูรหัสผ่าน
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('userPassword');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -356,11 +359,29 @@
             }
         }
 
-        // ฟังก์ชันสลับสถานะกลับมาหน้าแรก
+        // ฟังก์ชันเคลียร์ค่าเพื่อย้อนกลับไปหน้าลงทะเบียนสำหรับทดสอบระบบใหม่
         function navigateBackToRegister() {
+            localStorage.removeItem('mg_current_view'); // ลบสถานะหน้าจอเดิม
             document.getElementById('dashboardView').classList.add('hidden');
             document.getElementById('registerView').classList.remove('hidden');
         }
+
+        /* 🚀 ระบบหัวใจหลัก: ตรวจสอบและจดจำหน้าจอล่าสุดเมื่อมีการกดรีเฟรชหน้าเว็บ (F5) */
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('mg_user_name');
+            const savedPhone = localStorage.getItem('mg_user_phone');
+            const currentView = localStorage.getItem('mg_current_view');
+            
+            // ถ้าตรวจพบว่าเคยลงทะเบียนแล้ว และล่าสุดกำลังทำงานอยู่ที่หน้า 2 (Dashboard)
+            if (savedName && savedPhone && currentView === 'dashboard') {
+                // 1. นำข้อมูลมาเรนเดอร์ล็อกไว้ที่กล่อง Badge ขวาบนทันที
+                renderBadge(savedName, savedPhone);
+                
+                // 2. บังคับล็อกหน้าจอเปิดค้างไว้ที่หน้าความปลอดภัยบัญชีทันที ไม่ให้เด้งกลับหน้าลงทะเบียน
+                document.getElementById('registerView').classList.add('hidden');
+                document.getElementById('dashboardView').classList.remove('hidden');
+            }
+        });
     </script>
 </body>
 </html>
