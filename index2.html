@@ -351,21 +351,62 @@
             switchView('securityView');
         }
 
-        function handleForgotPasswordTrigger() {
-            const currentEmail = document.getElementById('userEmail').value.trim();
-            
-            if (currentEmail === "") {
-                openModal("ระบบกู้คืนรหัสผ่าน", "⚠️ กรุณากรอกอีเมลในช่องด้านบนก่อน เพื่อให้ระบบส่งหมายเลขยืนยันไปถูกที่ค๊า", false);
-                return;
-            }
+function handleForgotPasswordTrigger() {
+    const currentEmail = document.getElementById('userEmail').value.trim();
+    
+    if (currentEmail === "") {
+        openModal("ระบบกู้คืนรหัสผ่าน", "⚠️ กรุณากรอกอีเมลในช่องด้านบนก่อน เพื่อให้ระบบส่งหมายเลขยืนยันไปถูกที่ค๊า", false);
+        return;
+    }
 
-            const forgotBtn = document.querySelector("button[onclick='handleForgotPasswordTrigger()']");
-            const originalBtnText = forgotBtn ? forgotBtn.innerHTML : "ส่ง OTP";
-            if (forgotBtn) {
-                forgotBtn.disabled = true;
-                forgotBtn.innerHTML = `⏳`;
-            }
+    const forgotBtn = document.querySelector("button[onclick='handleForgotPasswordTrigger()']");
+    const originalBtnText = forgotBtn ? forgotBtn.innerHTML : "ส่ง OTP";
+    if (forgotBtn) {
+        forgotBtn.disabled = true;
+        forgotBtn.innerHTML = `⏳`;
+    }
 
+    // สุ่มเลข OTP 4 หลักจากฝั่งแอปหน้าบ้าน
+    simulatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+    
+    const otpSection = document.getElementById('otpSection');
+    if (otpSection) {
+        otpSection.classList.remove('hidden');
+    }
+
+    // 🚨 [แก้ไขจุดนี้] ใส่ URL ตัวจริงของไฟล์ PHP ที่คุณชินอิจิเอาไปอัปโหลดไว้บนโฮสติ้งอื่นค๊า
+    const PHP_BACKEND_URL = "https://ชื่อโดเมนโฮสติ้งอื่นของคุณชินอิจิ.com/send-otp.php"; 
+
+    // ยิงเรียกหา PHP หลังบ้านของเรา โดยส่งไปแค่เมลปลายทางและรหัส OTP ที่สุ่มได้
+    fetch(PHP_BACKEND_URL, {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: currentEmail,
+            otp: simulatedOTP
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            openModal("Forgot Password System", `📧 ส่งรหัส OTP สำเร็จค๊า! ลองตรวจสอบกล่องข้อความที่ <b>${currentEmail}</b> น้า`, true);
+        } else {
+            throw new Error('Backend Server Error');
+        }
+    })
+    .catch(error => {
+        console.error('Error Connecting to PHP Backend:', error);
+        // หากเชื่อมต่อหลังบ้าน PHP ไม่สำเร็จหรือโฮสติ้งล่ม จะสลับเข้าโหมดจำลองแบบมีตัวเลขบอกบนจอเพื่อความลื่นไหล
+        openModal("Forgot Password System", `⚠️ ระบบส่งเมลจริงผ่าน PHP ถูกบล็อกหรือมีข้อผิดพลาดค๊า คิมสลับเข้าระบบจำลองแบบสำรองให้แทนนะค๊า:<br><br><span class="text-xs bg-gray-950 p-2 rounded-lg block border border-gray-800 text-center font-mono tracking-widest text-red-500 font-bold">รหัสสำรองคือ: ${simulatedOTP}</span>`, false);
+    })
+    .finally(() => {
+        if (forgotBtn) {
+            forgotBtn.disabled = false;
+            forgotBtn.innerHTML = originalBtnText;
+        }
+    });
+}
             simulatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
             
             const otpSection = document.getElementById('otpSection');
@@ -374,7 +415,7 @@
             }
 
             // ⚠️ ใส่ API Key ของ Brevo ตัวจริงที่คุณคัดลอกมาจากขั้นตอนก่อนหน้านี้ตรงนี้ค๊า!
-            const BREVO_API_KEY = "xsmtpsib-18def84782cb7dbde4774497b41c693933a6c6204bb4c9d67e1eef301218d68b-mDf0LPOIefPOaQpF"; 
+            const BREVO_API_KEY = ""; 
 
             const emailData = {
                 sender: { name: "MG M2 MOTORSPORT", email: "noreply@mg-ubon.com" },
