@@ -34,7 +34,7 @@
             border: 1px solid #1f2937 !important;
         }
         
-        /* ล็อคโครงสร้างชุดคำสั่งช่องกรอกข้อมูลให้เท่ากันทุกช่อง */
+        /* ล็อคโครงสร้างชุดคำสั่งช่องกรอกข้อมูลให้เท่ากันทุกช่องเพื่อความพรีเมียม */
         .custom-input {
             background-color: #030712 !important;
             border: 1px solid #27272a !important;
@@ -57,7 +57,7 @@
             color: #4b5563 !important;
         }
         
-        /* แถบพื้นหลังเรืองแสงนีออนสไตล์สปอร์ตพรีเมียม */
+        /* แถบพื้นหลังเรืองแสงนีออนสไตล์สปอร์ตพรีเมียมหน้าแรก */
         .neon-banner {
             background: linear-gradient(180deg, #111827 0%, #070a13 100%);
             position: relative;
@@ -109,7 +109,7 @@
                 </div>
 
                 <form id="registerForm" class="space-y-5" onsubmit="handleSubmit(event)">
-                    <!-- ช่องกรอกชื่อ -->
+                    <!-- ช่องกรอกชื่อ-นามสกุล สีดำมนสวยงาม -->
                     <div class="space-y-2">
                         <label class="text-xs font-medium text-gray-300 flex items-center">
                             ชื่อ - นามสกุล <span class="text-red-500 ml-1">*</span>
@@ -117,7 +117,7 @@
                         <input type="text" required id="fullName" placeholder="คุณสมชาย ใจดี" class="custom-input">
                     </div>
 
-                    <!-- ช่องกรอกเบอร์โทร -->
+                    <!-- ช่องกรอกเบอร์โทรศัพท์ สีดำมนสวยงาม -->
                     <div class="space-y-2">
                         <label class="text-xs font-medium text-gray-300 flex items-center">
                             เบอร์โทรศัพท์ติดต่อ <span class="text-red-500 ml-1">*</span>
@@ -137,56 +137,43 @@
     </div>
 
 
-    <!-- ================= หน้าที่ 2: หน้าถัดไปหลังลงทะเบียนเสร็จ (DASHBOARD / ACTION VIEW) ================= -->
-    <div id="dashboardView" class="w-full flex flex-col items-center justify-start hidden animate-[fadeIn_0.4s_ease-out]">
+    <!-- ================= หน้าที่ 2: หน้าถัดไปหลังลงทะเบียนเสร็จ (ACTION VIEW) ================= -->
+    <!-- ปรับปรุงสถาปัตยกรรมหัวเว็บบนหน้า 2 ให้แสดงแบรนด์และจัดวางกล่องโปรไฟล์มุมขวาบนแบบงดงามลงตัว -->
+    <div id="dashboardView" class="w-full flex flex-col items-center justify-start hidden animate-[fadeIn_0.3s_ease-out]">
         
-        <!-- แถบด้านบนแสดงโลโก้ฝั่งซ้าย และ กล่องข้อมูลลูกค้ามุมขวาบนตามสั่งการ -->
-        <header class="w-full max-w-md px-6 py-4 flex items-center justify-between border-b border-gray-800/80 bg-gray-900/40 backdrop-blur-md sticky top-0 z-40">
-            <!-- ฝั่งซ้าย: โลโก้แบรนด์ย่อพรีเมียม -->
+        <!-- Header Bar ด้านบน: จัดวางโลโก้ซ้าย และ ข้อมูลสรุปลูกค้าขวาให้สมดุลหรูหรา -->
+        <header class="w-full max-w-md px-5 py-4 flex items-center justify-between border-b border-gray-800/60 bg-gray-900/30 backdrop-blur-md sticky top-0 z-40">
+            <!-- ฝั่งซ้าย: โลโก้แบรนด์ย่อสไตล์พรีเมียม -->
             <div class="flex items-center space-x-2">
-                <img src="MG_profile.png" alt="MG Logo" class="w-9 h-9 rounded-xl border border-gray-800 bg-white p-0.5">
-                <span class="text-xs font-bold text-white tracking-tight">MG M2</span>
+                <img src="MG_profile.png" alt="MG Logo" class="w-8 h-8 rounded-xl border border-gray-800 bg-white p-0.5">
+                <span class="text-xs font-bold text-white tracking-wider">MG M2</span>
             </div>
             
-            <!-- ฝั่งขวา: กล่องข้อมูลสรุปลูกค้าที่ลงทะเบียนเรียบร้อยแล้ว (Top-Right Floating Badge) -->
-            <div class="flex items-center space-x-2.5 bg-gray-950/80 border border-gray-800 rounded-2xl p-1.5 pr-3 shadow-inner max-w-[200px]">
-                <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-red-900/20" id="userAvatar">
-                    M
+            <!-- ฝั่งขวา: กล่องข้อมูลลูกค้าที่ปรับแต่งสัดส่วนและการจัดวางใหม่ให้อ่านง่ายและพรีเมียมขึ้นเด่นชัด -->
+            <div class="flex items-center space-x-3 bg-gray-950/90 border border-gray-800 rounded-2xl p-2 pl-2 pr-4 shadow-xl max-w-[220px]">
+                <!-- รูปวงกลมตัวอักษรย่อแสดงเอกลักษณ์ -->
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-red-900/30 shrink-0" id="userAvatar">
+                    น
                 </div>
-                <div class="flex flex-col text-left overflow-hidden">
-                    <span class="text-[11px] font-semibold text-gray-200 truncate" id="badgeName">คุณลูกค้า</span>
-                    <span class="text-[9px] text-gray-500 font-medium tracking-wide" id="badgePhone">08x-xxxxxxx</span>
+                <!-- รายละเอียดข้อมูล ชื่อ และ เบอร์โทรศัพท์ จัดช่องไฟสม่ำเสมอ -->
+                <div class="flex flex-col text-left overflow-hidden space-y-0.5">
+                    <span class="text-xs font-bold text-gray-100 truncate tracking-wide" id="badgeName">นาย เลิศฤทธิ์ สังขะมณี</span>
+                    <span class="text-[10px] text-gray-400 font-medium tracking-wider" id="badgePhone">0996193126</span>
                 </div>
             </div>
         </header>
 
-        <!-- พื้นที่หลักกึ่งกลางหน้าจอสำหรับปุ่มคำสั่งถัดไป (Next Action Main Container) -->
-        <main class="w-full max-w-md px-6 py-12 flex flex-col items-center justify-center text-center space-y-8">
+        <!-- พื้นที่หลักกึ่งกลางหน้าจอแอปพลิเคชัน: เคลียร์ข้อความตรงกลางออกทั้งหมดเรียบร้อยตามสั่งการ เพื่อเตรียมรับโครงสร้างถัดไป -->
+        <main class="w-full max-w-md px-6 py-20 flex flex-col items-center justify-center text-center">
             
-            <!-- ไอคอนต้อนรับสำเร็จพรีเมียม -->
-            <div class="space-y-3">
-                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-950/50 border-2 border-red-500/30 text-red-500 shadow-xl shadow-red-950/20">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.36 1.243.577 1.835l-3.978 2.89a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.978-2.89a1 1 0 00-1.176 0l-3.978 2.89c-.783.57-1.837-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.492 11.317c-.783-.593-.384-1.835.577-1.835h4.907a1 1 0 00.95-.69l1.519-4.674z"></path>
-                    </svg>
-                </div>
-                <div class="space-y-1">
-                    <h3 class="text-xl font-bold text-white tracking-wide">ยินดีต้อนรับสู่ครอบครัว MG</h3>
-                    <p class="text-xs text-gray-400">ระบบเปิดสิทธิ์การใช้งานแอปพลิเคชันอย่างเป็นทางการแล้ว</p>
-                </div>
-            </div>
-
-            <!-- การ์ดเปล่า/พื้นที่สำหรับปุ่มคำสั่งต่อไปของคุณชินอิจิ -->
-            <div class="w-full premium-card rounded-2xl p-6 border-dashed border-gray-800 bg-gray-900/20 text-center space-y-4">
-                <p class="text-xs text-gray-500 leading-relaxed">
-                    [ พื้นที่ว่างสถาปัตยกรรมหลัก ]<br>พร้อมรับคำสั่งสร้างระบบหรือปุ่มขั้นตอนถัดไปจากคุณชินอิจิแล้วค๊า
-                </p>
-                
-                <!-- ตัวอย่างปุ่มย้อนกลับระบบ (สามารถนำออกหรือเปลี่ยนเป็นฟังก์ชันอื่นได้ในอนาคต) -->
-                <button onclick="navigateBackToRegister()" class="text-xs text-red-500 hover:text-red-400 font-medium underline cursor-pointer transition-colors duration-200">
-                    ย้อนกลับไปหน้าลงทะเบียน
+            <!-- ไม่เอาข้อความตรงกลาง: พื้นที่ว่างบริสุทธิ์เพื่อรองรับปุ่มคำสั่งใหม่ของคุณชินอิจิในอนาคต -->
+            <div class="w-full py-12 flex flex-col items-center justify-center">
+                <!-- สามารถกดจำลองย้อนกลับเพื่อทดสอบระบบเติมข้อมูลได้จากลิงก์ด้านล่างนี้ค๊า -->
+                <button onclick="navigateBackToRegister()" class="text-[11px] text-gray-600 hover:text-red-500 font-medium tracking-wide transition-colors duration-200 uppercase underline cursor-pointer">
+                    [ Back to registration for testing ]
                 </button>
             </div>
+            
         </main>
     </div>
 
@@ -203,54 +190,53 @@
             });
         }
 
-        // ฟังก์ชันประมวลผลฟอร์มและการนำทางเปลี่ยนหน้าแบบ SPA
+        // ฟังก์ชันรับข้อมูลฟอร์มและจัดการสถานะเปลี่ยนหน้าแบบ SPA
         function handleSubmit(event) {
             event.preventDefault();
-            const fullName = document.getElementById('fullName').value;
-            const phoneNumber = document.getElementById('phoneNumber').value;
+            const fullName = document.getElementById('fullName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
 
-            if(fullName.trim() === "" || phoneNumber.trim() === "") {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วนค๊า");
+            if(fullName === "" || phoneNumber === "") {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วนค๊าคุณชินอิจิ");
                 return;
             }
 
-            // 1. จัดเก็บข้อมูลลงฐานข้อมูลเบราว์เซอร์ชั่วคราว (State Management)
+            // 1. เก็บ State ข้อมูลลงเบราว์เซอร์
             localStorage.setItem('mg_user_name', fullName);
             localStorage.setItem('mg_user_phone', phoneNumber);
 
-            // 2. ดึงข้อมูลไปแสดงที่กล่องโปรไฟล์มุมขวาบนของหน้าถัดไป
+            // 2. ส่งค่าไปจัดวางที่กล่องโปรไฟล์ Badge มุมขวาบน
             document.getElementById('badgeName').innerText = fullName;
             document.getElementById('badgePhone').innerText = phoneNumber;
             
-            // ตั้งค่าอักษรตัวแรกของชื่อเล่นบนวงกลมรูปภาพย่อ
+            // ดึงอักษรตัวแรกมาใส่ในสัญลักษณ์ Icon หน้าชื่อ
             if(fullName.length > 0) {
-                document.getElementById('userAvatar').innerText = fullName.trim().charAt(0).toUpperCase();
+                document.getElementById('userAvatar').innerText = fullName.charAt(0).toUpperCase();
             }
 
-            // 3. ปรับเปลี่ยน State หน้าจอ (นำทางไปหน้า 2 ทันทีโดยไม่ต้องโหลดหน้าเว็บใหม่)
+            // 3. เปลี่ยน State หน้าต่างแอปพลิเคชันไปหน้า 2 ทันทีอย่างลื่นไหล
             document.getElementById('registerView').classList.add('hidden');
             document.getElementById('dashboardView').classList.remove('hidden');
             
-            // รีเซ็ตฟอร์มเก่าเพื่อความปลอดภัย
+            // เคลียร์ค่าในช่องอินพุตให้สะอาดเรียบร้อย
             document.getElementById('registerForm').reset();
         }
 
-        // ฟังก์ชันระบบรองรับการกดกลับมาหน้าแรก
+        // ฟังก์ชันสลับสถานะกลับมาหน้าลงทะเบียนเพื่อตรวจสอบระบบใหม่
         function navigateBackToRegister() {
             document.getElementById('dashboardView').classList.add('hidden');
             document.getElementById('registerView').classList.remove('hidden');
         }
 
-        // ตรวจสอบสถานะโหลดหน้าจอ (ป้องกันการหลุดหน้ากรณีมีการรีเฟรชชั่วคราว)
+        // ป้องกันการหลุดสถานะเมื่อผู้ใช้งานเผลอกดรีเฟรชหน้าจอชั่วคราว
         window.addEventListener('DOMContentLoaded', () => {
             const savedName = localStorage.getItem('mg_user_name');
             const savedPhone = localStorage.getItem('mg_user_phone');
             
-            // ถ้าเคยลงทะเบียนไว้แล้ว สามารถเลือกล็อกอินเข้าหน้านั้นอัตโนมัติได้ (หรือเปิดหน้าลงทะเบียนใหม่เป็นค่าหลัก)
-            if(savedName && savedPhone && document.getElementById('registerView').classList.contains('hidden')) {
+            if(savedName && savedPhone && !document.getElementById('dashboardView').classList.contains('hidden')) {
                 document.getElementById('badgeName').innerText = savedName;
                 document.getElementById('badgePhone').innerText = savedPhone;
-                document.getElementById('userAvatar').innerText = savedName.trim().charAt(0).toUpperCase();
+                document.getElementById('userAvatar').innerText = savedName.charAt(0).toUpperCase();
             }
         });
     </script>
