@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MG UBONRATCHATHANI - Register Application</title>
     
-    <!-- ลงทะเบียนรหัสการเป็นแอปพลิเคชันสมาร์ทโฟน PWA สากล -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#dc2626">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- เรียกใช้งาน Tailwind CSS v4 Engine ประมวลผลดีไซน์แบบ Real-time -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
     <style>
@@ -73,13 +71,22 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--mg-red), transparent);
         }
+
+        /* ตารางสไตล์ดั้งเดิมที่เสถียรที่สุดเพื่อจัดเรียงกล่องข้อมูลลูกค้ามุมขวาบนให้สมบูรณ์แบบ */
+        .badge-table {
+            display: table !important;
+            width: auto !important;
+            border-collapse: separate !important;
+        }
+        .badge-cell {
+            display: table-cell !important;
+            vertical-align: middle !important;
+        }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col items-center justify-start p-0 antialiased relative">
 
-    <!-- ================= หน้าที่ 1: หน้าฟอร์มลงทะเบียน (REGISTER VIEW) ================= -->
     <div id="registerView" class="w-full flex flex-col items-center justify-start">
-        <!-- ส่วนหัวแอปพลิเคชัน โลโก้ศูนย์กลาง พรีเมียมคมชัด -->
         <header class="relative w-full max-w-md premium-card shadow-2xl neon-banner px-6 py-8 text-center flex flex-col items-center justify-center space-y-3">
             <div class="relative">
                 <img src="MG_profile.png" alt="MG Logo" class="w-20 h-20 rounded-2xl border-2 border-gray-800 bg-white shadow-xl p-1 mx-auto">
@@ -95,7 +102,6 @@
             </div>
         </header>
 
-        <!-- ส่วนเนื้อหาฟอร์มลงทะเบียนสมัครสมาชิก -->
         <main class="w-full max-w-md px-6 py-6">
             <div class="premium-card rounded-3xl p-6 shadow-2xl space-y-6">
                 <div class="space-y-1.5 border-b border-gray-800/60 pb-4">
@@ -109,7 +115,6 @@
                 </div>
 
                 <form id="registerForm" class="space-y-5" onsubmit="handleSubmit(event)">
-                    <!-- ช่องกรอกชื่อ-นามสกุล สีดำมนสวยงาม -->
                     <div class="space-y-2">
                         <label class="text-xs font-medium text-gray-300 flex items-center">
                             ชื่อ - นามสกุล <span class="text-red-500 ml-1">*</span>
@@ -117,7 +122,6 @@
                         <input type="text" required id="fullName" placeholder="คุณสมชาย ใจดี" class="custom-input">
                     </div>
 
-                    <!-- ช่องกรอกเบอร์โทรศัพท์ สีดำมนสวยงาม -->
                     <div class="space-y-2">
                         <label class="text-xs font-medium text-gray-300 flex items-center">
                             เบอร์โทรศัพท์ติดต่อ <span class="text-red-500 ml-1">*</span>
@@ -125,7 +129,6 @@
                         <input type="tel" required id="phoneNumber" pattern="[0-9]{9,10}" placeholder="0812345678" class="custom-input">
                     </div>
 
-                    <!-- ปุ่มกดส่งข้อมูล -->
                     <div class="pt-2">
                         <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold py-4 px-4 rounded-xl text-sm transition-all duration-300 transform active:scale-[0.99] shadow-lg shadow-red-900/40 cursor-pointer">
                             ส่งข้อมูลลงทะเบียน
@@ -137,52 +140,36 @@
     </div>
 
 
-    <!-- ================= หน้าที่ 2: หน้าถัดไปหลังลงทะเบียนเสร็จ (ACTION VIEW) ================= -->
-    <!-- ปรับปรุงสถาปัตยกรรมหัวเว็บบนหน้า 2 ให้แสดงแบรนด์และจัดวางกล่องโปรไฟล์มุมขวาบนแบบงดงามลงตัว -->
     <div id="dashboardView" class="w-full flex flex-col items-center justify-start hidden animate-[fadeIn_0.3s_ease-out]">
         
-        <!-- Header Bar ด้านบน: จัดวางโลโก้ซ้าย และ ข้อมูลสรุปลูกค้าขวาให้สมดุลหรูหรา -->
-        <header class="w-full max-w-md px-5 py-4 flex items-center justify-between border-b border-gray-800/60 bg-gray-900/30 backdrop-blur-md sticky top-0 z-40">
-            <!-- ฝั่งซ้าย: โลโก้แบรนด์ย่อสไตล์พรีเมียม -->
+        <header class="w-full max-w-md px-4 py-4 flex items-center justify-between border-b border-gray-800/60 bg-gray-900/40 backdrop-blur-md sticky top-0 z-40">
             <div class="flex items-center space-x-2">
-                <img src="MG_profile.png" alt="MG Logo" class="w-8 h-8 rounded-xl border border-gray-800 bg-white p-0.5">
-                <span class="text-xs font-bold text-white tracking-wider">MG M2</span>
+                <img src="MG_profile.png" alt="MG Logo" class="w-8 h-8 rounded-xl border border-gray-800 bg-white p-0.5 block">
+                <span class="text-xs font-bold text-white tracking-wider block">MG M2</span>
             </div>
             
-            <!-- ฝั่งขวา: กล่องข้อมูลลูกค้าที่ปรับแต่งสัดส่วนและการจัดวางใหม่ให้อ่านง่ายและพรีเมียมขึ้นเด่นชัด -->
-            <div class="flex items-center space-x-3 bg-gray-950/90 border border-gray-800 rounded-2xl p-2 pl-2 pr-4 shadow-xl max-w-[220px]">
-                <!-- รูปวงกลมตัวอักษรย่อแสดงเอกลักษณ์ -->
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-red-900/30 shrink-0" id="userAvatar">
-                    น
+            <div class="bg-gray-950/90 border border-gray-800 rounded-2xl p-2 pr-4 shadow-xl max-w-[240px] badge-table">
+                <div class="badge-cell">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white text-xs font-bold shadow-md shadow-red-900/30 flex items-center justify-center text-center mr-3 shrink-0" id="userAvatar" style="line-height: 1 !important;">
+                        น
+                    </div>
                 </div>
-                <!-- รายละเอียดข้อมูล ชื่อ และ เบอร์โทรศัพท์ จัดช่องไฟสม่ำเสมอ -->
-                <div class="flex flex-col text-left overflow-hidden space-y-0.5">
-                    <span class="text-xs font-bold text-gray-100 truncate tracking-wide" id="badgeName">นาย เลิศฤทธิ์ สังขะมณี</span>
-                    <span class="text-[10px] text-gray-400 font-medium tracking-wider" id="badgePhone">0996193126</span>
+                <div class="badge-cell text-left overflow-hidden">
+                    <div class="text-xs font-bold text-gray-100 truncate tracking-wide mb-0.5" id="badgeName" style="max-width: 160px;">นาย เลิศฤทธิ์ สังขะมณี</div>
+                    <div class="text-[10px] text-gray-400 font-medium tracking-wider" id="badgePhone">0996193126</div>
                 </div>
             </div>
         </header>
 
-        <!-- พื้นที่หลักกึ่งกลางหน้าจอแอปพลิเคชัน: เคลียร์ข้อความตรงกลางออกทั้งหมดเรียบร้อยตามสั่งการ เพื่อเตรียมรับโครงสร้างถัดไป -->
-        <main class="w-full max-w-md px-6 py-20 flex flex-col items-center justify-center text-center">
+        <main class="w-full max-w-md px-6 py-24 flex flex-col items-center justify-center text-center">
             
-            <!-- ไม่เอาข้อความตรงกลาง: พื้นที่ว่างบริสุทธิ์เพื่อรองรับปุ่มคำสั่งใหม่ของคุณชินอิจิในอนาคต -->
-            <div class="w-full py-12 flex flex-col items-center justify-center">
-                <!-- สามารถกดจำลองย้อนกลับเพื่อทดสอบระบบเติมข้อมูลได้จากลิงก์ด้านล่างนี้ค๊า -->
-                <button onclick="navigateBackToRegister()" class="text-[11px] text-gray-600 hover:text-red-500 font-medium tracking-wide transition-colors duration-200 uppercase underline cursor-pointer">
-                    [ Back to registration for testing ]
-                </button>
-            </div>
-            
-        </main>
+            </main>
     </div>
 
-    <!-- ส่วนท้ายแอปพลิเคชัน -->
     <footer class="w-full max-w-md text-center py-6 text-[10px] text-gray-600 tracking-wider mt-auto z-10">
         SECURE PWA APPLICATION © 2026 MG UBONRATCHATHANI
     </footer>
 
-    <!-- สคริปต์สถาปัตยกรรมภายในควบคุมแอปพลิเคชัน (JavaScript Controller) -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
@@ -197,38 +184,32 @@
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
 
             if(fullName === "" || phoneNumber === "") {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วนค๊าคุณชินอิจิ");
+                alert("กรุณากรอกข้อมูลให้ครบถ้วนค๊า");
                 return;
             }
 
-            // 1. เก็บ State ข้อมูลลงเบราว์เซอร์
+            // 1. จัดเก็บข้อมูลลงฐานข้อมูลเบราว์เซอร์ชั่วคราว
             localStorage.setItem('mg_user_name', fullName);
             localStorage.setItem('mg_user_phone', phoneNumber);
 
-            // 2. ส่งค่าไปจัดวางที่กล่องโปรไฟล์ Badge มุมขวาบน
+            // 2. จัดส่งข้อมูลไปยังกล่องโปรไฟล์ชุดปรับปรุงพรีเมียมมุมขวาบน
             document.getElementById('badgeName').innerText = fullName;
             document.getElementById('badgePhone').innerText = phoneNumber;
             
-            // ดึงอักษรตัวแรกมาใส่ในสัญลักษณ์ Icon หน้าชื่อ
+            // ประมวลผลดึงตัวอักษรตัวแรกสุดมาโชว์ในวงกลมให้สวยงามกึ่งกลาง
             if(fullName.length > 0) {
                 document.getElementById('userAvatar').innerText = fullName.charAt(0).toUpperCase();
             }
 
-            // 3. เปลี่ยน State หน้าต่างแอปพลิเคชันไปหน้า 2 ทันทีอย่างลื่นไหล
+            // 3. สลับสถานะหน้าต่างแอปพลิเคชันไปยังหน้าถัดไปอย่างไร้รอยต่อ
             document.getElementById('registerView').classList.add('hidden');
             document.getElementById('dashboardView').classList.remove('hidden');
             
-            // เคลียร์ค่าในช่องอินพุตให้สะอาดเรียบร้อย
+            // รีเซ็ตล้างฟอร์มกรอกข้อมูลหน้าแรกเพื่อความสะอาดปลอดภัย
             document.getElementById('registerForm').reset();
         }
 
-        // ฟังก์ชันสลับสถานะกลับมาหน้าลงทะเบียนเพื่อตรวจสอบระบบใหม่
-        function navigateBackToRegister() {
-            document.getElementById('dashboardView').classList.add('hidden');
-            document.getElementById('registerView').classList.remove('hidden');
-        }
-
-        // ป้องกันการหลุดสถานะเมื่อผู้ใช้งานเผลอกดรีเฟรชหน้าจอชั่วคราว
+        // เช็คสถานะกันข้อมูลหลุดหายเมื่อมีการกดรีเฟรชหน้าเบราว์เซอร์
         window.addEventListener('DOMContentLoaded', () => {
             const savedName = localStorage.getItem('mg_user_name');
             const savedPhone = localStorage.getItem('mg_user_phone');
