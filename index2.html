@@ -3,423 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG UBONRATCHATHANI - Register Application</title>
-    
-    <!-- ลงทะเบียนรหัสการเป็นแอปพลิเคชันสมาร์ทโฟน PWA สากล -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#dc2626">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- เรียกใช้งาน Tailwind CSS v4 Engine ประมวลผลดีไซน์แบบ Real-time -->
+    <title>MG UBONRATCHATHANI - Smart Application</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
-        
-        /* สถาปัตยกรรม CSS คุมโทนสี Dark Premium ล็อคโครงสร้างสีสันและความสมมาตร */
-        :root {
-            --bg-main: #0b0f19;
-            --bg-card: #111827;
-            --text-main: #f3f4f6;
-            --mg-red: #dc2626;
+        body {
+            font-family: 'Sarabun', sans-serif;
         }
-        body { 
-            font-family: 'Sarabun', sans-serif; 
-            background-color: var(--bg-main) !important;
-            color: var(--text-main) !important;
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        .premium-card {
-            background-color: var(--bg-card) !important;
-            border: 1px solid #1f2937 !important;
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
         }
-        
-        /* ช่องกรอกข้อมูลสีดำมน พรีเมียม และคงที่เท่ากันทุกช่อง */
-        .custom-input {
-            background-color: #030712 !important;
-            border: 1px solid #27272a !important;
-            color: #ffffff !important;
-            border-radius: 0.75rem !important;
-            width: 100% !important;
-            padding-top: 0.875rem !important;
-            padding-bottom: 0.875rem !important;
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-            font-size: 0.875rem !important;
-            outline: none !important;
-            transition: all 0.2s ease-in-out !important;
-        }
-        .custom-input:focus {
-            border-color: var(--mg-red) !important;
-            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
-        }
-        .custom-input::placeholder {
-            color: #4b5563 !important;
-        }
-        
-        .neon-banner {
-            background: linear-gradient(180deg, #111827 0%, #070a13 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        .neon-banner::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--mg-red), transparent);
-        }
-
-        /* ตารางดั้งเดิมจัดเรียงกล่องข้อมูลลูกค้ามุมขวาบนให้สมมาตรและเรียงตัวสวยงามที่สุด */
-        .badge-table {
-            display: table !important;
-            width: auto !important;
-            border-collapse: separate !important;
-        }
-        .badge-cell {
-            display: table-cell !important;
-            vertical-align: middle !important;
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 10px;
         }
     </style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col items-center justify-start p-0 antialiased relative">
+<body class="bg-[#0b0f19] text-gray-100 min-h-screen flex flex-col justify-between">
 
-    <!-- ================= หน้าที่ 1: หน้าฟอร์มลงทะเบียน (REGISTER VIEW) ================= -->
-    <div id="registerView" class="w-full flex flex-col items-center justify-start">
-        <header class="relative w-full max-w-md premium-card shadow-2xl neon-banner px-6 py-8 text-center flex flex-col items-center justify-center space-y-3">
-            <div class="relative">
-                <img src="MG_profile.png" alt="MG Logo" class="w-20 h-20 rounded-2xl border-2 border-gray-800 bg-white shadow-xl p-1 mx-auto">
-                <span class="absolute -bottom-1 -right-1 flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                </span>
-            </div>
-            <div class="space-y-1">
-                <h1 class="text-xl font-bold tracking-tight text-white">MG UBONRATCHATHANI</h1>
-                <p class="text-xs text-red-500 font-semibold tracking-wider uppercase">M2 MOTORSPORT OPERATED</p>
-            </div>
-        </header>
+    <header class="border-b border-gray-800 bg-[#0f1423] px-6 py-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="bg-red-600 text-white font-bold px-3 py-1 rounded-md tracking-wider text-sm shadow-md shadow-red-900/50">MG</div>
+            <span class="text-sm font-semibold tracking-wide text-gray-300">M2 MOTORSPORT</span>
+        </div>
+        <div id="userBadgeArea" class="hidden flex items-center space-x-2 bg-gray-900/80 border border-gray-800 px-3 py-1.5 rounded-full text-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="badgeName" class="text-gray-300 font-medium"></span>
+        </div>
+    </header>
 
-        <main class="w-full max-w-md px-6 py-6">
-            <div class="premium-card rounded-3xl p-6 shadow-2xl space-y-6">
-                <div class="space-y-1.5 border-b border-gray-800/60 pb-4">
-                    <h2 class="text-lg font-semibold text-gray-100 flex items-center">
-                        <svg class="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        ลงทะเบียนรับสิทธิพิเศษ
-                    </h2>
-                    <p class="text-xs text-gray-400 leading-relaxed">กรุณากรอกข้อมูลให้ครบถ้วนเพื่อรับสิทธิ์และข้อเสนอแคมเปญล่าสุด</p>
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-md bg-[#121829] border border-gray-800/80 rounded-2xl shadow-2xl p-6 md:p-8 transition-all duration-300">
+            
+            <section id="registerView" class="space-y-6">
+                <div class="text-center space-y-2">
+                    <h1 class="text-2xl font-bold text-white tracking-wide">ลงทะเบียนสมาชิกใหม่</h1>
+                    <p class="text-xs text-gray-400">กรอกข้อมูลของคุณเพื่อรับสิทธิ์และเข้าสู่ระบบอัจฉริยะ</p>
                 </div>
-
-                <form id="registerForm" class="space-y-5" onsubmit="handleSubmit(event)">
-                    <div class="space-y-2">
-                        <label class="text-xs font-medium text-gray-300 flex items-center">ชื่อ - นามสกุล <span class="text-red-500 ml-1">*</span></label>
-                        <input type="text" required id="fullName" placeholder="คุณสมชาย ใจดี" class="custom-input">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">ชื่อ-นามสกุล</label>
+                        <input type="text" id="regName" class="w-full bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="เช่น สมชาย ใจดี">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-xs font-medium text-gray-300 flex items-center">เบอร์โทรศัพท์ติดต่อ <span class="text-red-500 ml-1">*</span></label>
-                        <input type="tel" required id="phoneNumber" pattern="[0-9]{9,10}" placeholder="0812345678" class="custom-input">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">เบอร์โทรศัพท์</label>
+                        <input type="tel" id="regPhone" class="w-full bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="เช่น 0812345678">
                     </div>
-                    <div class="pt-2">
-                        <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold py-4 px-4 rounded-xl text-sm transition-all duration-300 transform active:scale-[0.99] shadow-lg shadow-red-900/40 cursor-pointer">
-                            ส่งข้อมูลลงทะเบียน
-                        </button>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">อีเมล</label>
+                        <input type="email" id="regEmail" class="w-full bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="name@example.com">
                     </div>
-                </form>
-            </div>
-        </main>
-    </div>
-
-
-    <!-- ================= หน้าที่ 2: หน้าตั้งค่าระบบความปลอดภัย & กู้คืน OTP (SECURITY VIEW) ================= -->
-    <div id="securityView" class="w-full flex flex-col items-center justify-start hidden animate-[fadeIn_0.3s_ease-out]">
-        <header class="w-full max-w-md px-4 py-4 flex items-center justify-between border-b border-gray-800/60 bg-gray-900/40 backdrop-blur-md sticky top-0 z-40">
-            <div class="flex items-center space-x-2">
-                <img src="MG_profile.png" alt="MG Logo" class="w-8 h-8 rounded-xl border border-gray-800 bg-white p-0.5 block">
-                <span class="text-xs font-bold text-white tracking-wider block">MG M2</span>
-            </div>
-            <div class="bg-gray-950/90 border border-gray-800 rounded-2xl p-2 pr-4 shadow-xl max-w-[240px] badge-table">
-                <div class="badge-cell"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white text-xs font-bold shadow-md shadow-red-900/30 flex items-center justify-center text-center mr-3 shrink-0" id="userAvatar2" style="line-height: 1 !important;">ม</div></div>
-                <div class="badge-cell text-left overflow-hidden">
-                    <div class="text-xs font-bold text-gray-100 truncate tracking-wide mb-0.5" id="badgeName2" style="max-width: 160px;">คุณลูกค้า</div>
-                    <div class="text-[10px] text-gray-400 font-medium tracking-wider" id="badgePhone2">08x-xxxxxxx</div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">รหัสผ่าน</label>
+                        <div class="relative">
+                            <input type="password" id="regPassword" class="w-full bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="กำหนดรหัสผ่านของคุณ">
+                            <button onclick="togglePasswordVisibility('regPassword', 'regPasswordIcon')" class="absolute right-3 top-3.5 text-gray-500 hover:text-gray-300">
+                                <svg id="regPasswordIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="handleRegisterSubmit()" class="w-full bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-3.5 rounded-xl shadow-lg shadow-red-900/30 transition-all active:scale-[0.98]">
+                        สร้างบัญชีสมาชิก
+                    </button>
                 </div>
-            </div>
-        </header>
-
-        <main class="w-full max-w-md px-6 py-6 flex flex-col justify-start">
-            <div class="premium-card rounded-3xl p-6 shadow-2xl space-y-6 mt-2">
-                <div class="space-y-1.5 border-b border-gray-800/60 pb-4">
-                    <h2 class="text-base font-semibold text-gray-100 flex items-center">
-                        <svg class="w-4 h-4 text-red-500 mr-2" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        ตั้งค่าระบบความปลอดภัยบัญชี
-                    </h2>
-                    <p class="text-[11px] text-gray-400 leading-relaxed">กรุณาระบุอีเมลและกำหนดรหัสผ่านเพื่อสิทธิ์เข้าใช้งานในอนาคต</p>
+                <div class="text-center pt-2">
+                    <p class="text-xs text-gray-400">เป็นสมาชิกอยู่แล้วใช่ไหม? <button onclick="switchView('loginView')" class="text-red-500 hover:underline font-semibold focus:outline-none">เข้าสู่ระบบที่นี่ค๊า</button></p>
                 </div>
+            </section>
 
-                <form id="securityForm" class="space-y-4" onsubmit="handleSecuritySubmit(event)">
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-medium text-gray-300 flex items-center">อีเมลผู้สมัคร (Email Account) <span class="text-red-500 ml-1">*</span></label>
-                        <input type="email" required id="userEmail" placeholder="yourname@email.com" class="custom-input">
+            <section id="loginView" class="hidden space-y-6">
+                <div class="text-center space-y-2">
+                    <h1 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h1>
+                    <p class="text-xs text-gray-400">กรอกอีเมลและรหัสผ่านเพื่อเข้าใช้งานแดชบอร์ด</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">อีเมล</label>
+                        <input type="email" id="loginEmail" class="w-full bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="name@example.com">
                     </div>
-
-                    <div class="space-y-1.5 relative">
-                        <label class="text-xs font-medium text-gray-300 flex items-center">กำหนดรหัสผ่าน (Set Password) <span class="text-red-500 ml-1">*</span></label>
-                        <div class="relative w-full">
-                            <input type="password" required id="userPassword" minlength="6" placeholder="รหัสผ่าน 6 ตัวขึ้นไป" class="custom-input pr-10">
-                            <button type="button" onclick="togglePasswordVisibility('userPassword', 'eyeIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer">
-                                <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">รหัสผ่าน</label>
+                        <div class="relative">
+                            <input type="password" id="loginPassword" class="w-full bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="กรอกรหัสผ่านของคุณ">
+                            <button onclick="togglePasswordVisibility('loginPassword', 'loginPasswordIcon')" class="absolute right-3 top-3.5 text-gray-500 hover:text-gray-300">
+                                <svg id="loginPasswordIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
                             </button>
                         </div>
                     </div>
 
-                    <div class="text-right">
-                        <button type="button" onclick="handleForgotPasswordTrigger()" class="text-xs text-red-500 hover:text-red-400 font-medium underline cursor-pointer">ลืมรหัสผ่าน?</button>
+                    <div id="loginErrorSection" class="hidden bg-red-950/30 border border-red-900/40 p-3.5 rounded-xl flex justify-between items-center animate-in fade-in slide-in-from-top-2 duration-200">
+                        <span class="text-xs text-red-400 font-medium">❌ รหัสผ่านไม่ถูกต้องค๊า!</span>
+                        <button onclick="handleRedirectToForgotPassword()" class="text-xs bg-red-600/10 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/20 px-3 py-1.5 rounded-lg transition-all font-semibold shadow-sm">
+                            ลืมรหัสผ่าน? 🔐
+                        </button>
                     </div>
 
-                    <!-- กล่องรับรหัสยืนยัน OTP (ระบบจำลองเพื่อทดสอบ UI Flow) -->
-                    <div id="otpSection" class="hidden premium-card rounded-2xl p-4 border border-red-900/30 bg-red-950/10 space-y-3 animate-[fadeIn_0.2s_ease-out]">
-                        <p class="text-xs font-semibold text-red-400 flex items-center">🛡️ ความปลอดภัย: กรอกรหัส OTP ยืนยันตัวตน</p>
-                        <p class="text-[11px] text-gray-400 leading-relaxed">ระบบจำลองการส่งรหัส 4 หลักไปที่อีเมลของคุณเรียบร้อยแล้วค๊า</p>
+                    <button onclick="handleLoginSubmit()" class="w-full bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-3.5 rounded-xl shadow-lg shadow-red-900/30 transition-all active:scale-[0.98]">
+                        เข้าสู่ระบบกิ๊ฟเก๋
+                    </button>
+                </div>
+                <div class="text-center pt-2">
+                    <p class="text-xs text-gray-400">ยังไม่มีบัญชีสมาชิก? <button onclick="switchView('registerView')" class="text-red-500 hover:underline font-semibold focus:outline-none">ลงทะเบียนใหม่ตรงนี้ค๊า</button></p>
+                </div>
+            </section>
+
+            <section id="mainDashboardView" class="hidden space-y-6">
+                <div class="text-center space-y-2">
+                    <div class="w-16 h-16 bg-emerald-600/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-2 text-emerald-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-white tracking-wide">ยินดีต้อนรับเข้าสู่ระบบค๊า</h1>
+                    <p class="text-xs text-gray-400">เชื่อมต่อบริการและตรวจสอบสถานะนิติบุคคลของคุณ</p>
+                </div>
+
+                <div class="bg-[#090d16] border border-gray-800 rounded-xl p-4 space-y-3 font-mono text-xs">
+                    <div class="flex justify-between border-b border-gray-900 pb-2">
+                        <span class="text-gray-500">CUSTOMER_NAME:</span>
+                        <span id="finalName" class="text-gray-200 font-bold"></span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-900 pb-2">
+                        <span class="text-gray-500">MOBILE_PHONE:</span>
+                        <span id="finalPhone" class="text-gray-200"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">SECURE_EMAIL:</span>
+                        <span id="finalEmail" class="text-gray-300"></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="switchView('securityView')" class="bg-gray-900 hover:bg-gray-800 border border-gray-800 text-xs font-semibold py-3 rounded-xl transition-all flex items-center justify-center space-x-1">
+                        <span>⚙️ ตั้งค่าความปลอดภัย</span>
+                    </button>
+                    <button onclick="handleLogOut()" class="bg-red-950/40 hover:bg-red-950/60 border border-red-900/30 text-red-400 text-xs font-semibold py-3 rounded-xl transition-all">
+                        ออกจากระบบ 👋
+                    </button>
+                </div>
+            </section>
+
+            <section id="securityView" class="hidden space-y-6">
+                <div class="text-center space-y-2">
+                    <h1 class="text-xl font-bold text-white tracking-wide">ศูนย์กู้คืนรหัสผ่านความปลอดภัย</h1>
+                    <p class="text-xs text-gray-400">กรอกอีเมลบัญชีของคุณเพื่อรับสิทธิ์ส่งรหัส OTP ผ่าน Brevo</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">อีเมลที่ใช้ลงทะเบียน</label>
                         <div class="flex space-x-2">
-                            <input type="text" id="otpInput" maxlength="4" placeholder="รหัส 4 หลัก" class="custom-input text-center tracking-widest font-bold">
-                            <button type="button" onclick="verifyOTPAndUnlock()" class="bg-red-600 hover:bg-red-500 text-white font-semibold px-4 rounded-xl text-xs transition-colors cursor-pointer shrink-0">ตรวจสอบรหัส</button>
+                            <input type="email" id="userEmail" class="flex-grow bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="name@example.com">
+                            <button onclick="handleForgotPasswordTrigger()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-4 rounded-xl transition-all shadow-md shadow-red-950">
+                                ส่ง OTP
+                            </button>
                         </div>
                     </div>
 
-                    <div class="pt-2">
-                        <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 transform active:scale-[0.99] shadow-lg shadow-red-900/40 cursor-pointer">
-                            บันทึกรหัสผ่านและเชื่อมโยงบัญชี
+                    <div id="otpSection" class="hidden space-y-3 bg-[#090d16] p-4 rounded-xl border border-gray-800/60">
+                        <label class="block text-xs font-medium text-red-400">🔐 กรอกรหัสยืนยัน 4 หลักจากอีเมลของคุณ</label>
+                        <div class="flex space-x-2">
+                            <input type="text" id="otpInput" maxlength="4" class="w-full bg-[#121829] border border-gray-800 rounded-lg py-2.5 text-center text-lg font-mono tracking-widest text-white focus:outline-none focus:border-red-500" placeholder="0000">
+                            <button onclick="verifyOTPAndUnlock()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 rounded-lg transition-all">
+                                ยืนยันรหัส
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">กำหนดรหัสผ่านใหม่ (เมื่อยืนยัน OTP ผ่าน)</label>
+                        <div class="relative">
+                            <input type="password" id="userPassword" class="w-full bg-[#090d16] border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors" placeholder="ป้อนรหัสผ่านชุดใหม่">
+                            <button onclick="togglePasswordVisibility('userPassword', 'userPasswordIcon')" class="absolute right-3 top-3.5 text-gray-500 hover:text-gray-300">
+                                <svg id="userPasswordIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-2 pt-2">
+                        <button onclick="handleSaveNewPassword()" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-3 rounded-xl transition-all">
+                            💾 บันทึกรหัสใหม่ค๊า
+                        </button>
+                        <button onclick="navigateBackToRegister()" class="bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-400 text-xs font-semibold py-3 px-4 rounded-xl transition-all">
+                            กลับหน้าแรก
                         </button>
                     </div>
-                </form>
-            </div>
-            
-            <div class="text-center mt-6">
-                <button onclick="navigateBackToRegister()" class="text-[10px] text-gray-600 hover:text-red-500 font-medium tracking-wider uppercase underline cursor-pointer">[ BACK TO REGISTRATION FOR TESTING ]</button>
-            </div>
-        </main>
-    </div>
-
-
-    <!-- ================= หน้าที่ 3: หน้าหลักแอปพลิเคชันหลังผ่านการยืนยันตัวตน (DASHBOARD APP VIEW) ================= -->
-    <div id="mainDashboardView" class="w-full flex flex-col items-center justify-start hidden animate-[fadeIn_0.3s_ease-out]">
-        <header class="w-full max-w-md px-4 py-4 flex items-center justify-between border-b border-gray-800/60 bg-gray-900/40 backdrop-blur-md sticky top-0 z-40">
-            <div class="flex items-center space-x-2">
-                <img src="MG_profile.png" alt="MG Logo" class="w-8 h-8 rounded-xl border border-gray-800 bg-white p-0.5 block">
-                <span class="text-xs font-bold text-white tracking-wider block">MG M2 MOTORSPORT</span>
-            </div>
-            <div class="bg-gray-950/90 border border-gray-800 rounded-2xl p-2 pr-4 shadow-xl max-w-[240px] badge-table">
-                <div class="badge-cell"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-600 to-emerald-800 text-white text-xs font-bold shadow-md shadow-green-900/30 flex items-center justify-center text-center mr-3 shrink-0" id="userAvatar3" style="line-height: 1 !important;">ม</div></div>
-                <div class="badge-cell text-left overflow-hidden">
-                    <div class="text-xs font-bold text-gray-100 truncate tracking-wide mb-0.5" id="badgeName3" style="max-width: 160px;">คุณลูกค้า</div>
-                    <div class="text-[10px] text-emerald-400 font-semibold tracking-wider flex items-center">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span> บัญชีปลอดภัยแล้ว
-                    </div>
                 </div>
-            </div>
-        </header>
+            </section>
 
-        <main class="w-full max-w-md px-6 py-12 flex flex-col items-center justify-center text-center">
-            <div class="w-full premium-card rounded-3xl p-8 border border-emerald-900/20 shadow-2xl text-center space-y-6 bg-gradient-to-b from-gray-900 to-gray-950">
-                <div class="w-16 h-16 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-900/20">
-                    <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                </div>
-                <div class="space-y-2">
-                    <h2 class="text-xl font-bold text-white tracking-wide">ยินดีต้อนรับเข้าสู่ระบบสำเร็จ</h2>
-                    <p class="text-xs text-gray-400 px-4 leading-relaxed">บัญชีผู้ใช้งานของคุณได้รับการบันทึกรหัสผ่าน และเชื่อมต่อความปลอดภัยระดับสูงเรียบร้อยแล้วค๊า</p>
-                </div>
-                <div class="p-4 bg-gray-950 rounded-2xl border border-gray-900 text-left space-y-2">
-                    <div class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold border-b border-gray-900 pb-1.5">ข้อมูลบัญชีผู้ผูกสิทธิ์</div>
-                    <div class="text-xs text-gray-300"><b>👤 ชื่อ:</b> <span id="finalName"> สมชาย </span></div>
-                    <div class="text-xs text-gray-300"><b>📱 เบอร์โทร:</b> <span id="finalPhone"> 08x-xxxxxxx </span></div>
-                    <div class="text-xs text-gray-300"><b>📧 อีเมล:</b> <span id="finalEmail"> user@email.com </span></div>
-                </div>
-            </div>
+        </div>
+    </main>
 
-            <div class="text-center mt-12">
-                <button onclick="navigateBackToRegister()" class="text-[10px] text-gray-600 hover:text-red-500 font-medium tracking-wider uppercase underline cursor-pointer">[ RESET SYSTEM FOR TESTING ]</button>
-            </div>
-        </main>
-    </div>
+    <footer class="text-center py-4 border-t border-gray-900 text-[10px] text-gray-600 bg-[#070a12] tracking-wider">
+        SECURE MULTI-VIEW ARCHITECTURE © 2026 MG UBONRATCHATHANI BY M2 MOTORSPORT
+    </footer>
 
-    <!-- หน้าต่างแจ้งเตือนพรีเมียม (Custom Premium Modal) -->
-    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden transition-all duration-300">
-        <div class="bg-gray-900 border border-gray-800 w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl scale-95 transition-transform duration-300 space-y-5">
-            <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-red-950 border border-red-500/30 text-red-400" id="modalIconContainer">
-                <svg class="h-7 w-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" id="modalIcon"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+    <div id="appModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="w-full max-w-sm bg-[#161c2e] border border-gray-800 rounded-2xl p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex items-center space-x-3">
+                <div id="modalIcon" class="w-8 h-8 rounded-full flex items-center justify-center text-sm"></div>
+                <h3 id="modalTitle" class="text-base font-bold text-white tracking-wide"></h3>
             </div>
-            <div class="space-y-2">
-                <h3 class="text-lg font-bold text-white tracking-wide" id="modalTitle">MG SYSTEM</h3>
-                <p class="text-sm text-gray-300 leading-relaxed" id="modalMessage">บันทึกข้อมูลสำเร็จ</p>
-            </div>
-            <button onclick="closeModal()" class="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-medium py-3 px-4 rounded-xl text-sm transition-all duration-200 cursor-pointer">ตกลง</button>
+            <p id="modalMessage" class="text-xs text-gray-300 leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-xs font-semibold py-2.5 rounded-xl transition-all text-white">
+                ตกลงค๊า
+            </button>
         </div>
     </div>
 
-    <footer class="w-full max-w-md text-center py-6 text-[10px] text-gray-600 tracking-wider mt-auto z-10">SECURE PWA APPLICATION © 2026 MG UBONRATCHATHANI</footer>
-
     <script>
-        // โครงสร้างตัวแปรเก็บเลขสุ่ม OTP จำลองเพื่อทดสอบ Flow หน้าจอ (Client-side Simulation เท่านั้น)
-        let simulatedOTP = ""; 
+        let simulatedOTP = "";
+        let isOtpVerified = false;
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js'); });
+        function switchView(viewId) {
+            const views = ['registerView', 'loginView', 'mainDashboardView', 'securityView'];
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if(el) el.classList.add('hidden');
+            });
+            const targetView = document.getElementById(viewId);
+            if(targetView) {
+                targetView.classList.remove('hidden');
+            }
+            localStorage.setItem('mg_current_view', viewId);
         }
 
         function openModal(title, message, isSuccess = true) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalMessage').innerHTML = message;
-            const iconContainer = document.getElementById('modalIconContainer');
+            const iconEl = document.getElementById('modalIcon');
             if(isSuccess) {
-                iconContainer.className = "mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-green-950 border border-green-500/30 text-green-400";
-                document.getElementById('modalIcon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />';
+                iconEl.className = "w-8 h-8 rounded-full flex items-center justify-center text-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                iconEl.innerText = "✓";
             } else {
-                iconContainer.className = "mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-yellow-950 border border-yellow-500/30 text-yellow-400";
-                document.getElementById('modalIcon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
+                iconEl.className = "w-8 h-8 rounded-full flex items-center justify-center text-sm bg-red-500/10 text-red-400 border border-red-500/20";
+                iconEl.innerText = "⚠️";
             }
-            const modal = document.getElementById('customModal');
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.querySelector('div').classList.remove('scale-95'); modal.querySelector('div').classList.add('scale-100'); }, 10);
+            document.getElementById('appModal').classList.remove('hidden');
         }
 
         function closeModal() {
-            const modal = document.getElementById('customModal');
-            modal.querySelector('div').classList.remove('scale-100'); modal.querySelector('div').classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+            document.getElementById('appModal').classList.add('hidden');
         }
 
-        // หน้า 1 -> หน้า 2
-        function handleSubmit(event) {
-            event.preventDefault();
-            const fullName = document.getElementById('fullName').value.trim();
-            const phoneNumber = document.getElementById('phoneNumber').value.trim();
-
-            if(fullName === "" || phoneNumber === "") { alert("กรุณากรอกข้อมูลให้ครบถ้วนค๊า"); return; }
-
-            localStorage.setItem('mg_user_name', fullName);
-            localStorage.setItem('mg_user_phone', phoneNumber);
-            localStorage.setItem('mg_current_view', 'security'); 
-
-            renderBadges(fullName, phoneNumber);
-
-            document.getElementById('registerView').classList.add('hidden');
-            document.getElementById('securityView').classList.remove('hidden');
-            document.getElementById('registerForm').reset();
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />';
+            } else {
+                input.type = "password";
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+            }
         }
 
         function renderBadges(name, phone) {
-            document.getElementById('badgeName2').innerText = name;
-            document.getElementById('badgePhone2').innerText = phone;
-            document.getElementById('userAvatar2').innerText = name.charAt(0).toUpperCase();
-            document.getElementById('badgeName3').innerText = name;
-            document.getElementById('userAvatar3').innerText = name.charAt(0).toUpperCase();
+            document.getElementById('badgeName').innerText = name;
+            document.getElementById('userBadgeArea').classList.remove('hidden');
         }
 
-        // หน้า 2 -> หน้า 3 บันทึกข้อมูลปลอดภัยถาวรลง Session ล็อกหน้าจอ
-        function handleSecuritySubmit(event) {
-            event.preventDefault();
-            const email = document.getElementById('userEmail').value.trim();
-            const pass = document.getElementById('userPassword').value;
-            const name = localStorage.getItem('mg_user_name') || "คุณลูกค้า";
-            const phone = localStorage.getItem('mg_user_phone') || "08x-xxxxxxx";
+        // ================= ACTION PROCESSORS =================
 
-            if(email === "" || pass === "") { openModal("ระบบความปลอดภัย", "กรุณาระบุข้อมูลให้ครบถ้วนค๊า", false); return; }
+        function handleRegisterSubmit() {
+            const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
 
-            // บันทึกสถานะเพื่อใช้สำหรับการเช็ค Session ในอนาคตเมื่อเปิดหน้าเว็บใหม่
+            if(!name || !phone || !email || !password) {
+                openModal("ข้อผิดพลาดระบบ", "⚠️ กรุณากรอกข้อมูลสำหรับการลงทะเบียนให้ครบทุกช่องก่อนนะค๊า", false);
+                return;
+            }
+
+            localStorage.setItem('mg_user_name', name);
+            localStorage.setItem('mg_user_phone', phone);
             localStorage.setItem('mg_user_email', email);
-            localStorage.setItem('mg_user_password', pass);
-            localStorage.setItem('mg_current_view', 'main_dashboard'); 
+            localStorage.setItem('mg_user_password', password);
 
-            document.getElementById('finalName').innerText = name;
-            document.getElementById('finalPhone').innerText = phone;
-            document.getElementById('finalEmail').innerText = email;
-
-            document.getElementById('securityView').classList.add('hidden');
-            document.getElementById('mainDashboardView').classList.remove('hidden');
+            openModal("ลงทะเบียนสำเร็จ", "✨ ยินดีด้วยค๊า! บัญชีของคุณถูกผูกเข้ากับระบบเสร็จสิ้นแล้ว ระบบจะนำคุณไปยังหน้าเข้าสู่ระบบอัตโนมัติค๊า", true);
             
-            openModal("MG UBONRATCHATHANI", `🔒 บันทึกรหัสผ่านและเชื่อมโยงบัญชีสำเร็จแล้วค๊า!`, true);
+            document.getElementById('regName').value = "";
+            document.getElementById('regPhone').value = "";
+            document.getElementById('regEmail').value = "";
+            document.getElementById('regPassword').value = "";
+
+            setTimeout(() => { closeModal(); switchView('loginView'); }, 1500);
         }
 
-       // บรรทัดที่ 346: เริ่มต้นฟังก์ชันส่งอีเมล OTP ตัวจริงผ่านระบบ Brevo ด้วยสถาปัตยกรรมที่ปลอดภัยและลื่นไหล
-function handleForgotPasswordTrigger() {
-    const currentEmail = document.getElementById('userEmail').value.trim();
-    
-    // [UX Input Validation]: ตรวจสอบว่าผู้ใช้กรอกอีเมลเรียบร้อยแล้วหรือยัง
-    if (currentEmail === "") {
-        openModal("ระบบกู้คืนรหัสผ่าน", "⚠️ กรุณากรอกอีเมลในช่องด้านบนก่อน เพื่อให้ระบบส่งหมายเลขยืนยันไปถูกที่ค๊า", false);
-        return;
-    }
+        // 🔑 [ปรับปรุง] ระบบการตรวจสอบข้อมูลและแสดงกล่องแจ้งเตือนลืมรหัสผ่าน
+        function handleLoginSubmit() {
+            const emailInput = document.getElementById('loginEmail').value.trim();
+            const passwordInput = document.getElementById('loginPassword').value.trim();
 
-    // [UX Loading State]: อ้างอิงปุ่มลืมรหัสผ่านเพื่อปิดการใช้งานชั่วคราวขณะส่ง ป้องกันการกดเบิ้ล
-    const forgotBtn = document.querySelector("button[onclick='handleForgotPasswordTrigger()']");
-    const originalBtnText = forgotBtn ? forgotBtn.innerHTML : "ลืมรหัสผ่าน?";
-    if (forgotBtn) {
-        forgotBtn.disabled = true;
-        forgotBtn.innerHTML = `<span class="inline-block animate-spin mr-2">⏳</span> กำลังส่งรหัส OTP...`;
-    }
+            const savedEmail = localStorage.getItem('mg_user_email');
+            const savedPassword = localStorage.getItem('mg_user_password');
+            const savedName = localStorage.getItem('mg_user_name');
+            const savedPhone = localStorage.getItem('mg_user_phone');
+            
+            const errorSection = document.getElementById('loginErrorSection');
 
-    // 1. สุ่มรหัส OTP 4 หลักที่เดาทางยากสำหรับยืนยันตัวตน (Client-Side State)
-    simulatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-    
-    // 2. แสดงอินพุตช่องรับรหัสยืนยันตัวตน (OTP Input Section) สแตนด์บายไว้บน UI
-    const otpSection = document.getElementById('otpSection');
-    if (otpSection) {
-        otpSection.classList.remove('hidden');
-    }
+            if(!emailInput || !passwordInput) {
+                openModal("ข้อมูลไม่ครบ", "⚠️ กรุณากรอกอีเมลและรหัสผ่านเพื่อเข้าใช้งานระบบค๊า", false);
+                return;
+            }
 
-    // 3. 🔑 ใส่ API Key ของ Brevo ที่ได้มาจากหน้าแดชบอร์ดตรงนี้ค๊า
-    const BREVO_API_KEY = "xsmtpsib-18def84782cb7dbde4774497b41c693933a6c6204bb4c9d67e1eef301218d68b-mDf0LPOIefPOaQpF"; 
+            if(emailInput === savedEmail && passwordInput === savedPassword) {
+                // หากผ่านสิทธิ์ ให้ซ่อนกล่อง Error ทันที (Reset)
+                if(errorSection) errorSection.classList.add('hidden');
 
-    // 4. ประกอบโครงสร้างข้อมูล (Payload Object) ส่งไปยัง Brevo API ทางช่องทางเปิด
-    const emailData = {
-        sender: { name: "MG M2 MOTORSPORT", email: "noreply@mg-ubon.com" },
-        to: [{ email: currentEmail }],
-        subject: "[MG UBONRATCHATHANI] รหัสยืนยันการตั้งรหัสผ่านใหม่ของคุณ",
-        htmlContent: `
-            <div style="font-family: 'Sarabun', sans-serif; background-color: #0b0f19; color: #ffffff; padding: 30px; border-radius: 20px; max-width: 500px; margin: auto; border: 1px solid #1f2937;">
-                <h2 style="color: #dc2626; text-align: center; margin-bottom: 20px;">MG UBONRATCHATHANI</h2>
-                <p style="font-size: 14px; color: #d1d5db;">เรียน คุณลูกค้าผู้รักรถยนต์ MG ทุกท่าน,</p>
-                <p style="font-size: 14px; color: #9ca3af; line-height: 1.6;">ระบบได้รับคำขอกู้คืนรหัสผ่านบัญชีของคุณ กรุณานำหมายเลขยืนยันด้านล่างนี้ ไปกรอกลงในแอปพลิเคชันเพื่อตั้งรหัสผ่านใหม่ค๊า:</p>
-                <div style="background-color: #030712; border: 1px solid #27272a; padding: 15px; border-radius: 12px; text-align: center; margin: 25px 0;">
-                    <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #dc2626; font-family: monospace;">${simulatedOTP}</span>
-                </div>
-                <p style="font-size: 11px; color: #4b5563; text-align: center; margin-top: 30px;">รหัสนี้มีอายุการใช้งาน 5 นาที และเป็นความลับเฉพาะบุคคล ห้ามเปิดเผยแก่ผู้อื่น<br>SECURE APPLICATION © 2026 MG UBONRATCHATHANI</p>
-            </div>
-        `
-    };
-
-    // 5. สั่งลุยยิง Fetch API ออกไปโลกภายนอกแบบ Real-time ไปยังเซิร์ฟเวอร์ Brevo
-    fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-            'accept': 'application/json',
-            'api-key': BREVO_API_KEY,
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify(emailData)
-    })
-    .then(response => {
-        if (response.ok) {
-            const successAlert = `📧 <b>ส่งรหัส OTP ตัวจริงสำเร็จแล้วค๊า!</b><br><br>ระบบส่งเลขกู้คืน 4 หลักตรงเข้าสู่กล่องข้อความอีเมล <b>${currentEmail}</b> เรียบร้อยแล้ว ลองเช็คที่ Inbox หรือ Junk Mail ดูได้เลยนะค๊า!`;
-            openModal("Forgot Password System", successAlert, true);
-        } else {
-            throw new Error('Brevo API Response Not OK');
+                renderBadges(savedName, savedPhone);
+                document.getElementById('finalName').innerText = savedName;
+                document.getElementById('finalPhone').innerText = savedPhone;
+                document.getElementById('finalEmail').innerText = savedEmail;
+                
+                openModal("เข้าสู่ระบบสำเร็จ", "💖 ยินดีต้อนรับกลับมาค๊า! กำลังเปิดหน้าแดชบอร์ดจัดการข้อมูล...", true);
+                setTimeout(() => { closeModal(); switchView('main_dashboard'); }, 1200);
+            } else {
+                // 🚨 กรณีใส่รหัสผ่านผิด -> สั่งเปิดกล่องแจ้งเตือนพร้อมปุ่มลืมรหัสผ่านทันที!
+                if(errorSection) errorSection.classList.remove('hidden');
+                document.getElementById('loginPassword').value = "";
+                document.getElementById('loginPassword').focus();
+            }
         }
-    })
-    .catch(error => {
-        console.error('Brevo API Error:', error);
-        // แผนสำรอง (Fallback Strategy): หาก API ติดปัญหา สลับเข้าโหมดจำลองทันทีเพื่อให้ User Journey ไม่ขาดตอน
-        const fallbackAlert = `⚠️ <b>ขออภัยค๊า ระบบส่งเมลจริงเกิดข้อผิดพลาด</b><br><br>แต่คิมสลับเข้าระบบจำลองให้เรียบร้อยแล้ว คุณชินอิจิสามารถใช้เลขนี้ทดสอบระบบหน้าจอต่อได้เลยค๊า:<br><br><span class="text-xs bg-gray-950 p-2 rounded-lg block border border-gray-800 text-center font-mono tracking-widest text-red-500 font-bold">รหัสสำรองคือ: ${simulatedOTP}</span>`;
-        openModal("Forgot Password System", fallbackAlert, false);
-    })
-    .finally(() => {
-        // [UX Reset State]: คืนค่าสถานะปุ่มกดให้กลับมาคลิกซ้ำได้ปกติหลังกระบวนการเสร็จสิ้น
-        if (forgotBtn) {
-            forgotBtn.disabled = false;
-            forgotBtn.innerHTML = originalBtnText;
+
+        // 🔗 ฟังก์ชันช่วยย้ายข้อมูลอีเมลจากช่องล็อกอินไปยังช่องกู้คืนโดยอัตโนมัติเมื่อกดปุ่มลืมรหัสผ่าน
+        function handleRedirectToForgotPassword() {
+            const currentLoginEmail = document.getElementById('loginEmail').value.trim();
+            
+            // นำอีเมลที่กรอกค้างไว้ในหน้าล็อกอิน ไปสแตนด์บายไว้ที่ช่องกู้คืน เพื่อความสะดวกสบายของผู้ใช้ (Good UX)
+            if(currentLoginEmail !== "") {
+                document.getElementById('userEmail').value = currentLoginEmail;
+            }
+            switchView('securityView');
         }
-    });
-}
+
+        function handleForgotPasswordTrigger() {
+            const currentEmail = document.getElementById('userEmail').value.trim();
+            
+            if (currentEmail === "") {
+                openModal("ระบบกู้คืนรหัสผ่าน", "⚠️ กรุณากรอกอีเมลในช่องด้านบนก่อน เพื่อให้ระบบส่งหมายเลขยืนยันไปถูกที่ค๊า", false);
+                return;
+            }
+
+            const forgotBtn = document.querySelector("button[onclick='handleForgotPasswordTrigger()']");
+            const originalBtnText = forgotBtn ? forgotBtn.innerHTML : "ส่ง OTP";
+            if (forgotBtn) {
+                forgotBtn.disabled = true;
+                forgotBtn.innerHTML = `⏳`;
+            }
+
+            simulatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            const otpSection = document.getElementById('otpSection');
+            if (otpSection) {
+                otpSection.classList.remove('hidden');
+            }
+
+            // ⚠️ ใส่ API Key ของ Brevo ตัวจริงที่คุณคัดลอกมาจากขั้นตอนก่อนหน้านี้ตรงนี้ค๊า!
+            const BREVO_API_KEY = "ใส่_API_KEY_จริง_ของคุณชินอิจิ_ตรงนี้"; 
+
+            const emailData = {
+                sender: { name: "MG M2 MOTORSPORT", email: "noreply@mg-ubon.com" },
+                to: [{ email: currentEmail }],
+                subject: "[MG UBONRATCHATHANI] รหัสยืนยันความปลอดภัยเพื่อเปลี่ยนรหัสผ่านใหม่",
+                htmlContent: `
+                    <div style="font-family: 'Sarabun', sans-serif; background-color: #0b0f19; color: #ffffff; padding: 30px; border-radius: 20px; max-width: 500px; margin: auto; border: 1px solid #1f2937;">
+                        <h2 style="color: #dc2626; text-align: center; margin-bottom: 20px;">MG UBONRATCHATHANI</h2>
+                        <p style="font-size: 14px; color: #d1d5db;">เรียน คุณลูกค้าผู้รักรถยนต์ MG ทุกท่าน,</p>
+                        <p style="font-size: 14px; color: #9ca3af; line-height: 1.6;">ระบบได้รับคำขอกู้คืนรหัสผ่านบัญชีของคุณ กรุณานำหมายเลขยืนยันด้านล่างนี้ ไปกรอกลงในแอปพลิเคชันเพื่อตั้งรหัสผ่านใหม่ค๊า:</p>
+                        <div style="background-color: #030712; border: 1px solid #27272a; padding: 15px; border-radius: 12px; text-align: center; margin: 25px 0;">
+                            <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #dc2626; font-family: monospace;">${simulatedOTP}</span>
+                        </div>
+                        <p style="font-size: 11px; color: #4b5563; text-align: center; margin-top: 30px;">รหัสนี้มีอายุการใช้งาน 5 นาที และเป็นความลับเฉพาะบุคคล ห้ามเปิดเผยแก่ผู้อื่น<br>SECURE APPLICATION © 2026 MG UBONRATCHATHANI</p>
+                    </div>
+                `
+            };
+
+            fetch('https://api.brevo.com/v3/smtp/email', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'api-key': BREVO_API_KEY,
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(emailData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    openModal("Forgot Password System", `📧 ส่งรหัส OTP สำเร็จค๊า! ลองตรวจสอบกล่องข้อความที่ <b>${currentEmail}</b> น้า`, true);
+                } else {
+                    throw new Error('API Response Error');
+                }
+            })
+            .catch(error => {
+                console.error('Error Sending Email:', error);
+                openModal("Forgot Password System", `⚠️ ระบบส่งเมลจริงถูกบล็อกหรือมีข้อผิดพลาดค๊า คิมสลับเข้าระบบจำลองแบบสำรองให้แทนนะค๊า:<br><br><span class="text-xs bg-gray-950 p-2 rounded-lg block border border-gray-800 text-center font-mono tracking-widest text-red-500 font-bold">รหัสสำรองคือ: ${simulatedOTP}</span>`, false);
+            })
+            .finally(() => {
+                if (forgotBtn) {
+                    forgotBtn.disabled = false;
+                    forgotBtn.innerHTML = originalBtnText;
+                }
+            });
+        }
+
+        function verifyOTPAndUnlock() {
+            const inputOtp = document.getElementById('otpInput').value.trim();
+            if(inputOtp === "") { openModal("ระบบยืนยันรหัส", "กรุณากรอกรหัส 4 หลักด้วยค๊า", false); return; }
+
+            if(inputOtp === simulatedOTP) {
+                isOtpVerified = true;
+                openModal("ยืนยันสำเร็จ", "✨ รหัส OTP ถูกต้องอย่างพรีเมียมค๊า! ช่องกำหนดรหัสผ่านใหม่ด้านล่างเปิดใช้งานแล้ว กรุณาพิมพ์รหัสชุดใหม่แล้วกดปุ่มบันทึกข้อมูลได้เลยค๊า", true);
+                document.getElementById('userPassword').value = ""; 
+                document.getElementById('userPassword').focus();
+                document.getElementById('otpSection').classList.add('hidden'); 
+                document.getElementById('otpInput').value = "";
+            } else {
+                openModal("ยืนยันล้มเหลว", "❌ รหัสไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งค๊า", false);
+            }
+        }
+
+        function handleSaveNewPassword() {
+            if(!isOtpVerified) {
+                openModal("ระบบรักษาความปลอดภัย", "⚠️ คุณยังไม่ได้ทำการยืนยันรหัสผ่าน OTP จากอีเมลให้ผ่านเลยนะค๊า กรุณากดส่งรหัสและยืนยันก่อนค๊า", false);
+                return;
+            }
+
+            const newPassword = document.getElementById('userPassword').value.trim();
+            if(newPassword === "") {
+                openModal("ข้อมูลว่างเปล่า", "⚠️ กรุณากรอกรหัสผ่านชุดใหม่ที่ต้องการบันทึกก่อนค๊า", false);
+                return;
+            }
+
+            localStorage.setItem('mg_user_password', newPassword);
+            openModal("เปลี่ยนรหัสสำเร็จ", "🎉 รีเซ็ตรหัสผ่านใหม่เรียบร้อยแล้วค๊า! ระบบจะพาคุณไปยังหน้าเข้าสู่ระบบเพื่อทดสอบรหัสผ่านใหม่น้า", true);
+            
+            isOtpVerified = false;
+            document.getElementById('userPassword').value = "";
+            document.getElementById('userEmail').value = "";
+
+            setTimeout(() => { closeModal(); switchView('loginView'); }, 1500);
+        }
+
+        function handleLogOut() {
+            document.getElementById('userBadgeArea').classList.add('hidden');
+            openModal("ออกจากระบบ", "👋 เคลียร์หน้าจอเสร็จสิ้น ปลอดภัย 100% แล้วค๊า", true);
+            setTimeout(() => { closeModal(); switchView('loginView'); }, 1000);
+        }
+
+        function navigateBackToRegister() {
+            localStorage.clear();  
+            document.getElementById('userBadgeArea').classList.add('hidden');
+            switchView('registerView');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('mg_user_name');
+            const savedPhone = localStorage.getItem('mg_user_phone');
+            const savedEmail = localStorage.getItem('mg_user_email');
+            const currentView = localStorage.getItem('mg_current_view');
+            
+            if (savedName && savedPhone) {
+                renderBadges(savedName, savedPhone);
+
+                if (currentView === 'main_dashboard') {
+                    document.getElementById('finalName').innerText = savedName;
+                    document.getElementById('finalPhone').innerText = savedPhone;
+                    document.getElementById('finalEmail').innerText = savedEmail || "-";
+                    switchView('mainDashboardView');
+                }
+                else if (currentView === 'security') {
+                    switchView('securityView');
+                }
+                else {
+                    switchView('loginView');
+                }
+            } else {
+                switchView('registerView');
+            }
+        });
+    </script>
+</body>
+</html>
