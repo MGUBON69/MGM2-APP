@@ -3,164 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEMO APP MGM2</title>
+    <title>MG UBONRATCHATHANI - Register Application</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#dc2626">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        
+        /* สถาปัตยกรรมคุมโทนพรีเมียม ป้องกันหน้าจอเบี้ยว (UI Fallback & Custom Variables) */
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #111827;
+            --text-main: #f3f4f6;
+            --mg-red: #dc2626;
         }
-
-        .mobile-container {
-            width: 100%;
-            max-width: 414px;
-            height: 100vh;
-            background-color: #ffffff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
+        body { 
+            font-family: 'Sarabun', sans-serif; 
+            background-color: var(--bg-main) !important;
+            color: var(--text-main) !important;
+        }
+        .premium-card {
+            background-color: var(--bg-card) !important;
+            border: 1px solid #1f2937 !important;
+        }
+        .custom-input {
+            background-color: #030712 !important;
+            border: 1px solid #1f2937 !important;
+            color: #ffffff !important;
+        }
+        .custom-input:focus {
+            border-color: var(--mg-red) !important;
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+        }
+        /* เทคนิคสร้างพื้นหลังเนบิวลาสีแดงแนวสปอร์ตพรีเมียม แทนการใช้ไฟล์รูปภาพ */
+        .neon-banner {
+            background: linear-gradient(135deg, #111827 0%, #030712 100%);
             position: relative;
+            overflow: hidden;
         }
-
-        .header {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-        }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 10px;
-        }
-
-        .content {
-            padding: 20px;
-            /* เพิ่ม padding-bottom ด้านล่างเพื่อไม่ให้ปุ่มตรงกลางด้านล่างไปบังเนื้อหาหลักตอนเลื่อนจอค่ะ */
-            padding-bottom: 70px; 
-            flex-grow: 1;
-        }
-
-        /* ปุ่มหลักเดิมในแอป */
-        .app-button {
-            display: block;
-            background-color: #f8f9fa;
-            color: #333;
-            text-align: center;
-            padding: 15px;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            border: 1px solid #e9ecef;
-        }
-
-        .app-button:hover {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .action-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 12px;
-            color: #888;
-        }
-
-        /* 👑 1. โค้ดสไตล์ (CSS) สำหรับปุ่มเล็กตรงกลางด้านล่าง */
-        .small-center-btn {
-            position: fixed;            /* ตรึงตำแหน่งไว้กับหน้าจอ */
-            bottom: 15px;               /* ระยะห่างจากขอบล่างสุด 15 พิกเซล */
-            left: 50%;                  /* ดันปุ่มมาที่กึ่งกลางหน้าจอจากขอบซ้าย */
-            transform: translateX(-50%); /* ดึงตัวปุ่มย้อนกลับมาครึ่งหนึ่งของตัวเองเพื่อให้จุดศูนย์กลางอยู่ตรงกลางเป๊ะๆ */
-            
-            /* ดึงดีไซน์ที่คล้ายกับปุ่มหลักเดิมมาใช้ */
-            background-color: #f8f9fa;
-            color: #333;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            z-index: 1000;
-            white-space: nowrap;        /* ป้องกันตัวหนังสือตัดบรรทัดใหม่ */
-
-            /* ปรับขนาดให้เล็กกว่าปุ่มหลัก */
-            padding: 8px 16px;          /* ลดระยะขอบในให้แคบลงและกะทัดรัดขึ้น */
-            font-size: 12px;            /* ลดขนาดตัวอักษรลงเหลือ 12 พิกเซล */
-            transition: 0.3s;
-        }
-
-        .small-center-btn:hover {
-            background-color: #007bff;
-            color: white;
+        .neon-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+            filter: blur(20px);
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col items-center justify-start p-0 antialiased relative">
 
-    <div class="mobile-container">
-        
-        <div class="header">
-            <div class="logo" style="background-color: transparent;">
-                <img src="MG_profile.png" alt="MG Ubon Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <h2>MG UBONRATCHATHANI</h2>
-            <p>by M2 MOTORSPORT</p>
-        </div>
-
-        <div class="content">
-            <a href="https://lin.ee/Ov20t55" target="_blank" class="app-button">💬 ติดต่อเราผ่าน Line</a>
-            <a href="tel:0996193126" class="app-button">📞 โทรหาเราทันที</a>
-            <a href="https://maps.app.goo.gl/6FhfXwfj7hvhgRFj9?g_st=al" target="_blank" class="app-button">📍 ดูแผนที่โชว์รูม</a>
-            
-            <button class="app-button action-btn" onclick="togglePromo()">🎉โปรโมชั่นวันนี้</button>
-            <div id="promo-box" style="display:none; padding: 15px; background: #e2f0d9; border-radius: 10px; text-align: center; margin-top: 10px;">
-                <strong>สมาชิกรับส่วนลด 10%!</strong> สำหรับสินค้าที่ร่วมรายการ(ติดต่อแอดมิน)
+    <div class="relative w-full max-w-md premium-card shadow-2xl border-b border-gray-800 neon-banner">
+        <div class="h-40 w-full flex items-center justify-center relative z-10 px-6 pt-6">
+            <div class="flex items-center space-x-4 w-full">
+                <img src="MG_profile.png" alt="MG Logo" class="w-20 h-20 rounded-2xl border-2 border-gray-800 bg-white shadow-xl p-1 shrink-0">
+                <div class="space-y-0.5">
+                    <h1 class="text-xl font-bold tracking-tight text-white">MG UBONRATCHATHANI</h1>
+                    <p class="text-xs text-red-500 font-semibold tracking-wider uppercase">M2 MOTORSPORT OPERATED</p>
+                    <div class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-950 text-red-400 border border-red-900/50">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5 animate-pulse"></span>Official App
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="footer">
-            © 2026 My Business App. All Rights Reserved.
-        </div>
-
-        <!-- 👑 2. โค้ดโครงสร้าง (HTML) สำหรับปุ่มเล็กตรงกลางด้านล่าง -->
-        <!-- คุณชินอิจิสามารถเปลี่ยนชื่อปุ่มและลิงก์ใน href ได้ตามต้องการเลยค่ะ -->
-        <a href="register.html" class="small-center-btn">📝 สมัครสมาชิกที่นี่</a>
-
+        <div class="w-full h-[3px] bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-70"></div>
     </div>
 
+    <main class="w-full max-w-md px-6 py-5 flex-1">
+        <div class="premium-card rounded-3xl p-6 shadow-xl space-y-6">
+            <div class="space-y-1">
+                <h2 class="text-lg font-semibold text-gray-200">ลงทะเบียนรับสิทธิพิเศษ</h2>
+                <p class="text-xs text-gray-400">กรุณากรอกข้อมูลให้ครบถ้วนเพื่อรับสิทธิ์และข้อเสนอแคมเปญล่าสุด</p>
+            </div>
+
+            <form id="registerForm" class="space-y-5" onsubmit="handleSubmit(event)">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-gray-400">ชื่อ - นามสกุล</label>
+                    <input type="text" required id="fullName" placeholder="คุณสมชาย ใจดี" 
+                        class="w-full custom-input rounded-xl px-4 py-3 text-sm placeholder-gray-600 focus:outline-none transition-all duration-200">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-gray-400">เบอร์โทรศัพท์ติดต่อ</label>
+                    <input type="tel" required id="phoneNumber" pattern="[0-9]{9,10}" placeholder="0812345678" 
+                        class="w-full custom-input rounded-xl px-4 py-3 text-sm placeholder-gray-600 focus:outline-none transition-all duration-200">
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 transform active:scale-[0.98] shadow-lg shadow-red-900/30 cursor-pointer mt-2">
+                    ส่งข้อมูลลงทะเบียน
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden transition-all duration-300">
+        <div class="bg-gray-900 border border-gray-800 w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl scale-95 transition-transform duration-300 space-y-5">
+            <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-green-950 border border-green-500/30 text-green-400">
+                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            
+            <div class="space-y-2">
+                <h3 class="text-lg font-bold text-white tracking-wide" id="modalTitle">MG UBONRATCHATHANI</h3>
+                <p class="text-sm text-gray-300 leading-relaxed" id="modalMessage">บันทึกข้อมูลสำเร็จ</p>
+            </div>
+            
+            <button onclick="closeModal()" 
+                class="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-medium py-3 px-4 rounded-xl text-sm transition-all duration-200 cursor-pointer">
+                ตกลง
+            </button>
+        </div>
+    </div>
+
+    <footer class="w-full max-w-md text-center py-6 text-[10px] text-gray-600 tracking-wider mt-auto">
+        SECURE PWA APPLICATION © 2026 MG UBONRATCHATHANI
+    </footer>
+
     <script>
-        function togglePromo() {
-            var x = document.getElementById("promo-box");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
+        // เปิดระบบเปิดสิทธิ์การรันแอปพลิเคชันบนสมาร์ทโฟนผ่าน Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+
+        // ฟังก์ชันควบคุมการทำงานของกล่องแจ้งเตือน Custom Modal
+        function openModal(title, message) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerHTML = message;
+            const modal = document.getElementById('customModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.querySelector('div').classList.remove('scale-95'); modal.querySelector('div').classList.add('scale-100'); }, 10);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if(e.key === 'Escape') closeModal();
+        });
+
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            modal.querySelector('div').classList.remove('scale-100'); modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+
+        // ฟังก์ชันดักจับข้อมูลและประมวลผลฟอร์ม
+        function handleSubmit(event) {
+            event.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+
+            if(fullName.trim() === "" || phoneNumber.trim() === "") {
+                openModal("แจ้งเตือนระบบ", "กรุณากรอกข้อมูลให้ครบถ้วนค๊า");
+                return;
             }
+
+            // แสดงเฉพาะชื่อและเบอร์โทรในป๊อปอัปแจ้งเตือนสำเร็จ
+            const successDetail = `🎉 บันทึกข้อมูลการสมัครสมาชิกเรียบร้อยแล้วค่ะ ขอบพระคุณค่ะ<br><br><span class="text-xs text-gray-400">ชื่อ: ${fullName}<br>เบอร์โทร: ${phoneNumber}</span>`;
+            openModal("MG UBONRATCHATHANI", successDetail);
+            document.getElementById('registerForm').reset();
         }
     </script>
-
 </body>
 </html>
