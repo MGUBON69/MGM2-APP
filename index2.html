@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MG UBONRATCHATHANI - Smart Application</title>
+    <!-- Tailwind CSS v4 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome สำหรับ Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Prompt) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,58 +16,75 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #0b0f19; /* สีพื้นหลังหลักที่ถอดจากแอปต้นฉบับ */
+            background-color: #0b0f19; /* โทนสีพื้นหลังหลักถอดจากภาพ 1000045184.jpg */
         }
         /* ซ่อน Scrollbar สำหรับความเป็นโมบายแอป */
         ::-webkit-scrollbar {
             display: none;
         }
+        /* อนิเมชัน Fade-in สำหรับการเปลี่ยนหน้าให้ลื่นไหล */
+        .page-fade {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="flex justify-center items-center min-h-screen text-slate-200 p-4">
 
+    <!-- Container จำลองหน้าจอมือถือ (Max-width 450px) -->
     <div class="w-full max-w-[450px] bg-[#111625] min-h-[850px] rounded-3xl shadow-2xl border border-slate-800 flex flex-col overflow-hidden relative">
         
-        <div id="registerPage" class="flex-1 flex flex-col p-6">
+        <!-- ================= PAGE 1: REGISTER PAGE (สมัครสมาชิก) ================= -->
+        <div id="registerPage" class="flex-1 flex flex-col p-6 page-fade">
+            <!-- Header แบรนด์ -->
             <div class="flex items-center gap-3 mt-4 mb-8">
                 <div class="bg-[#e50012] text-white font-bold px-3 py-1 rounded text-sm tracking-wider">MG</div>
                 <div class="text-xs font-semibold text-slate-400 tracking-wide uppercase">M2 MOTORSPORT</div>
             </div>
 
+            <!-- Form Content -->
             <div class="flex-1 flex flex-col justify-center">
                 <h1 class="text-3xl font-bold text-white mb-2 text-center">ลงทะเบียนสมาชิกใหม่</h1>
-                <p class="text-sm text-slate-400 text-center mb-8">กรอกข้อมูลของคุณเพื่อรับสิทธิ์และเข้าสู่ระบบ</p>
+                <p class="text-sm text-slate-400 text-center mb-8">กรอกข้อมูลของคุณเพื่อรับสิทธิ์และเข้าสู่ระบบอัจฉริยะ</p>
 
                 <form id="registerForm" class="space-y-5" onsubmit="handleRegister(event)">
+                    <!-- ชื่อ-นามสกุล -->
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">ชื่อ-นามสกุล</label>
-                        <input type="text" id="fullname" required placeholder="เช่น นาย เออเบิ้ล วิ่งไกล"
+                        <input type="text" id="reg_fullname" required placeholder="เช่น pop"
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
                     </div>
 
+                    <!-- เบอร์โทรศัพท์ -->
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="phone" required placeholder="เช่น 0912345678" pattern="[0-9]{9,10}"
+                        <input type="tel" id="reg_phone" required placeholder="เช่น 0852369587" pattern="[0-9]{9,10}"
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
                     </div>
 
+                    <!-- อีเมล -->
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">อีเมล</label>
-                        <input type="email" id="email" required placeholder="ป้องกันการลืมรหัสผ่าน"
+                        <input type="email" id="reg_email" required placeholder="เช่น popsteptep10722@gmail.com"
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
                     </div>
 
+                    <!-- รหัสผ่าน -->
                     <div class="space-y-1 relative">
                         <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
                         <div class="relative">
-                            <input type="password" id="password" required placeholder="••••••••••••"
+                            <input type="password" id="reg_password" required placeholder="••••••••••••"
                                 class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 pr-10 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
-                                <i id="passwordIcon" class="far fa-eye"></i>
+                            <button type="button" onclick="togglePasswordVisibility('reg_password', 'reg_passwordIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                                <i id="reg_passwordIcon" class="far fa-eye"></i>
                             </button>
                         </div>
                     </div>
 
+                    <!-- ปุ่มส่งข้อมูล -->
                     <button type="submit" 
                         class="w-full bg-[#e50012] hover:bg-[#c4000f] active:scale-[0.99] text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-red-900/20 mt-4 text-base cursor-pointer">
                         สร้างบัญชีสมาชิก
@@ -72,33 +92,88 @@
                 </form>
             </div>
 
+            <!-- Link สลับหน้าไปยังหน้าล็อคอิน -->
             <div class="text-center text-sm text-slate-400 mt-8 mb-4">
-                เป็นสมาชิกอยู่แล้วใช่ไหม? <a href="#" onclick="alert('ระบบจำลองการลงทะเบียนเป็นหลัก กรุณากรอกข้อมูลเพื่อทดสอบเข้าหน้าถัดไปได้เลยครับ')" class="text-red-500 hover:underline ml-1">เข้าสู่ระบบที่นี่ค้า</a>
+                เป็นสมาชิกอยู่แล้วใช่ไหม? <a href="#" onclick="switchPage('loginPage')" class="text-red-500 hover:underline font-medium ml-1">เข้าสู่ระบบที่นี่ค้า</a>
             </div>
         </div>
 
 
-        <div id="dashboardPage" class="hidden flex-1 flex flex-col p-6">
+        <!-- ================= PAGE 2: LOGIN PAGE (เข้าสู่ระบบ) ================= -->
+        <div id="loginPage" class="hidden flex-1 flex flex-col p-6 page-fade">
+            <!-- Header แบรนด์ -->
+            <div class="flex items-center gap-3 mt-4 mb-8">
+                <div class="bg-[#e50012] text-white font-bold px-3 py-1 rounded text-sm tracking-wider">MG</div>
+                <div class="text-xs font-semibold text-slate-400 tracking-wide uppercase">M2 MOTORSPORT</div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="flex-1 flex flex-col justify-center">
+                <h1 class="text-3xl font-bold text-white mb-2 text-center">เข้าสู่ระบบ</h1>
+                <p class="text-sm text-slate-400 text-center mb-8">กรอกอีเมลและรหัสผ่านของคุณเพื่อเข้าใช้งานแอปพลิเคชัน</p>
+
+                <form id="loginForm" class="space-y-5" onsubmit="handleLogin(event)">
+                    <!-- อีเมล หรือ เบอร์โทร -->
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">อีเมลที่ลงทะเบียน</label>
+                        <input type="email" id="login_email" required placeholder="popsteptep10722@gmail.com"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
+                    </div>
+
+                    <!-- รหัสผ่าน -->
+                    <div class="space-y-1 relative">
+                        <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
+                        <div class="relative">
+                            <input type="password" id="login_password" required placeholder="••••••••••••"
+                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 pr-10 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
+                            <button type="button" onclick="togglePasswordVisibility('login_password', 'login_passwordIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                                <i id="login_passwordIcon" class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ปุ่มล็อกอิน -->
+                    <button type="submit" 
+                        class="w-full bg-[#e50012] hover:bg-[#c4000f] active:scale-[0.99] text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-red-900/20 mt-4 text-base cursor-pointer">
+                        เข้าสู่ระบบอัจฉริยะ
+                    </button>
+                </form>
+            </div>
+
+            <!-- Link สลับหน้าไปยังหน้าลงทะเบียน -->
+            <div class="text-center text-sm text-slate-400 mt-8 mb-4">
+                ยังไม่มีบัญชีสมาชิก? <a href="#" onclick="switchPage('registerPage')" class="text-red-500 hover:underline font-medium ml-1">สมัครสมาชิกใหม่ที่นี่ค้า</a>
+            </div>
+        </div>
+
+
+        <!-- ================= PAGE 3: DASHBOARD PAGE (หน้าหลักหลังเข้าสู่ระบบ) ================= -->
+        <div id="dashboardPage" class="hidden flex-1 flex flex-col p-6 page-fade">
+            <!-- Top App Bar -->
             <div class="flex justify-between items-center mt-4 mb-6">
                 <div class="flex items-center gap-3">
                     <div class="bg-[#e50012] text-white font-bold px-2.5 py-0.5 rounded text-xs">MG</div>
                     <span class="text-sm font-medium text-white">Smart Dashboard</span>
                 </div>
+                <!-- Profile Status Indicator -->
                 <div class="flex items-center gap-2 bg-[#0b0f19] px-3 py-1.5 rounded-full border border-slate-800">
                     <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                     <span id="userBadge" class="text-xs text-slate-300 font-medium">คุณ pop</span>
                 </div>
             </div>
 
+            <!-- Welcome Banner -->
             <div class="bg-gradient-to-br from-[#1a233a] to-[#0b0f19] p-5 rounded-2xl border border-slate-800 mb-6 relative overflow-hidden">
                 <div class="absolute -right-6 -bottom-6 text-slate-800/20 text-8xl font-bold">MG</div>
-                <p class="text-xs text-red-500 font-semibold tracking-wider uppercase mb-1">ยินดีต้อนรับสมาชิกใหม่</p>
-                <h2 id="welcomeName" class="text-xl font-bold text-white mb-2">สวัสดีครับ คุณ Pop</h2>
-                <p class="text-xs text-slate-400">เข้าถึงระบบบริการ MG M2 Motorsport ได้ง่ายๆ</p>
+                <p class="text-xs text-red-500 font-semibold tracking-wider uppercase mb-1">ยินดีต้อนรับเข้าสู่ระบบ</p>
+                <h2 id="welcomeName" class="text-xl font-bold text-white mb-2">สวัสดีครับ คุณ pop</h2>
+                <p class="text-xs text-slate-400">เข้าถึงระบบบริการอัจฉริยะของ MG M2 Motorsport ได้ง่ายๆ เพียงปลายนิ้วสัมผัส</p>
             </div>
 
+            <!-- Grid Menu Buttons -->
             <div class="flex-1 grid grid-cols-2 gap-4 items-start content-start">
                 
+                <!-- ปุ่ม 1: จองคิวนัดหมาย -->
                 <button onclick="triggerFeature('จองคิวนัดหมาย')" 
                     class="bg-[#1a233a]/50 hover:bg-[#1a233a] border border-slate-800 hover:border-red-500/50 rounded-2xl p-5 flex flex-col items-center justify-center text-center gap-3 transition-all group cursor-pointer aspect-square">
                     <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
@@ -110,6 +185,7 @@
                     </div>
                 </button>
 
+                <!-- ปุ่ม 2: ติดต่อพนักงาน -->
                 <button onclick="triggerFeature('ติดต่อพนักงาน')" 
                     class="bg-[#1a233a]/50 hover:bg-[#1a233a] border border-slate-800 hover:border-red-500/50 rounded-2xl p-5 flex flex-col items-center justify-center text-center gap-3 transition-all group cursor-pointer aspect-square">
                     <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
@@ -121,6 +197,7 @@
                     </div>
                 </button>
 
+                <!-- ปุ่ม 3: ตำแหน่งที่ตั้งบริษัท -->
                 <button onclick="triggerFeature('ตำแหน่งที่ตั้งบริษัท')" 
                     class="bg-[#1a233a]/50 hover:bg-[#1a233a] border border-slate-800 hover:border-red-500/50 rounded-2xl p-5 flex flex-col items-center justify-center text-center gap-3 transition-all group cursor-pointer aspect-square">
                     <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
@@ -132,6 +209,7 @@
                     </div>
                 </button>
 
+                <!-- ปุ่ม 4: ออกจากระบบ -->
                 <button onclick="handleLogout()" 
                     class="bg-[#1a233a]/30 hover:bg-red-950/20 border border-slate-800 hover:border-red-900/50 rounded-2xl p-5 flex flex-col items-center justify-center text-center gap-3 transition-all group cursor-pointer aspect-square">
                     <div class="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
@@ -145,55 +223,109 @@
 
             </div>
 
+            <!-- Footer แบรนด์ -->
             <div class="mt-6 pt-4 border-t border-slate-800 text-center">
                 <p class="text-xs text-slate-500">MG UBONRATCHATHANI M2 MOTORSPORT</p>
-                <p class="text-[10px] text-slate-600 mt-1">v1.0.0 (Beta Edition)</p>
+                <p class="text-[10px] text-slate-600 mt-1">v1.1.0 (Auth & Local Database System)</p>
             </div>
         </div>
 
     </div>
 
+    <!-- JavaScript Application Logic -->
     <script>
-        // ทำการเช็คสถานะการเข้าสู่ระบบเมื่อเปิดแอปพลิเคชันขึ้นมาครั้งแรก
+        // เรียกทำงานระบบตรวจสอบ Session ทันทีเมื่อหน้าเว็บโหลดเสร็จ
         document.addEventListener("DOMContentLoaded", () => {
-            const loggedInUser = localStorage.getItem("mg_current_user");
-            if (loggedInUser) {
-                showDashboard(JSON.parse(loggedInUser));
+            const currentSession = localStorage.getItem("mg_current_user");
+            if (currentSession) {
+                showDashboard(JSON.parse(currentSession));
+            } else {
+                // หากไม่มี Session ให้เริ่มที่หน้าลงทะเบียนก่อนเป็นค่า Default (หรือสลับไปหน้า loginPage ก็ได้ตามชอบค่ะ)
+                switchPage('registerPage');
             }
         });
 
-        // ฟังก์ชันสมัครสมาชิกและบันทึกข้อมูล
+        // ฟังก์ชันสลับหน้าแอป (SPA Navigation System)
+        function switchPage(pageId) {
+            const pages = ['registerPage', 'loginPage', 'dashboardPage'];
+            pages.forEach(id => {
+                const element = document.getElementById(id);
+                if (id === pageId) {
+                    element.classList.remove('hidden');
+                } else {
+                    element.classList.add('hidden');
+                }
+            });
+        }
+
+        // ฟังก์ชันสมัครสมาชิกใหม่และผูกระบบฐานข้อมูล
         function handleRegister(event) {
-            event.preventDefault(); // ป้องกันการรีเฟรชหน้าจอ
+            event.preventDefault();
 
-            const fullname = document.getElementById("fullname").value.trim();
-            const phone = document.getElementById("phone").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
+            const fullname = document.getElementById("reg_fullname").value.trim();
+            const phone = document.getElementById("reg_phone").value.trim();
+            const email = document.getElementById("reg_email").value.trim().toLowerCase();
+            const password = document.getElementById("reg_password").value;
 
-            // โครงสร้างฐานข้อมูลอ็อบเจกต์ของสมาชิก
-            const userData = {
+            // การสร้าง Object สมาชิกใหม่
+            const newUser = {
                 fullname: fullname,
                 phone: phone,
                 email: email,
-                password: password // ในแอปจริงจุดนี้จะต้องทำการเข้ารหัสผ่านเพื่อความปลอดภัย
+                password: password
             };
 
-            // บันทึกข้อมูลลงสู่ LocalStorage (ฐานข้อมูลในบราวเซอร์)
-            localStorage.setItem("mg_user_database", JSON.stringify(userData));
-            localStorage.setItem("mg_current_user", JSON.stringify(userData));
+            // ดึงอาเรย์ฐานข้อมูลเดิมที่มีอยู่ (ถ้าไม่มีให้สร้างอาร์เรย์เปล่าขึ้นมาใหม่)
+            let userDatabase = JSON.parse(localStorage.getItem("mg_users_list")) || [];
 
-            // แสดง Feedback เล็กน้อยก่อนเข้าหน้าถัดไปเพื่อ UX ที่ดี
-            alert("🎉 ลงทะเบียนสมาชิกสำเร็จ! ยินดีต้อนรับค่ะ");
-            
-            // นำทางไปยังหน้า Dashboard
-            showDashboard(userData);
+            // ตรวจสอบความซ้ำซ้อนของอีเมลในฐานข้อมูล
+            const isEmailExist = userDatabase.some(user => user.email === email);
+            if (isEmailExist) {
+                alert("❌ อีเมลนี้เคยเปิดบัญชีสมาชิกไว้แล้วค่ะ กรุณากดปุ่มเข้าสู่ระบบแทนนะคะ");
+                return;
+            }
+
+            // เพิ่มผู้ใช้ใหม่เข้าไปในระบบฐานข้อมูล
+            userDatabase.push(newUser);
+            localStorage.setItem("mg_users_list", JSON.stringify(userDatabase));
+
+            // สร้าง Active Session เข้าสู่ระบบโดยอัตโนมัติ
+            localStorage.setItem("mg_current_user", JSON.stringify(newUser));
+
+            alert("🎉 ลงทะเบียนสมาชิกสำเร็จ! ยินดีต้อนรับเข้าสู่ครอบครัว MG");
+            showDashboard(newUser);
+            document.getElementById("registerForm").reset();
         }
 
-        // ฟังก์ชันเปิด-ปิดการแสดงผลรหัสผ่าน (รูปดวงตา)
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById("password");
-            const passwordIcon = document.getElementById("passwordIcon");
+        // ฟังก์ชันระบบยืนยันตัวตนการเข้าสู่ระบบ (Login Authorization)
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const emailInput = document.getElementById("login_email").value.trim().toLowerCase();
+            const passwordInput = document.getElementById("login_password").value;
+
+            // ดึงคลังข้อมูลจากฐานข้อมูลหลัก
+            const userDatabase = JSON.parse(localStorage.getItem("mg_users_list")) || [];
+
+            // ค้นหาผู้ใช้งานที่แมตช์กับอีเมลและรหัสผ่าน
+            const matchedUser = userDatabase.find(user => user.email === emailInput && user.password === passwordInput);
+
+            if (matchedUser) {
+                // หากข้อมูลถูกต้อง ให้บันทึก Session ปัจจุบันและพาเข้าหน้าแดชบอร์ด
+                localStorage.setItem("mg_current_user", JSON.stringify(matchedUser));
+                alert(`👋 ยินดีต้อนรับกลับมาค่ะ คุณ ${matchedUser.fullname}`);
+                showDashboard(matchedUser);
+                document.getElementById("loginForm").reset();
+            } else {
+                // หากไม่ตรงกัน ให้แจ้งเตือนปฏิเสธสิทธิ์การเข้าใช้งาน
+                alert("❌ อีเมลหรือรหัสผ่านไม่ถูกต้อง หรือยังไม่ได้ทำการสมัครสมาชิกค่ะ กรุณาตรวจสอบอีกครั้งนะคะ");
+            }
+        }
+
+        // ฟังก์ชันสำหรับเปิด-ปิดความคมชัดของรหัสผ่าน (Toggle Password Input)
+        function togglePasswordVisibility(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const passwordIcon = document.getElementById(iconId);
             
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
@@ -206,32 +338,23 @@
             }
         }
 
-        // ฟังก์ชันสลับหน้าไปแสดงผลหน้า Dashboard
+        // ฟังก์ชันเรนเดอร์และเปิดหน้า Dashboard หลัก
         function showDashboard(user) {
-            document.getElementById("registerPage").classList.add("hidden");
-            document.getElementById("dashboardPage").classList.remove("hidden");
-            
-            // เปลี่ยนข้อความต้อนรับตามชื่อที่ผู้ใช้สมัครเข้ามาจริง
+            switchPage('dashboardPage');
             document.getElementById("userBadge").innerText = `คุณ ${user.fullname}`;
             document.getElementById("welcomeName").innerText = `สวัสดีครับ คุณ ${user.fullname}`;
         }
 
-        // ฟังก์ชันสำหรับการคลิกปุ่มต่างๆ บน Dashboard
+        // ฟังก์ชันแสดงผลจำลองสถานะปุ่มกดเมื่อใช้งาน
         function triggerFeature(featureName) {
-            alert(`📱 คุณได้กดปุ่ม: "${featureName}" \n(ในระบบจริงจะนำท่านเข้าสู่ฟังก์ชันหรือเปิด WebView ลิงก์ไปยังส่วนงานนั้นๆ ต่อไป)`);
+            alert(`📱 คุณได้กดปุ่มใช้งาน: "${featureName}" \n(ระบบพร้อมพัฒนานำทางเชื่อมต่อชุดคำสั่งอื่นของ MG ต่อได้ทันทีค่ะ)`);
         }
 
-        // ฟังก์ชันออกจากระบบ (Clear State)
+        // ฟังก์ชันทำลาย Session เมื่อกดออกจากระบบ
         function handleLogout() {
-            if(confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
-                localStorage.removeItem("mg_current_user"); // ลบเฉพาะ session การล็อคอินปัจจุบัน (ข้อมูลสมัครสมาชิกยังคงอยู่ในฐานข้อมูล)
-                
-                // รีเซ็ตฟอร์มสมัครสมาชิก
-                document.getElementById("registerForm").reset();
-                
-                // สลับหน้าจอกลับมาหน้าแรก
-                document.getElementById("dashboardPage").classList.add("hidden");
-                document.getElementById("registerPage").classList.remove("hidden");
+            if(confirm("คุณต้องการออกจากระบบเพื่อสิ้นสุดการใช้งานในครั้งนี้ใช่หรือไม่?")) {
+                localStorage.removeItem("mg_current_user"); // ลบ Session ปัจจุบันออก แต่ฐานข้อมูลผู้สมัคร mg_users_list ไม่หาย
+                switchPage('loginPage'); // เด้งสลับไปที่หน้าล็อคอินเริ่มต้นเพื่อเพิ่มความปลอดภัยให้กับยูสเซอร์
             }
         }
     </script>
