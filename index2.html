@@ -5,21 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MG UBON - Smart Full System V3</title>
     
-    <!-- PWA Core Configurations -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b0f19">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MG UBON">
     
-    <!-- Tailwind CSS v4 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Prompt) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -31,28 +27,51 @@
         ::-webkit-scrollbar {
             display: none;
         }
-        /* เอฟเฟกต์แอนิเมชันสำหรับเปลี่ยนหน้าจอ UI */
         .page-active {
             animation: cubicSlide 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
         }
         @keyframes cubicSlide {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="flex justify-center items-center min-h-screen text-slate-200 p-0 md:p-6">
 
-    <!-- กรอบจำลองแอปพลิเคชันมือถือจริง (Mobile Chassis Container) -->
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
-        <!-- ================= 🔔 CUSTOM PWA INSTALLATION PROMPT ================= -->
+        <div id="editNameModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center text-[#e50012]">
+                        <i class="fa-solid fa-user-pen text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">แก้ไขชื่อผู้ลงทะเบียน</h4>
+                        <p class="text-[11px] text-slate-400">กรุณาระบุชื่อ-นามสกุลใหม่ของคุณครับ</p>
+                    </div>
+                </div>
+                <form onsubmit="saveNewName(event)" class="space-y-4">
+                    <div>
+                        <input type="text" id="new-profile-name" required placeholder="กรอกชื่อ-นามสกุลใหม่ที่นี่"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    <div class="flex justify-end gap-2 text-xs font-semibold pt-2">
+                        <button type="button" onclick="closeEditModal()" class="text-slate-400 hover:text-white py-2 px-3 cursor-pointer">ยกเลิก</button>
+                        <button type="submit" class="bg-[#e50012] hover:bg-[#c4000f] text-white px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer">บันทึกข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
-                <div class="w-11 h-11 bg-slate-700/60 rounded-xl flex items-center justify-center font-bold text-slate-300 text-lg shrink-0">G</div>
+                <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                </div>
                 <div class="flex-1">
                     <h4 class="text-xs font-bold text-white">เพิ่ม MG UBON ลงหน้าจอหลัก</h4>
-                    <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">ติดตั้งแอปพลิเคชันลงบนมือถือของคุณเพื่อการใช้งานที่รวดเร็วและเสถียรยิ่งขึ้น</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">ติดตั้งแอปพลิเคชันลงบนมือถือเพื่อการใช้งานที่รวดเร็วยิ่งขึ้นครับ</p>
                 </div>
             </div>
             <div class="flex justify-end gap-3 mt-4 text-xs font-semibold">
@@ -61,7 +80,6 @@
             </div>
         </div>
 
-        <!-- ================= APP HEADER ================= -->
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -73,15 +91,13 @@
             </div>
         </header>
 
-        <!-- ================= MAIN CONTENT SPACE ================= -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
-            <!-- ---------------- หน้าจอที่ 1: หน้าลงทะเบียน (REGISTER PAGE) ---------------- -->
             <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md shadow-red-950/20">MG</div>
+                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
                     <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
-                    <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการ</p>
+                    <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการอัจฉริยะ</p>
                 </div>
 
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
@@ -106,25 +122,23 @@
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
 
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/30 transition-all active:scale-[0.99] mt-4 cursor-pointer text-sm">
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
                         สร้างบัญชีสมาชิก
                     </button>
                     
-                    <!-- ปุ่มสำหรับผู้ที่มีบัญชีอยู่แล้วและต้องการเข้าสู่ระบบ -->
                     <div class="text-center mt-4">
-                        <p class="text-xs text-slate-400">มีบัญชีผู้ใช้งานแล้วใช่ไหมค๊า? 
+                        <p class="text-xs text-slate-400">มีบัญชีผู้ใช้งานแล้วใช่ไหม? 
                             <button type="button" onclick="changeView('login')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
                         </p>
                     </div>
                 </form>
             </div>
 
-            <!-- ---------------- หน้าจอที่ 2: หน้าเข้าสู่ระบบ (LOGIN PAGE) ---------------- -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md shadow-red-950/20">MG</div>
+                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
                     <h2 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h2>
-                    <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
+                    <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบครับ</p>
                 </div>
 
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
@@ -139,7 +153,7 @@
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
 
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/30 transition-all active:scale-[0.99] mt-4 cursor-pointer text-sm">
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
                         เข้าสู่ระบบผู้ใช้งาน
                     </button>
                     
@@ -151,96 +165,88 @@
                 </form>
             </div>
 
-            <!-- ---------------- หน้าจอที่ 3: แดชบอร์ดหลัก (HOME DASHBOARD) ---------------- -->
             <div id="page-home" class="hidden p-5 space-y-5">
-                <!-- Welcome Banner -->
-                <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md">
+                <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
                     <div>
                         <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
                         <h3 id="client-name" class="text-lg font-bold text-white">คุณชินอิจิ</h3>
-                        <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชันMGM2 ✨</p>
+                        <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชัน MGM2 ✨</p>
                     </div>
-                    <div class="w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner">
+                    <button onclick="openEditModal()" class="w-12 h-12 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner cursor-pointer transition-colors" title="แก้ไขชื่อ">
                         <i class="fa-solid fa-user-gear text-xl"></i>
-                    </div>
+                    </button>
                 </div>
 
-                <!-- บริการด่วนทั้งหมด (Quick Launch Buttons Shortcuts) -->
                 <div class="space-y-2.5">
                     <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">บริการด่วนทั้งหมด</h4>
                     <div class="grid grid-cols-2 gap-3">
                         
-                        <!-- 🟢 ปุ่มจองคิว: เชื่อมต่อยิงเข้าเปิด LINE OA จริงทันทีตามสั่ง -->
-                        <a href="https://lin.ee/Ov20t55" target="_blank" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
-                            <div class="w-9 h-9 bg-green-500/10 text-green-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i class="fa-brands fa-line text-lg"></i>
+                        <a href="https://lin.ee/Ov20t55" target="_blank" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                            <div class="w-9 h-9 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-line text-xl"></i>
                             </div>
                             <span class="text-xs font-bold text-white block">จองคิวรับบริการ</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5">นัดหมายเช็คระยะผ่าน LINE OA</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">นัดหมายเช็คระยะผ่าน LINE OA</span>
                         </a>
 
-                        <!-- 🔵 ปุ่มติดต่อพนักงาน: สลับหน้าภายในเพื่อแสดงข้อมูลและกดโทรออกง่ายๆ -->
-                        <button onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                        <button onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-phone text-base"></i>
                             </div>
                             <span class="text-xs font-bold text-white block">ติดต่อพนักงาน</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
                         </button>
 
-                        <button onclick="changeView('location')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                        <button onclick="changeView('location')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-map-location-dot text-base"></i>
                             </div>
                             <span class="text-xs font-bold text-white block">ที่ตั้งบริษัท</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5">แผนที่และการนำทางมาศูนย์</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
                         </button>
 
-                        <button onclick="triggerLogout()" class="bg-[#181f32] hover:bg-red-950/20 border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                        <button onclick="triggerLogout()" class="bg-[#181f32] hover:bg-red-950/20 border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-slate-800 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
                                 <i class="fa-solid fa-power-off text-base"></i>
                             </div>
                             <span class="text-xs font-bold text-slate-300 group-hover:text-red-400 block">ออกจากระบบ</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5">ล็อกเอาท์ปิดเซสชันปลอดภัย</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">ล็อกเอาท์ปิดเซสชันปลอดภัยครับ</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- ---------------- หน้าจอที่ 4: ติดต่อพนักงาน (CONTACT STAFF) ---------------- -->
             <div id="page-contact" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่และฝ่ายขาย
                 </h3>
-                <p class="text-xs text-slate-400">คุณสามารถกดโทรออกสายด่วนเพื่อติดต่อทีมงาน MG M2 Motorsport ได้ทันทีค่ะ:</p>
+                <p class="text-xs text-slate-400">คุณสามารถกดโทรออกสายด่วนเพื่อติดต่อทีมงาน MG M2 Motorsport ได้ทันทีครับ:</p>
 
                 <div class="space-y-3">
-                    <!-- คุณชินอิจิเปลี่ยนเบอร์ในแท็ก href="tel:..." และแก้ข้อความในวงเล็บได้เองอย่างอิสระเลยนะคะ -->
-                    <a href="tel:0925588055" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors">
+                    <a href="tel:0930641144" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-red-500/10 text-[#e50012] rounded-full flex items-center justify-center"><i class="fa-solid fa-phone-volume"></i></div>
                             <div>
                                 <span class="text-xs font-bold text-white block">เบอร์โทรศัพท์ศูนย์บริการหลัก</span>
-                                <span class="text-[10px] text-slate-400">โทร. 093-064-1144 (คลิกเพื่อโทรออก)</span>
+                                <span class="text-[10px] text-slate-400">โทร. 093-064-1144</span>
                             </div>
                         </div>
-                        <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                        <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
                     </a>
 
-                    <a href="tel:0912345678" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors">
+                    <a href="tel:0925588055" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center"><i class="fa-solid fa-headset"></i></div>
                             <div>
                                 <span class="text-xs font-bold text-white block">ที่ปรึกษาการขายด่วน (Hotline)</span>
-                                <span class="text-[10px] text-slate-400">โทร. 092-558-8055 (คลิกเพื่อโทรออก)</span>
+                                <span class="text-[10px] text-slate-400">โทร. 092-558-8055</span>
                             </div>
                         </div>
-                        <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                        <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
                     </a>
                 </div>
             </div>
 
-            <!-- ---------------- หน้าจอที่ 5: ที่ตั้งบริษัท (COMPANY LOCATION) ---------------- -->
             <div id="page-location" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัทสำนักงานใหญ่
@@ -250,15 +256,15 @@
                     <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#e50012_1px,transparent_1px)] [background-size:16px_16px]"></div>
                     <i class="fa-solid fa-location-crosshairs text-3xl text-red-500 mb-2 animate-bounce"></i>
                     <span class="text-xs font-bold text-white block">MG Ubonratchathani (M2 Motorsport)</span>
-                    <span class="text-[10px] text-slate-500 mt-1 max-w-[280px]">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
+                    <span class="text-[10px] text-slate-400 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
                 </div>
 
-                <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3">
+                <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3 shadow-sm">
                     <h4 class="text-xs font-bold text-white uppercase tracking-wider">ข้อมูลการเดินทางติดต่อ</h4>
                     <p class="text-xs text-slate-400 leading-relaxed">
-                        โชว์รูมและศูนย์บริการมาตรฐานครบวงจรขนาดใหญ่ พร้อมรองรับระบบสถานีชาร์จความเร็วสูงสำหรับรถยนต์ EV ค๊า
+                        โชว์รูมและศูนย์บริการมาตรฐานครบวงจรขนาดใหญ่ พร้อมรองรับระบบสถานีชาร์จความเร็วสูงสำหรับรถยนต์ EV ครับ
                     </p>
-                    <a href="https://maps.app.goo.gl/vVRVtJx1SYv4TatQ8" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors">
+                    <a href="https://maps.google.com" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
                         <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
                     </a>
                 </div>
@@ -266,13 +272,12 @@
 
         </main>
 
-        <!-- ================= BOTTOM NAVIGATION BAR (แถบเมนูดังกล่าวจะซ่อนไว้ตอนกรอกข้อมูลฟอร์ม) ================= -->
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
                 <span class="text-[10px] tracking-wide">หน้าแรก</span>
             </button>
-            <a href="https://lin.ee/Ov20t55" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+            <a href="https://lin.ee/Ov20t55" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16 text-center">
                 <i class="fa-brands fa-line text-lg"></i>
                 <span class="text-[10px] tracking-wide">จองคิว</span>
             </a>
@@ -288,11 +293,9 @@
 
     </div>
 
-    <!-- JavaScript Smart Core Engine Orchestrator -->
     <script>
         let installTrigger = null;
 
-        // ดักจับและตรวจจับสัญญาณการติดตั้งแอป PWA จากเบราว์เซอร์
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
             installTrigger = event;
@@ -313,32 +316,27 @@
             document.getElementById('pwaAlertBanner').classList.add('hidden');
         }
 
-        // ฟังก์ชันจัดการสมัครสมาชิก (Register Form Controller)
+        // ฟังก์ชันจัดการสมัครสมาชิก (Register Form)
         function processRegister(event) {
             event.preventDefault();
             
             const profile = {
-                fullname: document.getElementById('reg-name').value,
-                phone: document.getElementById('reg-phone').value,
-                email: document.getElementById('reg-email').value,
+                fullname: document.getElementById('reg-name').value.trim(),
+                phone: document.getElementById('reg-phone').value.trim(),
+                email: document.getElementById('reg-email').value.trim().toLowerCase(),
                 password: document.getElementById('reg-password').value
             };
 
-            // บันทึกฐานข้อมูลผู้ใช้ลงหน่วยความจำถาวร
             localStorage.setItem('mg_client_account', JSON.stringify(profile));
-            
-            // เปิดทำงานเลเยอร์ส่วนหัวและส่วนท้ายแอป
             loginUserSuccess(profile.fullname);
         }
 
-        // ฟังก์ชันประมวลผลระบบเข้าสู่ระบบ (Login Form Controller)
+        // ฟังก์ชันประมวลผลระบบเข้าสู่ระบบ (Login Form)
         function processLogin(event) {
             event.preventDefault();
             
-            const emailInput = document.getElementById('login-email').value;
+            const emailInput = document.getElementById('login-email').value.trim().toLowerCase();
             const passwordInput = document.getElementById('login-password').value;
-            
-            // ดึงข้อมูลบัญชีผู้ใช้ที่เคยเซฟไว้ขึ้นมาตรวจสอบ
             const storedAccount = localStorage.getItem('mg_client_account');
             
             if (storedAccount) {
@@ -348,9 +346,7 @@
                     return;
                 }
             }
-            
-            // ดักเงื่อนไขหากไม่มีบัญชีหรือข้อมูลไม่ตรง
-            alert('ไม่พบข้อมูลบัญชีสมาชิก หรือคุณกรอกรหัสผ่านไม่ถูกต้องค๊า กรุณาตรวจสอบอีกครั้งนะคะ');
+            alert('ไม่พบข้อมูลบัญชีสมาชิก หรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งนะครับ');
         }
 
         // ฟังก์ชันเมื่อล็อกอินสำเร็จ
@@ -361,7 +357,53 @@
             changeView('home');
         }
 
-        // ระบบนำทางและสลับหน้าจอเลเยอร์ (SPA View Router Engine)
+        // 🛠️ ฟังก์ชันสำหรับเปิดหน้าต่างแก้ไขชื่อ (Open Name Editor)
+        function openEditModal() {
+            const storedAccount = localStorage.getItem('mg_client_account');
+            let currentName = "ชินอิจิ";
+            if (storedAccount) {
+                currentName = JSON.parse(storedAccount).fullname;
+            }
+            // ใส่ชื่อปัจจุบันลงในกล่องรับข้อมูลให้ล่วงหน้า
+            document.getElementById('new-profile-name').value = currentName;
+            document.getElementById('editNameModal').classList.remove('hidden');
+        }
+
+        // 🛠️ ฟังก์ชันสำหรับปิดหน้าต่างแก้ไขชื่อ (Close Name Editor)
+        function closeEditModal() {
+            document.getElementById('editNameModal').classList.add('hidden');
+        }
+
+        // 🛠️ ฟังก์ชันบันทึกชื่อใหม่ลงฐานข้อมูล LocalStorage และอัปเดต UI หน้าจอทันที
+        function saveNewName(event) {
+            event.preventDefault();
+            const newName = document.getElementById('new-profile-name').value.trim();
+            
+            if (!newName) return;
+
+            const storedAccount = localStorage.getItem('mg_client_account');
+            if (storedAccount) {
+                // กรณีผู้ใช้มีข้อมูล Profile เดิมอยู่แล้ว ให้ดึงมาแก้ไขเฉพาะฟิลด์ชื่อ
+                const accountData = JSON.parse(storedAccount);
+                accountData.fullname = newName;
+                localStorage.setItem('mg_client_account', JSON.stringify(accountData));
+            } else {
+                // กรณีเป็น Guest Session ชั่วคราว ให้สร้าง Object ขึ้นมารองรับซัพพอร์ตระบบล็อกอินเดิม
+                const dummyAccount = {
+                    fullname: newName,
+                    phone: "0912345678",
+                    email: "mgurban@gmail.com",
+                    password: "password123"
+                };
+                localStorage.setItem('mg_client_account', JSON.stringify(dummyAccount));
+            }
+
+            // อัปเดตข้อความบนการ์ดแสดงผลแดชบอร์ดหลักทันที
+            document.getElementById('client-name').innerText = `คุณ ${newName}`;
+            closeEditModal();
+        }
+
+        // ระบบนำทางและสลับหน้าจอเลเยอร์ (SPA Router Engine)
         function changeView(viewId) {
             const allViews = ['register', 'login', 'home', 'contact', 'location'];
             allViews.forEach(v => {
@@ -373,10 +415,11 @@
             });
 
             const targetLayer = document.getElementById(`page-${viewId}`);
-            targetLayer.classList.remove('hidden');
-            targetLayer.classList.add('page-active');
+            if (targetLayer) {
+                targetLayer.classList.remove('hidden');
+                targetLayer.classList.add('page-active');
+            }
 
-            // จัดการเปลี่ยนสถานะปุ่มเมนูไฮไลต์ด้านล่าง (ถ้าไม่ได้อยู่ในฟอร์ม)
             const navButtons = ['home', 'contact', 'location'];
             navButtons.forEach(btn => {
                 const element = document.getElementById(`btn-nav-${btn}`);
@@ -392,23 +435,29 @@
             });
         }
 
-        // ระบบสัญญานความปลอดภัย ล็อกเอาท์ออกจากแอปพลิเคชัน (Logout Execution)
+        // ระบบล็อกเอาท์ (Logout Execution)
         function triggerLogout() {
-            if (confirm('คุณต้องการออกจากระบบการควบคุมแอปพลิเคชันใช่ไหมค๊า?')) {
+            if (confirm('คุณต้องการออกจากระบบใช่ไหมครับ?')) {
                 document.getElementById('appHeader').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
                 
-                // ล้างค่าฟิลด์ล็อกอินทั้งหมดเพื่อความปลอดภัย
                 document.getElementById('login-email').value = '';
                 document.getElementById('login-password').value = '';
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-phone').value = '';
+                document.getElementById('reg-email').value = '';
+                document.getElementById('reg-password').value = '';
                 
                 changeView('login');
             }
         }
 
+        // ลงทะเบียน PWA Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js');
+                navigator.serviceWorker.register('service-worker.js').catch(err => {
+                    console.log('Service Worker registration skipped or mocked.');
+                });
             });
         }
     </script>
