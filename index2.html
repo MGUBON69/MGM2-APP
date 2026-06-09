@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MG UBON - Smart Full System V3</title>
     
+    <!-- PWA Configurations -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b0f19">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MG UBON">
     
+    <!-- Third-party Styles & Scripts via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,9 +26,11 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
+        /* ซ่อน Scrollbar ของเบราว์เซอร์เพื่อให้ได้ฟีลลิ่งเหมือน App Native */
         ::-webkit-scrollbar {
             display: none;
         }
+        /* แอนิเมชันเมื่อเปลี่ยนหน้าจอ */
         .page-active {
             animation: cubicSlide 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
         }
@@ -38,8 +42,10 @@
 </head>
 <body class="flex justify-center items-center min-h-screen text-slate-200 p-0 md:p-6">
 
+    <!-- Container หลักจำลองกรอบสมาร์ตโฟน (Max-Width 450px) -->
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
+        <!-- ================= MODAL: แก้ไขชื่อผู้ลงทะเบียน ================= -->
         <div id="editNameModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
                 <div class="flex items-center gap-3 mb-4">
@@ -64,6 +70,7 @@
             </div>
         </div>
 
+        <!-- ================= BANNER: แจ้งเตือนติดตั้ง PWA ================= -->
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
@@ -80,6 +87,7 @@
             </div>
         </div>
 
+        <!-- ================= GLOBAL APP HEADER ================= -->
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -91,8 +99,10 @@
             </div>
         </header>
 
+        <!-- ================= MAIN CONTENT SCROLL AREA ================= -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
+            <!-- PAGE: Register (หน้าแรกสุดเริ่มต้นตอนยังไม่ล็อกอิน) -->
             <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -134,6 +144,7 @@
                 </form>
             </div>
 
+            <!-- PAGE: Login -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -165,7 +176,9 @@
                 </form>
             </div>
 
+            <!-- PAGE: Home DashBoard -->
             <div id="page-home" class="hidden p-5 space-y-5">
+                <!-- Welcome Card Profile -->
                 <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
                     <div>
                         <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
@@ -177,6 +190,7 @@
                     </button>
                 </div>
 
+                <!-- Grid Menu Navigation Links -->
                 <div class="space-y-2.5">
                     <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">เข้าถึงง่าย แค่ปลายนิ้ว</h4>
                     <div class="grid grid-cols-2 gap-3">
@@ -216,6 +230,7 @@
                 </div>
             </div>
 
+            <!-- PAGE: Contact List -->
             <div id="page-contact" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่
@@ -247,6 +262,7 @@
                 </div>
             </div>
 
+            <!-- PAGE: Location & Maps -->
             <div id="page-location" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัทสำนักงานใหญ่
@@ -272,6 +288,7 @@
 
         </main>
 
+        <!-- ================= BOTTOM NAVIGATION BAR ================= -->
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
@@ -293,6 +310,7 @@
 
     </div>
 
+    <!-- ================= JAVASCRIPT APPLICATION LOGIC ================= -->
     <script>
         let installTrigger = null;
 
@@ -346,7 +364,7 @@
                     return;
                 }
             }
-            alert('ไม่พบข้อมูลบัญชีสมาชิก หรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งนะค่ะ');
+            alert('ไม่พบข้อมูลบัญชีสมาชิก หรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งนะคะ');
         }
 
         // ฟังก์ชันเมื่อล็อกอินสำเร็จ
@@ -357,24 +375,23 @@
             changeView('home');
         }
 
-        // 🛠️ ฟังก์ชันสำหรับเปิดหน้าต่างแก้ไขชื่อ (Open Name Editor)
+        // ฟังก์ชันสำหรับเปิดหน้าต่างแก้ไขชื่อ (Open Name Editor)
         function openEditModal() {
             const storedAccount = localStorage.getItem('mg_client_account');
             let currentName = "ชินอิจิ";
             if (storedAccount) {
                 currentName = JSON.parse(storedAccount).fullname;
             }
-            // ใส่ชื่อปัจจุบันลงในกล่องรับข้อมูลให้ล่วงหน้า
             document.getElementById('new-profile-name').value = currentName;
             document.getElementById('editNameModal').classList.remove('hidden');
         }
 
-        // 🛠️ ฟังก์ชันสำหรับปิดหน้าต่างแก้ไขชื่อ (Close Name Editor)
+        // ฟังก์ชันสำหรับปิดหน้าต่างแก้ไขชื่อ (Close Name Editor)
         function closeEditModal() {
             document.getElementById('editNameModal').classList.add('hidden');
         }
 
-        // 🛠️ ฟังก์ชันบันทึกชื่อใหม่ลงฐานข้อมูล LocalStorage และอัปเดต UI หน้าจอทันที
+        // ฟังก์ชันบันทึกชื่อใหม่ลงฐานข้อมูล LocalStorage และอัปเดต UI หน้าจอทันที
         function saveNewName(event) {
             event.preventDefault();
             const newName = document.getElementById('new-profile-name').value.trim();
@@ -383,12 +400,10 @@
 
             const storedAccount = localStorage.getItem('mg_client_account');
             if (storedAccount) {
-                // กรณีผู้ใช้มีข้อมูล Profile เดิมอยู่แล้ว ให้ดึงมาแก้ไขเฉพาะฟิลด์ชื่อ
                 const accountData = JSON.parse(storedAccount);
                 accountData.fullname = newName;
                 localStorage.setItem('mg_client_account', JSON.stringify(accountData));
             } else {
-                // กรณีเป็น Guest Session ชั่วคราว ให้สร้าง Object ขึ้นมารองรับซัพพอร์ตระบบล็อกอินเดิม
                 const dummyAccount = {
                     fullname: newName,
                     phone: "0912345678",
@@ -398,7 +413,6 @@
                 localStorage.setItem('mg_client_account', JSON.stringify(dummyAccount));
             }
 
-            // อัปเดตข้อความบนการ์ดแสดงผลแดชบอร์ดหลักทันที
             document.getElementById('client-name').innerText = `คุณ ${newName}`;
             closeEditModal();
         }
@@ -435,7 +449,7 @@
             });
         }
 
-        // ระบบล็อกเอาท์ (Logout Execution)
+        // ระบบออกจากระบบ (Logout Execution)
         function triggerLogout() {
             if (confirm('คุณต้องการออกจากระบบใช่ไหมคะ?')) {
                 document.getElementById('appHeader').classList.add('hidden');
@@ -448,9 +462,30 @@
                 document.getElementById('reg-email').value = '';
                 document.getElementById('reg-password').value = '';
                 
-                changeView('login');
+                // เคลียร์ประวัติการเข้าสู่ระบบออกจากฐานข้อมูลเมื่อตั้งใจกด Logout เท่านั้น
+                localStorage.removeItem('mg_client_account');
+                
+                changeView('register');
             }
         }
+
+        // 🛠️ ฟังก์ชันตรวจสอบ Session บัญชีเมื่อแอปพลิเคชันถูกเปิดหรือรีเฟรชหน้าจอ (Fix State Logic)
+        function checkLoginSession() {
+            const storedAccount = localStorage.getItem('mg_client_account');
+            if (storedAccount) {
+                const parsedAccount = JSON.parse(storedAccount);
+                if (parsedAccount && parsedAccount.fullname) {
+                    // หากตรวจพบว่าเคยบันทึกบัญชีไว้แล้ว ระบบจะข้ามหน้าลงทะเบียนไปที่หน้าแรกอัตโนมัติค๊า
+                    loginUserSuccess(parsedAccount.fullname);
+                    return;
+                }
+            }
+            // หากตรวจสอบไม่พบข้อมูลบัญชี จะคงไว้ที่หน้าลงทะเบียนดั้งเดิม
+            changeView('register');
+        }
+
+        // ผูก Lifecycle Event ตรวจสอบสถานะทันทีเมื่อ DOM โหลดเสร็จสมบูรณ์
+        window.addEventListener('DOMContentLoaded', checkLoginSession);
 
         // ลงทะเบียน PWA Service Worker
         if ('serviceWorker' in navigator) {
