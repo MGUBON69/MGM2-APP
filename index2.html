@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG UBON - Smart Full System v2.0</title>
+    <title>MG Smart Full System - One-Time Password</title>
+    <!-- เรียกใช้งาน Tailwind CSS เจเนอเรชันใหม่ล่าสุดตาม Requirement -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- เรียกใช้งาน EmailJS SDK (เวอร์ชันเสถียรสำหรับการสั่งการผ่าน Client-Side) -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         // เริ่มต้นเปิดระบบ EmailJS ด้วย Public Key ของคุณชินอิจิ
@@ -13,120 +15,105 @@
         })();
     </script>
 </head>
-<body class="bg-[#0b0f19] text-white min-h-screen flex flex-col items-center justify-center p-4 font-sans relative">
+<body class="bg-[#0b0f19] text-white min-h-screen flex items-center justify-center p-4 font-sans">
 
-    <div id="login-box" class="w-full max-w-md bg-[#161b26] rounded-2xl p-6 border border-slate-800 shadow-2xl space-y-6">
-        <div class="text-center">
-            <h1 class="text-2xl font-black text-amber-500 tracking-wider">MG UBON</h1>
-            <p class="text-xs text-slate-400 mt-1">Smart Full System Management</p>
+    <!-- กล่องคอนเทนเนอร์หลักระบบกู้คืนรหัสผ่าน (UI/UX พรีเมียมมีมิติ) -->
+    <div class="w-full max-w-md bg-[#161b26] rounded-2xl p-6 border border-slate-800 shadow-2xl relative overflow-hidden">
+        
+        <!-- ส่วนหัว (Header) -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center font-bold text-[#0b0f19] text-lg shadow-md shadow-amber-500/20">
+                MG
+            </div>
+            <div>
+                <h2 class="text-lg font-bold tracking-wide">กู้คืนระบบบัญชี</h2>
+                <p class="text-xs text-slate-400">Security Verification Service</p>
+            </div>
+            <button id="btn-close-forgot" class="absolute top-5 right-5 text-slate-500 hover:text-white transition-colors cursor-pointer text-sm">✕</button>
         </div>
 
-        <form id="login-form" onsubmit="alert('เข้าสู่ระบบสำเร็จ (ตัวอย่าง)'); event.preventDefault();" class="space-y-4">
+        <!-- ================= STEP 1: ฟอร์มระบุอีเมลเพื่อรับ OTP ================= -->
+        <form id="forgot-step-1" onsubmit="processRequestEmailOTP(event)" class="space-y-4">
             <div class="space-y-1.5">
-                <label class="text-xs text-slate-400 font-medium">อีเมลผู้ใช้งาน</label>
-                <input type="email" id="login-email" required placeholder="name@gmail.com" class="w-full bg-[#1f2635] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+                <label for="forgot-email" class="text-xs text-slate-400 font-medium">กรอกอีเมลที่ใช้ลงทะเบียน</label>
+                <input 
+                    type="email" 
+                    id="forgot-email" 
+                    required
+                    placeholder="example@gmail.com" 
+                    class="w-full bg-[#1f2635] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-500"
+                >
             </div>
-            <div class="space-y-1.5">
-                <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-                <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-[#1f2635] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
-            </div>
-            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl text-xs font-bold transition-colors cursor-pointer">
-                เข้าสู่ระบบ
+
+            <!-- กล่องข้อความแจ้งผลลัพธ์ภายในหน้าแอป (UX Error fallback) -->
+            <div id="forgot-result-box" class="hidden text-xs bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl"></div>
+
+            <button 
+                type="submit" 
+                id="btn-submit-forgot"
+                class="w-full bg-amber-500 hover:bg-amber-600 text-[#0b0f19] py-3 rounded-xl shadow-md shadow-amber-500/10 transition-colors cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold"
+            >
+                <span id="text-submit-forgot">ส่งรหัสเข้าเมลฟรี</span>
             </button>
         </form>
 
-        <div class="text-center">
-            <button onclick="openForgotModal()" class="text-xs text-amber-500 hover:underline cursor-pointer">
-                ลืมรหัสผ่านใช่หรือไม่? กู้คืนด้วย Email OTP
-            </button>
-        </div>
-    </div>
-
-
-    <div id="forgot-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        
-        <div class="w-full max-w-md bg-[#161b26] rounded-2xl p-6 border border-slate-800 shadow-2xl relative overflow-hidden">
-            
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center font-bold text-[#0b0f19] text-lg shadow-md">
-                    MG
-                </div>
-                <div>
-                    <h2 class="text-sm font-bold tracking-wide">กู้คืนรหัสผ่านด้วย Email OTP</h2>
-                    <p class="text-[11px] text-slate-400">ระบบจะส่งรหัสความปลอดภัย 6 หลักไปที่เมลของคุณค่ะ</p>
-                </div>
-                <button type="button" onclick="closeForgotModal()" id="btn-close-forgot" class="absolute top-5 right-5 text-slate-500 hover:text-white transition-colors cursor-pointer text-sm">✕</button>
+        <!-- ================= STEP 2: ฟอร์มกรอกรหัส OTP ยืนยัน (เริ่มต้นซ่อนไว้) ================= -->
+        <form id="forgot-step-2" onsubmit="processVerifyOTP(event)" class="space-y-4 hidden">
+            <div class="text-center p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl">
+                <p id="target-email-display" class="text-xs text-amber-400 font-medium"></p>
             </div>
 
-            <form id="forgot-step-1" onsubmit="processRequestEmailOTP(event)" class="space-y-4">
-                <div class="space-y-1.5">
-                    <label for="forgot-email" class="text-xs text-slate-400 font-medium">ระบุอีเมลที่ใช้ลงทะเบียน</label>
-                    <input type="email" id="forgot-email" required placeholder="popsteptep10722@gmail.com" class="w-full bg-[#1f2635] border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-500">
+            <div class="space-y-1.5">
+                <div class="flex justify-between items-center">
+                    <label for="otp-code" class="text-xs text-slate-400 font-medium">รหัสยืนยัน OTP (6 หลัก)</label>
+                    <span id="otp-timer" class="text-xs text-amber-500 font-bold">60s</span>
                 </div>
+                <input 
+                    type="text" 
+                    id="otp-code" 
+                    maxLength="6"
+                    pattern="\d{6}"
+                    required
+                    placeholder="· · · · · ·" 
+                    class="w-full bg-[#1f2635] border border-slate-700 rounded-xl px-3.5 py-2.5 text-center text-lg font-mono tracking-[0.5em] focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-500"
+                >
+            </div>
 
-                <div id="forgot-result-box" class="hidden text-xs bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl"></div>
+            <button 
+                type="submit" 
+                id="btn-verify-otp"
+                class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl shadow-md transition-colors cursor-pointer text-xs font-semibold"
+            >
+                ตรวจสอบรหัสความปลอดภัย
+            </button>
 
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeForgotModal()" class="px-4 py-2 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer">ปิดหน้าต่าง</button>
-                    <button type="submit" id="btn-submit-forgot" class="bg-amber-500 hover:bg-amber-600 text-[#0b0f19] px-4 py-2 rounded-xl text-xs font-semibold shadow-md transition-colors cursor-pointer flex items-center gap-1.5">
-                        <span id="text-submit-forgot">ส่งรหัสเข้าเมลฟรี</span>
-                    </button>
-                </div>
-            </form>
+            <button 
+                type="button" 
+                onclick="backToStep1()"
+                class="w-full text-center text-xs text-slate-400 hover:text-white transition-colors cursor-pointer pt-1"
+            >
+                ย้อนกลับไปแก้ไขอีเมล
+            </button>
+        </form>
 
-            <form id="forgot-step-2" onsubmit="processVerifyOTP(event)" class="space-y-4 hidden">
-                <div class="text-center p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl">
-                    <p id="target-email-display" class="text-xs text-amber-400 font-medium"></p>
-                </div>
-
-                <div class="space-y-1.5">
-                    <div class="flex justify-between items-center">
-                        <label for="otp-code" class="text-xs text-slate-400 font-medium">รหัสยืนยัน OTP (6 หลัก)</label>
-                        <span id="otp-timer" class="text-xs text-amber-500 font-bold">60s</span>
-                    </div>
-                    <input type="text" id="otp-code" maxLength="6" pattern="\d{6}" required placeholder="· · · · · ·" class="w-full bg-[#1f2635] border border-slate-700 rounded-xl px-3.5 py-2.5 text-center text-lg font-mono tracking-[0.5em] focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-500">
-                </div>
-
-                <button type="submit" id="btn-verify-otp" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-semibold shadow-md transition-colors cursor-pointer">
-                    ตรวจสอบรหัสความปลอดภัย
-                </button>
-
-                <button type="button" onclick="backToStep1()" class="w-full text-center text-xs text-slate-400 hover:text-white transition-colors cursor-pointer">
-                    ย้อนกลับไปแก้ไขอีเมล
-                </button>
-            </form>
-
-        </div>
     </div>
 
-
+    <!-- ================= ระบบการทำงานผ่าน JavaScript (Vanilla JS State Management) ================= -->
     <script>
-        // ประกาศตัวแปร Global State สำหรับคุมการทำงานของระบบ OTP ในหน้าเดียว
+        // ประกาศตัวแปร Global State สำหรับควบคุมกระบวนการกู้คืนรหัสผ่านภายในหน้าเดียว
         let generatedOTP = "";
         let globalPasswordText = "";
         let countdownTimer = null;
 
-        // เมลจำลองในเครื่องของคุณชินอิจิ (ใช้สำหรับการตรวจสอบข้อมูลใน LocalStorage)
+        // ฟังก์ชันจำลองการตั้งค่าบัญชีในเครื่องคุณชินอิจิ (หากยังไม่มีข้อมูลสำหรับทดสอบ)
         if (!localStorage.getItem('mg_client_account')) {
             localStorage.setItem('mg_client_account', JSON.stringify({
-                email: "popsteptep10722@gmail.com", 
+                email: "shinichi22@gmail.com", // ปรับให้ตรงกับอีเมลที่คุณชินอิจิต้องการทดสอบจริงได้เลยค่ะ
                 password: "MG_M2_Motorsport_2026"
             }));
         }
 
-        // ฟังก์ชันควบคุมการเปิด-ปิดหน้าต่าง Modal
-        function openForgotModal() {
-            document.getElementById('forgot-modal').classList.remove('hidden');
-            document.getElementById('forgot-email').focus();
-        }
-
-        function closeForgotModal() {
-            clearInterval(countdownTimer);
-            document.getElementById('forgot-modal').classList.add('hidden');
-            backToStep1(); // รีเซ็ตฟอร์มกลับไปสเต็ป 1 เสมอเมื่อปิด
-        }
-
-        // 1. ฟังก์ชันส่งอีเมลคำขอรหัส OTP ผ่าน EmailJS API Gateway
+        // 1. ฟังก์ชันส่งอีเมลผ่านระบบเชื่อมต่อ EmailJS API
         async function processRequestEmailOTP(event) {
             event.preventDefault();
             
@@ -141,97 +128,75 @@
             resultBox.classList.add('hidden');
 
             if (!storedAccount) {
-                showLocalError('ไม่พบข้อมูลบัญชีผู้ใช้งานบนเครื่องนี้ค่ะ');
+                showLocalError('ไม่พบข้อมูลบัญชีผู้ใช้งานบนอุปกรณ์เครื่องนี้ค่ะ');
                 return;
             }
 
             const parsedAccount = JSON.parse(storedAccount);
             if (parsedAccount.email !== emailInput) {
-                showLocalError('อีเมลนี้ไม่ตรงกับที่คุณระบุไว้ตอนลงทะเบียนในระบบค่ะ');
+                showLocalError('อีเมลนี้ไม่ถูกต้อง หรือไม่ตรงกับที่ลงทะเบียนไว้ในระบบค่ะ');
                 return;
             }
 
             try {
-                // เปลี่ยนสถานะปุ่มเพื่อล็อกระบบการกดซ้ำซ้อนขณะรอเซิร์ฟเวอร์ตอบกลับ
+                // อัปเดตสถานะ UI ป้องกันสถานะ Race Condition (ผู้ใช้กดย้ำซ้ำๆ)
                 submitBtn.disabled = true;
                 closeBtn.disabled = true;
-                submitText.innerText = "กำลังยิงสัญญาณ API...";
+                submitText.innerText = "กำลังส่งสัญญาณคำขอ...";
 
                 globalPasswordText = parsedAccount.password;
                 generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
                 const currentLocalTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
 
-                // ผูกตัวแปรส่งเข้าป้าย Template ในแดชบอร์ด EmailJS ({{email}}, {{passcode}}, {{time}})
+                // เตรียมข้อมูลจัดส่งให้ตรงกับโครงสร้างป้าย Parameter {{email}}, {{passcode}}, {{time}} ในแดชบอร์ด
                 const templateParams = {
                     email: emailInput,             
                     passcode: generatedOTP,         
                     time: currentLocalTime                 
                 };
 
-                // สั่งการยิง API ด้วย Service ID และ Template ID ที่ถูกต้องแม่นยำจากหน้าแดชบอร์ด
+                // เรียกใช้บริการ Service ID และ Template ID ที่ถูกต้องแม่นยำจากแดชบอร์ดจริงของคุณชินอิจิ
                 const response = await emailjs.send('service_7etoscl', 'template_c1sevkg', templateParams);
 
                 if (response.status === 200 || response.text === 'OK') {
-                    // สลับสถานะหน้าฟอร์มเข้าสู่ขั้นตอนกรอก OTP ยืนยันความปลอดภัย
-                    document.getElementById('target-email-display').innerText = `ระบบได้ส่ง OTP ไปยังอีเมล ${emailInput} แล้วค่ะ`;
+                    // จัดการสลับฟอร์มเพื่อเข้าสู่ขั้นตอนที่ 2 อย่างเป็นระบบแบบ SPA
+                    document.getElementById('target-email-display').innerText = `รหัส OTP ถูกส่งไปที่ ${emailInput} เรียบร้อยแล้ว`;
                     document.getElementById('forgot-step-1').classList.add('hidden');
                     document.getElementById('forgot-step-2').classList.remove('hidden');
                     document.getElementById('otp-code').value = '';
-                    document.getElementById('otp-code').focus();
                     
-                    startOTPTimer(); // สั่งรันเวลานับถอยหลังทันที
-                    alert('🎉 ส่งรหัสสำเร็จ! คิมส่ง OTP เข้าอีเมลเรียบร้อยแล้วนะคะ อย่าลืมเช็คในกล่องจดหมายขยะ (Spam) ด้วยนะคะ');
+                    startOTPTimer(); // สั่งงานระบบนับเวลาถอยหลังอายุของ OTP
+                    alert('🎉 ส่งรหัสสำเร็จ! คุณชินอิจิเช็คกล่องจดหมาย หรือสแปมใน Gmail ได้เลยนะคะ');
                 } else {
-                    throw new Error('เซิร์ฟเวอร์ตอบกลับผิดปกติ: ' + response.text);
+                    throw new Error('ระบบตอบรับผิดพลาด: ' + response.text);
                 }
 
             } catch (error) {
-                console.error('EmailJS Connection Error:', error);
-                showLocalError('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย ส่งเมลไม่สำเร็จเนื่องจากสัญญาณขัดข้องค่ะ!');
+                console.error('EmailJS Transport Fail:', error);
+                showLocalError('ส่งเมลไม่สำเร็จ: ' + (error.text || error.message || 'เครือข่ายขัดข้อง'));
             } finally {
-                // ปลดล็อกคืนสถานะปุ่มปกติ
+                // คืนค่าปุ่มกดกลับสู่สถานะพร้อมใช้งานปกติ
                 submitBtn.disabled = false;
                 closeBtn.disabled = false;
                 submitText.innerText = "ส่งรหัสเข้าเมลฟรี";
             }
         }
 
-        // 2. [FIXED] ฟังก์ชันยืนยันความถูกต้องของ OTP และนำพากลับเข้าสู่หน้าจอเข้าระบบหลักอัตโนมัติ
+        // 2. ฟังก์ชันตรวจสอบรหัสความถูกต้องของ OTP
         function processVerifyOTP(event) {
             event.preventDefault();
             const userOTP = document.getElementById('otp-code').value.trim();
 
             if (userOTP === generatedOTP) {
-                clearInterval(countdownTimer); // ทำลายระบบนับถอยหลังทันทีที่ผ่านสิทธิ์
-                
-                alert(`🔓 ยืนยันตัวตนสำเร็จค่ะ!\nรหัสผ่านเข้าสู่ระบบของคุณคือ: ${globalPasswordText}`);
-                
-                // กระบวนการย้ายหน้าจอ: สั่งปิดหน้าต่างป๊อปอัป (Modal) ลงไปทันที
-                document.getElementById('forgot-modal').classList.add('hidden');
-                
-                // รีเซ็ตการแสดงผลฟอร์มสเต็ปภายในเตรียมไว้สำหรับเปิดรอบหน้า
-                document.getElementById('forgot-step-2').classList.add('hidden');
-                document.getElementById('forgot-step-1').classList.remove('hidden');
-
-                // นำอีเมลและพาสเวิร์ดที่กู้คืนมาได้ ไปหยอดใส่ในช่องพิมพ์ล็อกอินหน้าหลักทันทีเพื่อประหยัดเวลา
-                const loginEmailField = document.getElementById('login-email');
-                const loginPasswordField = document.getElementById('login-password');
-                
-                if (loginEmailField) {
-                    loginEmailField.value = document.getElementById('forgot-email').value.trim();
-                }
-                if (loginPasswordField) {
-                    loginPasswordField.value = globalPasswordText;
-                }
-
-                alert('✨ คิมนำคุณชินอิจิกลับมาหน้าล็อกอินหลัก พร้อมกรอกข้อมูลเข้าสู่ระบบให้เรียบร้อยแล้วค่ะ กดปุ่ม "เข้าสู่ระบบ" สีแดงได้เลยนะคะ!');
-
+                clearInterval(countdownTimer);
+                alert(`🔓 ยืนยันตัวตนสำเร็จค่ะคุณชินอิจิ!\nรหัสผ่านเข้าสู่ระบบของคุณคือ: ${globalPasswordText}`);
+                // ตรงนี้คุณชินอิจิสามารถเขียนสั่งให้นำพาสเวิร์ดไปล็อกอินอัตโนมัติ หรือเปิดหน้าต่างใหม่ได้เลยค่ะ
             } else {
-                alert('❌ รหัส OTP ไม่ถูกต้องค่ะ! กรุณาเช็คตัวเลขในกล่องข้อความอีเมลใหม่อีกครั้งนะคะ');
+                alert('❌ รหัส OTP ไม่ถูกต้อง กรุณาเช็คตัวเลขและลองใหม่อีกครั้งค่ะ');
             }
         }
 
-        // 3. ฟังก์ชันนับถอยหลังอายุรหัสผ่าน OTP
+        // 3. ฟังก์ชันระบบนับเวลาถอยหลัง (UX Timer countdown)
         function startOTPTimer() {
             let duration = 60;
             const timerDisplay = document.getElementById('otp-timer');
@@ -244,21 +209,20 @@
                 
                 if (duration <= 0) {
                     clearInterval(countdownTimer);
-                    alert('⏰ รหัส OTP สิ้นสุดอายุการใช้งานแล้วค่ะ กรุณากดส่งรหัสใหม่อีกครั้งนะคะ');
+                    alert('⏰ รหัส OTP หมดอายุแล้วค่ะ คุณชินอิจิกรุณากดส่งใหม่อีกครั้งนะคะ');
                     backToStep1();
                 }
             }, 1000);
         }
 
-        // 4. ฟังก์ชันถอยกลับมาแก้ไขอีเมลในสเต็ปที่ 1
+        // 4. ฟังก์ชันย้อนกลับไปหน้าแรกในกรณีพิมพ์อีเมลผิด (SPA Navigation)
         function backToStep1() {
             clearInterval(countdownTimer);
             document.getElementById('forgot-step-2').classList.add('hidden');
             document.getElementById('forgot-step-1').classList.remove('hidden');
-            document.getElementById('forgot-email').focus();
         }
 
-        // 5. ฟังก์ชันพ่น Error ลงกล่องแจ้งเตือนบน UI
+        // 5. ฟังก์ชันแสดงข้อความความผิดพลาดบนหน้าจอแอปแบบลื่นไหล
         function showLocalError(message) {
             const resultBox = document.getElementById('forgot-result-box');
             resultBox.innerText = `⚠️ ${message}`;
