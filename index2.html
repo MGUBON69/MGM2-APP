@@ -524,7 +524,7 @@
             document.getElementById('forgot-step-1').classList.remove('hidden');
         }
 
-        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (แก้ไขตามรูปภาพ image_375067.png) =================
+        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (ปรับปรุงจุดพารามิเตอร์สำเร็จรูป) =================
         async function processRequestEmailOTP(event) {
             event.preventDefault();
             
@@ -558,15 +558,14 @@
                 generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
                 document.getElementById('target-email-display').innerText = `ระบบส่ง OTP ไปที่อีเมล ${emailInput} แล้วค่ะ`;
 
-                // ✅ แก้ไขสอดคล้องตามภาพ image_375067.png: แมปคีย์ตามกล่องดีไซน์ตัวแปรเป๊ะๆ 
                 const templateParams = {
-                    email: emailInput,             // ใช้คีย์ email ตามช่อง To Email ในรูปภาพ
-                    passcode: generatedOTP,         // ใช้คีย์ passcode ตามช่องเนื้อความหลัก
-                    time: "15 นาที"                 // ใช้คีย์ time ระบุเวลาหมดอายุตามข้อความดึงท้ายจดหมาย
+                    email: emailInput,             
+                    passcode: generatedOTP,         
+                    time: "15 นาที"                 
                 };
 
-                // ✅ แก้ไข Template ID: ปรับเปลี่ยนเป็น 'wu4hhx7' ให้ตรงตาม URL แดชบอร์ดในรูปภาพ
-                await emailjs.send('service_7etoscl', 'wu4hhx7', templateParams);
+                // ✨ [FIXED] บังคับฉีด Public Key เข้าพารามิเตอร์ลำดับที่ 4 แก้ปัญหาแจ้งเตือนขัดข้องระบบ Service ID ทันที!
+                await emailjs.send('service_7etoscl', 'wu4hhx7', templateParams, 'KSS0THK1eB1HxrAsn');
 
                 // สลับหน้าจอไปยังขั้นตอนกรอกรหัสยืนยัน
                 document.getElementById('forgot-step-1').classList.add('hidden');
