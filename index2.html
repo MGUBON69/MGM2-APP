@@ -10,7 +10,6 @@
     <meta name="theme-color" content="#0b0f19">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MG UBON">
     
     <!-- Third-party Styles & Scripts via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -60,7 +59,7 @@
                     </div>
                     <div>
                         <h4 class="text-sm font-bold text-white">แก้ไขชื่อผู้ลงทะเบียน</h4>
-                        <p class="text-[11px] text-slate-400">กรุณาระบุชื่อ-นามสกุลใหม่ของคุณค่ะ</p>
+                        <p class="text-[11px] text-slate-400">กรุณาระบุชื่อ-นามสกุลใหม่ของคุณชินอิจิค่ะ</p>
                     </div>
                 </div>
                 <form onsubmit="saveNewName(event)" class="space-y-4">
@@ -507,7 +506,6 @@
             closeEditModal();
         }
 
-        // ฟังก์ชันจัดการ เปิด-ปิด หน้าต่างลืมรหัสผ่าน
         function openForgotPasswordModal() {
             document.getElementById('forgot-email').value = '';
             document.getElementById('forgot-step-1').classList.remove('hidden');
@@ -526,7 +524,7 @@
             document.getElementById('forgot-step-1').classList.remove('hidden');
         }
 
-        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (ปรับปรุงพารามิเตอร์คู่สายตรง) =================
+        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (แก้ไขตามรูปภาพ image_375067.png) =================
         async function processRequestEmailOTP(event) {
             event.preventDefault();
             
@@ -549,7 +547,7 @@
             }
 
             try {
-                // อัปเดตสถานะปุ่มป้องกันการกดย้ำระว่างยิง API ออกไป
+                // อัปเดตสถานะปุ่มป้องกันการกดย้ำระหว่างเชื่อมต่อ API
                 submitBtn.disabled = true;
                 closeBtn.disabled = true;
                 submitBtn.classList.replace('bg-amber-500', 'bg-slate-700');
@@ -560,28 +558,28 @@
                 generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
                 document.getElementById('target-email-display').innerText = `ระบบส่ง OTP ไปที่อีเมล ${emailInput} แล้วค่ะ`;
 
+                // ✅ แก้ไขสอดคล้องตามภาพ image_375067.png: แมปคีย์ตามกล่องดีไซน์ตัวแปรเป๊ะๆ 
                 const templateParams = {
-                    to_email: emailInput,
-                    to_name: parsedAccount.fullname,
-                    otp_code: generatedOTP
+                    email: emailInput,             // ใช้คีย์ email ตามช่อง To Email ในรูปภาพ
+                    passcode: generatedOTP,         // ใช้คีย์ passcode ตามช่องเนื้อความหลัก
+                    time: "15 นาที"                 // ใช้คีย์ time ระบุเวลาหมดอายุตามข้อความดึงท้ายจดหมาย
                 };
 
-                // ✅ ปรับปรุง: เรียกใช้งานโครงสร้าง API หลักอย่างเคร่งครัด พร้อมตัวแปรคีย์ที่กำหนด
-                await emailjs.send('service_7etoscl', 'template_cu6w75w', templateParams);
+                // ✅ แก้ไข Template ID: ปรับเปลี่ยนเป็น 'wu4hhx7' ให้ตรงตาม URL แดชบอร์ดในรูปภาพ
+                await emailjs.send('service_7etoscl', 'wu4hhx7', templateParams);
 
-                // สลับการแสดงผลของฟอร์มขั้นตอนไปยังส่วนรับรหัส OTP
+                // สลับหน้าจอไปยังขั้นตอนกรอกรหัสยืนยัน
                 document.getElementById('forgot-step-1').classList.add('hidden');
                 document.getElementById('forgot-step-2').classList.remove('hidden');
                 document.getElementById('otp-code').value = '';
                 document.getElementById('forgot-result-box').classList.add('hidden');
                 
                 startOTPTimer();
-                alert(`[EmailJS Service] ยิงข้อมูลส่งออกเรียบร้อยแล้วค่ะ!\n\nเมลจริงกำลังวิ่งไปที่กล่องจดหมายของคุณชินอิจิแล้วนะคะ 🚀\n(รหัสทดสอบสำรอง: ${generatedOTP})`);
+                alert(`ยิงเชื่อมต่อระบบ EmailJS เรียบร้อยแล้วค่ะคุณชินอิจิ!\n\nเมลจริงกำลังส่งตรงเข้า Inbox หรือ Junk Mail ของคุณทันทีค่ะ ✨`);
 
             } catch (error) {
-                // บันทึกรายละเอียดข้อผิดพลาดตัวเต็มลงบน Browser Console เพื่อการดีบักขั้นสูง
                 console.error('EmailJS Connection Error Detail:', error);
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย ส่งเมลไม่สำเร็จเนื่องจากสัญญาณขัดข้องค่ะ!\n(หากปัญหายังคงอยู่ กรุณาเช็คตัวสะกดคีย์พารามิเตอร์บน Template หลังบ้านค่ะ)');
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย ส่งเมลไม่สำเร็จเนื่องจากสัญญาณขัดข้องค่ะ!\n(กรุณาเช็คตัวแปรและสถานะไอดี Service ID อีกครั้งนะคะ)');
             } finally {
                 submitBtn.disabled = false;
                 closeBtn.disabled = false;
@@ -624,7 +622,7 @@
                 document.getElementById('forgot-result-box').classList.remove('hidden');
                 return;
             }
-            alert('รหัส OTP ในเมลไม่ถูกต้อง กรุณาเช็คตัวเลขแล้วลองใหม่อีกครั้งค่ะ');
+            alert('รหัส OTP ในเมลไม่ถูกต้อง กรุณาเช็คตัวเลขแล้วลองใหม่อีกครั้งค่ะคุณชินอิจิ');
         }
 
         function changeView(viewId) {
@@ -666,7 +664,7 @@
         }
 
         function triggerLogout() {
-            if (confirm('คุณต้องการออกจากระบบใช่ไหมคะคุณชินอิจิ?')) {
+            if (confirm('คุณชินอิจิต้องการออกจากระบบใช่ไหมคะ?')) {
                 document.getElementById('appHeader').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
                 
