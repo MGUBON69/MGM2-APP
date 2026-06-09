@@ -17,6 +17,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // เริ่มต้นเปิดระบบ EmailJS ด้วย Public Key ของคุณชินอิจิ
+        (function() {
+            emailjs.init("KSS0THK1eB1HxrAsn");
+        })();
+    </script>
+    
     <style>
         body {
             font-family: 'Prompt', sans-serif;
@@ -65,43 +73,59 @@
         </div>
 
         <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
-            <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
+            <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active relative overflow-hidden">
+                
                 <div class="flex items-center gap-3 mb-4">
                     <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500">
                         <i class="fa-solid fa-key text-lg"></i>
                     </div>
                     <div>
-                        <h4 class="text-sm font-bold text-white">กู้คืนรหัสผ่าน</h4>
-                        <p class="text-[11px] text-slate-400">กรุณากรอกข้อมูลที่ใช้ลงทะเบียนเพื่อตรวจสอบค่ะ</p>
+                        <h4 class="text-sm font-bold text-white">กู้คืนรหัสผ่านด้วย Email OTP</h4>
+                        <p class="text-[11px] text-slate-400">กรุณากรอกอีเมลลงทะเบียนเพื่อรับรหัสยืนยันค่ะ</p>
                     </div>
+                    <button type="button" onclick="closeForgotPasswordModal()" id="btn-close-forgot" class="absolute top-5 right-5 text-slate-500 hover:text-white transition-colors cursor-pointer text-sm">✕</button>
                 </div>
-                <form onsubmit="processRecoverPassword(event)" class="space-y-4">
+
+                <form id="forgot-step-1" onsubmit="processRequestEmailOTP(event)" class="space-y-4">
                     <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400 font-medium">อีเมลสมาชิก</label>
+                        <label class="text-[11px] text-slate-400 font-medium">อีเมลสมาชิกที่ลงทะเบียน</label>
                         <input type="email" id="forgot-email" required placeholder="เช่น mgurban@gmail.com"
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 text-xs transition-all">
                     </div>
-                    <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400 font-medium">เบอร์โทรศัพท์ 10 หลัก</label>
-                        <input type="tel" id="forgot-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 text-xs transition-all">
-                    </div>
-                    
-                    <div id="forgot-result-box" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center relative">
-                        <span class="text-[11px] text-emerald-400 block font-medium">รหัสผ่านของคุณคือ</span>
-                        <div class="flex items-center justify-center gap-2 mt-0.5 relative pr-8">
-                            <span id="forgot-password-output" class="text-base font-bold text-white tracking-widest block select-all">PASSWORD</span>
-                            <button type="button" onclick="togglePasswordVisibility('forgot-password-output', 'forgot-eye-icon', true)" class="absolute right-2 text-slate-400 hover:text-white cursor-pointer p-1">
-                                <i id="forgot-eye-icon" class="fa-solid fa-eye-slash text-xs"></i>
-                            </button>
-                        </div>
-                    </div>
+
+                    <div id="forgot-result-box" class="hidden text-[11px] bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl"></div>
 
                     <div class="flex justify-end gap-2 text-xs font-semibold pt-2">
                         <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white py-2 px-3 cursor-pointer">ปิดหน้าต่าง</button>
-                        <button type="submit" id="btn-submit-forgot" class="bg-amber-500 hover:bg-amber-600 text-[#0b0f19] px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer">ตรวจสอบรหัสผ่าน</button>
+                        <button type="submit" id="btn-submit-forgot" class="bg-amber-500 hover:bg-amber-600 text-[#0b0f19] px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer">
+                            <span id="text-submit-forgot">ส่งรหัสเข้าเมลฟรี</span>
+                        </button>
                     </div>
                 </form>
+
+                <form id="forgot-step-2" onsubmit="processVerifyOTP(event)" class="space-y-4 hidden">
+                    <div class="text-center p-2.5 bg-amber-500/5 border border-amber-500/10 rounded-xl">
+                        <p id="target-email-display" class="text-[11px] text-amber-400 font-medium"></p>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between items-center">
+                            <label for="otp-code" class="text-[11px] text-slate-400 font-medium">รหัสยืนยัน OTP (6 หลัก)</label>
+                            <span id="otp-timer" class="text-xs text-amber-500 font-bold">60s</span>
+                        </div>
+                        <input type="text" id="otp-code" maxLength="6" pattern="\d{6}" required placeholder="· · · · · ·" 
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2 text-center text-lg font-mono tracking-[0.5em] focus:outline-none focus:border-amber-500 text-white transition-all placeholder:text-slate-600">
+                    </div>
+
+                    <button type="submit" id="btn-verify-otp" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-semibold shadow-md transition-colors cursor-pointer">
+                        ตรวจสอบรหัสความปลอดภัย
+                    </button>
+
+                    <button type="button" onclick="backToStep1()" class="w-full text-center text-[11px] text-slate-400 hover:text-white transition-colors cursor-pointer pt-1">
+                        ย้อนกลับไปแก้ไขอีเมล
+                    </button>
+                </form>
+
             </div>
         </div>
 
@@ -349,7 +373,9 @@
 
     <script>
         let installTrigger = null;
-        let globalPasswordText = ''; // 🛠️ ตัวแปรเก็บรหัสผ่านจริงสําหรับหน้ากู้รหัสผ่าน
+        let generatedOTP = "";          // ตัวแปรเก็บรหัสความปลอดภัย OTP ชั่วคราว
+        let globalPasswordText = '';     // ตัวแปรเก็บรหัสผ่านจริงสำหรับการส่งกลับเข้าช่องฟอร์มล็อกอินหลัก
+        let countdownTimer = null;       // คอนโทรลเลอร์ควบคุมเวลานับถอยหลังอายุรหัส OTP
 
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
@@ -371,13 +397,12 @@
             document.getElementById('pwaAlertBanner').classList.add('hidden');
         }
 
-        // 🛠️ NEW: ฟังก์ชันสลับการมองเห็นรหัสผ่าน (ซ่อน/แสดง) ทั้งแบบ Input และ Text Span
+        // ฟังก์ชันสลับการมองเห็นรหัสผ่าน (ซ่อน/แสดง) 
         function togglePasswordVisibility(elementId, iconId, isTextSpan = false) {
             const element = document.getElementById(elementId);
             const icon = document.getElementById(iconId);
             
             if (isTextSpan) {
-                // สำหรับจัดการรหัสกู้คืนที่เป็นข้อความ Text
                 if (element.innerText.includes('•')) {
                     element.innerText = globalPasswordText;
                     icon.classList.remove('fa-eye-slash');
@@ -388,7 +413,6 @@
                     icon.classList.add('fa-eye-slash');
                 }
             } else {
-                // สำหรับจัดการฟอร์มที่เป็น Input ฟิลด์ปกติ
                 if (element.type === 'password') {
                     element.type = 'text';
                     icon.classList.remove('fa-eye-slash');
@@ -486,132 +510,210 @@
             closeEditModal();
         }
 
-        // เปิดโมดอลลืมรหัสผ่าน
+        // เปิดโมดอลลืมรหัสผ่าน (ทำการรีเซ็ตสเต็ปกลับเป็นหน้าส่งเมลตัวแรกเสมอเพื่อความเสถียร)
         function openForgotPasswordModal() {
             document.getElementById('forgot-email').value = '';
-            document.getElementById('forgot-phone').value = '';
             document.getElementById('forgot-result-box').classList.add('hidden');
             document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-1').classList.remove('hidden');
             globalPasswordText = '';
+            generatedOTP = '';
         }
 
-        // ปิดโมดอลลืมรหัสผ่าน
+        // 🛠️ FIXED: ฟังก์ชันสําหรับปิดหน้าต่างโมดอลกู้รหัสผ่านตัวสมบูรณ์
         function closeForgotPasswordModal() {
+            clearInterval(countdownTimer);
             document.getElementById('forgotPasswordModal').classList.add('hidden');
+            backToStep1();
         }
 
-        // ประมวลผลการตรวจสอบและกู้รหัสผ่าน
-        function processRecoverPassword(event) {
+        // 1. ฟังก์ชันส่งรหัส OTP ผ่านระบบเซิร์ฟเวอร์เกตเวย์ EmailJS API
+        async function processRequestEmailOTP(event) {
             event.preventDefault();
+            
             const emailInput = document.getElementById('forgot-email').value.trim().toLowerCase();
-            const phoneInput = document.getElementById('forgot-phone').value.trim();
             const storedAccount = localStorage.getItem('mg_client_account');
+            const submitBtn = document.getElementById('btn-submit-forgot');
+            const submitText = document.getElementById('text-submit-forgot');
+            const closeBtn = document.getElementById('btn-close-forgot');
+            const resultBox = document.getElementById('forgot-result-box');
 
-            if (storedAccount) {
-                const parsedAccount = JSON.parse(storedAccount);
-                if (parsedAccount.email === emailInput && parsedAccount.phone === phoneInput) {
-                    globalPasswordText = parsedAccount.password;
-                    // เริ่มต้นด้วยการซ่อนรหัสผ่านเป็นจุดรักษาสุขอนามัยความปลอดภัยข้อมูล
-                    document.getElementById('forgot-password-output').innerText = '•'.repeat(globalPasswordText.length);
-                    
-                    const eyeIcon = document.getElementById('forgot-eye-icon');
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
-                    
-                    document.getElementById('forgot-result-box').classList.remove('hidden');
-                    return;
-                }
+            resultBox.classList.add('hidden');
+
+            if (!storedAccount) {
+                showLocalError('ไม่พบข้อมูลบัญชีผู้ใช้งานบนเครื่องนี้ค่ะ');
+                return;
             }
-            alert('ข้อมูลไม่ถูกต้องหรือไม่พบบัญชีนี้ในระบบ กรุณาลองใหม่อีกครั้งนะคะ');
+
+            const parsedAccount = JSON.parse(storedAccount);
+            if (parsedAccount.email !== emailInput) {
+                showLocalError('อีเมลไม่ถูกต้อง หรือไม่ตรงกับข้อมูลในระบบค่ะ');
+                return;
+            }
+
+            try {
+                // อัปเดตสถานะปุ่มกดล็อกหน้าเพื่อป้องกันการกดเบิ้ลสัญญาณ
+                submitBtn.disabled = true;
+                closeBtn.disabled = true;
+                submitText.innerText = "กำลังส่งคำขอ...";
+
+                globalPasswordText = parsedAccount.password;
+                generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+                const currentLocalTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+
+                const templateParams = {
+                    email: emailInput,             
+                    passcode: generatedOTP,         
+                    time: currentLocalTime                 
+                };
+
+                const response = await emailjs.send('service_7etoscl', 'template_c1sevkg', templateParams);
+
+                if (response.status === 200 || response.text === 'OK') {
+                    // ปรับสลับเข้าฟอร์มสเต็ปที่ 2 ทันที
+                    document.getElementById('target-email-display').innerText = `รหัส OTP ถูกส่งไปที่เมล ${emailInput} แล้วค่ะ`;
+                    document.getElementById('forgot-step-1').classList.add('hidden');
+                    document.getElementById('forgot-step-2').classList.remove('hidden');
+                    document.getElementById('otp-code').value = '';
+                    
+                    startOTPTimer(); // รันระบบจับเวลาถอยหลัง 60 วินาที
+                    alert('🎉 ส่งรหัสสำเร็จ! เช็คดูรหัสในอีเมลของคุณได้เลยนะคะ');
+                } else {
+                    throw new Error('ระบบเซิร์ฟเวอร์ปลายทางติดขัด: ' + response.text);
+                }
+
+            } catch (error) {
+                console.error('EmailJS Connection Error:', error);
+                showLocalError('ส่งไม่สำเร็จ: สัญญาณเครือข่ายขัดข้องกรุณาลองใหม่อีกครั้ง');
+            } finally {
+                submitBtn.disabled = false;
+                closeBtn.disabled = false;
+                submitText.innerText = "ส่งรหัสเข้าเมลฟรี";
+            }
         }
 
-        // ระบบนำทางและสลับหน้าจอเลเยอร์ (SPA Router Engine)
-        function changeView(viewId) {
-            const allViews = ['register', 'login', 'home', 'contact', 'location'];
-            allViews.forEach(v => {
-                const layer = document.getElementById(`page-${v}`);
-                if (layer) {
-                    layer.classList.add('hidden');
-                    layer.classList.remove('page-active');
-                }
-            });
+        // 2. 🛠️ FIXED: ฟังก์ชันตรวจสอบรหัส OTP และพาวิ่งกลับเข้าช่องล็อกอินหน้าจอหลักโดยอัตโนมัติ
+        function processVerifyOTP(event) {
+            event.preventDefault();
+            const userOTP = document.getElementById('otp-code').value.trim();
 
-            const targetLayer = document.getElementById(`page-${viewId}`);
-            if (targetLayer) {
-                targetLayer.classList.remove('hidden');
-                targetLayer.classList.add('page-active');
+            if (userOTP === generatedOTP) {
+                clearInterval(countdownTimer); // ล้างหน่วยความจำตัวจับเวลา
+                
+                alert(`🔓 ยืนยันตัวตนสำเร็จค่ะคุณชินอิจิ!\nรหัสผ่านเข้าสู่ระบบของคุณคือ: ${globalPasswordText}`);
+                
+                // สั่งปิดตัวหน้าต่างโมดอลหลักวับหายไปในพริบตา
+                document.getElementById('forgotPasswordModal').classList.add('hidden');
+                
+                // ดึงอีเมลและรหัสผ่านที่กู้คืนได้ นำมาหยอดเข้าฟิลด์ฟอร์มหน้าล็อกอินหลักให้อัตโนมัติทันที 
+                document.getElementById('login-email').value = document.getElementById('forgot-email').value.trim();
+                document.getElementById('login-password').value = globalPasswordText;
+
+                // พาเด้งหน้าจอหลักสลับมาที่กล่องหน้าล็อกอินปกติเรียบร้อย
+                changeView('login');
+                
+                alert('✨ ระบบทำการปิดหน้าต่างและป้อนรหัสผ่านให้ในช่องเรียบร้อยแล้วค่ะ กดปุ่มสีแดงเพื่อเข้าใช้งานได้เลยค่ะ!');
+            } else {
+                alert('❌ รหัส OTP ไม่ถูกต้อง กรุณาเช็คตัวเลขและลองใหม่อีกครั้งค่ะ');
             }
+        }
 
-            // คืนค่าประเภทฟิลด์รหัสผ่านกลับเป็น Password ทุกครั้งที่เปลี่ยนหน้าเพื่อความปลอดภัย
-            document.getElementById('reg-password').type = 'password';
-            document.getElementById('login-password').type = 'password';
-            const regEye = document.getElementById('reg-eye-icon');
-            const loginEye = document.getElementById('login-eye-icon');
-            if (regEye) { regEye.classList.remove('fa-eye'); regEye.classList.add('fa-eye-slash'); }
-            if (loginEye) { loginEye.classList.remove('fa-eye'); loginEye.classList.add('fa-eye-slash'); }
+        // 3. ฟังก์ชันระบบนับเวลาถอยหลัง (Timer countdown)
+        function startOTPTimer() {
+            let duration = 60;
+            const timerDisplay = document.getElementById('otp-timer');
+            timerDisplay.innerText = `${duration}s`;
+            
+            clearInterval(countdownTimer);
+            countdownTimer = setInterval(() => {
+                duration--;
+                timerDisplay.innerText = `${duration}s`;
+                
+                if (duration <= 0) {
+                    clearInterval(countdownTimer);
+                    alert('⏰ รหัส OTP สิ้นสุดอายุความปลอดภัยแล้ว กรุณากดส่งใหม่อีกครั้งค่ะ');
+                    backToStep1();
+                }
+            }, 1000);
+        }
 
-            const navButtons = ['home', 'contact', 'location'];
-            navButtons.forEach(btn => {
-                const element = document.getElementById(`btn-nav-${btn}`);
-                if (element) {
-                    if (btn === viewId) {
-                        element.classList.remove('text-slate-400');
-                        element.classList.add('text-red-500', 'font-bold');
+        // 4. ฟังก์ชันถอยสถานะฟอร์มกลับมาหน้าระบุอีเมลตัวแรก
+        function backToStep1() {
+            clearInterval(countdownTimer);
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+        }
+
+        // 5. ฟังก์ชันคัดพ่นคำสั่ง Error แสดงบนโมดอลแอป
+        function showLocalError(message) {
+            const resultBox = document.getElementById('forgot-result-box');
+            resultBox.innerText = `⚠️ ${message}`;
+            resultBox.classList.remove('hidden');
+        }
+
+        // ฟังก์ชันสลับการแสดงผลแต่ละหน้าแบบ Single Page Application (SPA View Manager)
+        function changeView(viewName) {
+            const views = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
+            views.forEach(v => {
+                const element = document.getElementById(v);
+                if (element) element.classList.add('hidden');
+            });
+            
+            const activePage = document.getElementById(`page-${viewName}`);
+            if (activePage) {
+                activePage.classList.remove('hidden');
+                activePage.classList.add('page-active');
+            }
+            
+            // ปรับการไฮไลท์สีปุ่มกดเมนูบาร์ด้านล่างแอปพลิเคชัน
+            const navButtons = {
+                'home': 'btn-nav-home',
+                'contact': 'btn-nav-contact',
+                'location': 'btn-nav-location'
+            };
+            
+            Object.keys(navButtons).forEach(key => {
+                const btn = document.getElementById(navButtons[key]);
+                if (btn) {
+                    if (key === viewName) {
+                        btn.classList.remove('text-slate-400');
+                        btn.classList.add('text-red-500', 'font-bold');
                     } else {
-                        element.classList.remove('text-red-500', 'font-bold');
-                        element.classList.add('text-slate-400');
+                        btn.classList.remove('text-red-500', 'font-bold');
+                        btn.classList.add('text-slate-400');
                     }
                 }
             });
         }
 
-        // ระบบออกจากระบบ (Logout Execution)
+        // ฟังก์ชันออกจากระบบ
         function triggerLogout() {
-            if (confirm('คุณต้องการออกจากระบบใช่ไหมคะ?')) {
+            if (confirm('คุณชินอิจิต้องการออกจากระบบความปลอดภัยใช่หรือไม่คะ?')) {
+                sessionStorage.removeItem('mg_is_logged_in');
                 document.getElementById('appHeader').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
                 
-                document.getElementById('login-email').value = '';
+                // เคลียร์ค่ารหัสผ่านช่องล็อกอินเพื่อความปลอดภัย
                 document.getElementById('login-password').value = '';
-                document.getElementById('reg-name').value = '';
-                document.getElementById('reg-phone').value = '';
-                document.getElementById('reg-email').value = '';
-                document.getElementById('reg-password').value = '';
-                
-                sessionStorage.removeItem('mg_is_logged_in');
                 changeView('login');
             }
         }
 
-        // ฟังก์ชันตรวจสอบ Session บัญชี
-        function checkLoginSession() {
-            const storedAccount = localStorage.getItem('mg_client_account');
+        // ตรวจเช็ค Session สถานะขณะเปิดตัวหน้าเว็บครั้งแรกเพื่อสลับหน้าจอให้อัตโนมัติ
+        window.addEventListener('DOMContentLoaded', () => {
             const isLoggedIn = sessionStorage.getItem('mg_is_logged_in');
+            const storedAccount = localStorage.getItem('mg_client_account');
             
-            if (storedAccount && isLoggedIn === 'true') {
-                const parsedAccount = JSON.parse(storedAccount);
-                if (parsedAccount && parsedAccount.fullname) {
-                    loginUserSuccess(parsedAccount.fullname);
-                    return;
-                }
-            }
-            
-            if (storedAccount) {
+            if (isLoggedIn && storedAccount) {
+                const account = JSON.parse(storedAccount);
+                loginUserSuccess(account.fullname);
+            } else if (storedAccount) {
                 changeView('login');
             } else {
                 changeView('register');
             }
-        }
-
-        window.addEventListener('DOMContentLoaded', checkLoginSession);
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js').catch(err => {
-                    console.log('Service Worker registration skipped or mocked.');
-                });
-            });
-        }
+        });
     </script>
 </body>
 </html>
