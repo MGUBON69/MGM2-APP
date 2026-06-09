@@ -524,7 +524,7 @@
             document.getElementById('forgot-step-1').classList.remove('hidden');
         }
 
-        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (ปรับปรุงจุดพารามิเตอร์สำเร็จรูป) =================
+        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS =================
         async function processRequestEmailOTP(event) {
             event.preventDefault();
             
@@ -564,8 +564,8 @@
                     time: "15 นาที"                 
                 };
 
-                // ✨ [FIXED] บังคับฉีด Public Key เข้าพารามิเตอร์ลำดับที่ 4 แก้ปัญหาแจ้งเตือนขัดข้องระบบ Service ID ทันที!
-                await emailjs.send('service_7etoscl', 'wu4hhx7', templateParams, 'KSS0THK1eB1HxrAsn');
+                // ✨ [UPDATED] อัปเดจรหัสเทมเพลตล่าสุดเป็น template_dutq85p เรียบร้อยแล้วค่ะ
+                await emailjs.send('service_7etoscl', 'template_dutq85p', templateParams, 'KSS0THK1eB1HxrAsn');
 
                 // สลับหน้าจอไปยังขั้นตอนกรอกรหัสยืนยัน
                 document.getElementById('forgot-step-1').classList.add('hidden');
@@ -574,7 +574,7 @@
                 document.getElementById('forgot-result-box').classList.add('hidden');
                 
                 startOTPTimer();
-                alert(`ยิงเชื่อมต่อระบบ EmailJS เรียบร้อยแล้วค่ะคุณชินอิจิ!\n\nเมลจริงกำลังส่งตรงเข้า Inbox หรือ Junk Mail ของคุณทันทีค่ะ ✨`);
+                alert(`ยิงเชื่อมต่อระบบ EmailJS เรียบร้อยแล้วค่ะคุณชินอิจิ!\n\nเมลจริงกำลังส่งตรงเข้า Inbox หรือ Junk Mail ของคุณทันทีด้วยเทมเพลตใหม่ค่ะ ✨`);
 
             } catch (error) {
                 console.error('EmailJS Connection Error Detail:', error);
