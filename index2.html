@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG UBONRATCHATHANI - Smart Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MG UBON - Smart Full System</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b0f19">
@@ -21,155 +21,307 @@
         body {
             font-family: 'Prompt', sans-serif;
             background-color: #0b0f19;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         ::-webkit-scrollbar {
             display: none;
         }
-        .page-fade {
-            animation: fadeIn 0.3s ease-in-out;
+        .page-active {
+            animation: cubicSlide 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+        @keyframes cubicSlide {
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen text-slate-200 p-4">
+<body class="flex justify-center items-center min-h-screen text-slate-200 p-0 md:p-6">
 
-    <div class="w-full max-w-[450px] bg-[#111625] min-h-[850px] rounded-3xl shadow-2xl border border-slate-800 flex flex-col overflow-hidden relative">
+    <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
-        <div id="pwaPrompt" class="hidden absolute bottom-4 left-4 right-4 bg-[#1e293b] border border-red-500/30 p-4 rounded-2xl shadow-2xl z-50 page-fade">
-            <div class="flex items-start gap-3">
-                <div class="w-11 h-11 bg-slate-500 rounded-2xl flex items-center justify-center font-bold text-white text-xl shadow-md shrink-0">
-                    G
-                </div>
+        <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 bg-slate-700/60 rounded-xl flex items-center justify-center font-bold text-slate-300 text-lg shrink-0">G</div>
                 <div class="flex-1">
                     <h4 class="text-xs font-bold text-white">เพิ่ม MG UBON ลงหน้าจอหลัก</h4>
-                    <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">ติดตั้งแอปพลิเคชันลงบนมือถือของคุณเพื่อการเข้าใช้งานที่รวดเร็วและเสถียรยิ่งขึ้น</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">ติดตั้งแอปพลิเคชันลงบนมือถือของคุณเพื่อการใช้งานที่รวดเร็วและเสถียรยิ่งขึ้น</p>
                 </div>
             </div>
-            <div class="flex justify-end gap-2 mt-3 text-xs">
-                <button onclick="dismissPwaPrompt()" class="px-3 py-1.5 text-slate-400 hover:text-white font-medium cursor-pointer">ไว้ทีหลัง</button>
-                <button onclick="triggerPwaInstall()" class="bg-[#e50012] hover:bg-[#c4000f] text-white px-4 py-1.5 rounded-xl font-semibold cursor-pointer shadow-md shadow-red-950/20">ติดตั้งทันที</button>
+            <div class="flex justify-end gap-3 mt-4 text-xs font-semibold">
+                <button onclick="closePwaBanner()" class="text-slate-400 hover:text-white py-1.5 px-2 cursor-pointer">ไว้ทีหลัง</button>
+                <button onclick="executePwaInstall()" class="bg-[#e50012] hover:bg-[#c4000f] text-white px-3 py-1.5 rounded-xl shadow-md transition-colors cursor-pointer">ติดตั้งทันที</button>
             </div>
         </div>
 
-        <div id="registerPage" class="flex-1 flex flex-col p-6 page-fade">
-            <div class="flex items-center gap-3 mt-4 mb-8">
-                <div class="bg-[#e50012] text-white font-bold px-3 py-1 rounded text-sm tracking-wider">MG</div>
-                <div class="text-xs font-semibold text-slate-400 tracking-wide uppercase">M2 MOTORSPORT</div>
+        <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-2">
+                <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
+                <span class="text-xs font-semibold tracking-wide text-slate-300">M2 MOTORSPORT</span>
             </div>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span class="text-[11px] text-slate-400 font-medium">ระบบออนไลน์</span>
+            </div>
+        </header>
 
-            <div class="flex-1 flex flex-col justify-center">
-                <h1 class="text-3xl font-bold text-white mb-2 text-center">ลงทะเบียนสมาชิกใหม่</h1>
-                <p class="text-sm text-slate-400 text-center mb-8">กรอกข้อมูลของคุณเพื่อรับสิทธิ์และเข้าสู่ระบบ</p>
+        <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
-                <form id="registerForm" class="space-y-5" onsubmit="handleRegister(event)">
+            <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
+                <div class="text-center mt-4 mb-6">
+                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md shadow-red-950/20">MG</div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
+                    <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการอัจฉริยะค๊า</p>
+                </div>
+
+                <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">ชื่อ-นามสกุล</label>
-                        <input type="text" id="reg_fullname" required placeholder="เช่น นาย เออเบิ้ล วิ่งไกล"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
+                        <input type="text" id="reg-name" required placeholder="เช่น นาย เออบิล วิ่งไกล"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="reg_phone" required placeholder="เช่น 0912345678" pattern="[0-9]{9,10}"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
+                        <input type="tel" id="reg-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">อีเมล</label>
-                        <input type="email" id="reg_email" required placeholder="เช่น mgurban@gmail.com"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
+                        <input type="email" id="reg-email" required placeholder="เช่น mgurban@gmail.com"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
-                    <div class="space-y-1 relative">
+                    <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-                        <input type="password" id="reg_password" required placeholder="••••••••••••"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 transition-all text-base">
+                        <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-semibold py-4 rounded-xl shadow-lg transition-all mt-4 cursor-pointer">
+
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/30 transition-all active:scale-[0.99] mt-6 cursor-pointer text-sm">
                         สร้างบัญชีสมาชิก
                     </button>
                 </form>
             </div>
-            <div class="text-center text-sm text-slate-400 mt-8 mb-4">
-                เป็นสมาชิกอยู่แล้วใช่ไหม? <a href="#" onclick="switchPage('loginPage')" class="text-red-500 hover:underline font-medium ml-1">เข้าสู่ระบบที่นี่ค้า</a>
-            </div>
-        </div>
 
-        <div id="loginPage" class="hidden flex-1 flex flex-col p-6 page-fade">
-            <div class="flex-1 flex flex-col justify-center">
-                <h1 class="text-3xl font-bold text-white mb-8 text-center">เข้าสู่ระบบ</h1>
-                <form class="space-y-5" onsubmit="event.preventDefault(); showDashboard();">
-                    <input type="email" placeholder="อีเมลของคุณ" required class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white">
-                    <input type="password" placeholder="รหัสผ่าน" required class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3.5 text-white">
-                    <button type="submit" class="w-full bg-[#e50012] py-4 rounded-xl font-semibold cursor-pointer">เข้าสู่ระบบ</button>
-                </form>
-            </div>
-            <div class="text-center text-sm text-slate-400 mt-8" onclick="switchPage('registerPage')">ยังไม่มีบัญชี? สมัครสมาชิก</div>
-        </div>
+            <div id="page-home" class="hidden p-5 space-y-5">
+                <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md">
+                    <div>
+                        <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
+                        <h3 id="client-name" class="text-lg font-bold text-white">คุณชินอิจิ</h3>
+                        <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชันบริการอัจฉริยะค๊า ✨</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner">
+                        <i class="fa-solid fa-user-gear text-xl"></i>
+                    </div>
+                </div>
 
-        <div id="dashboardPage" class="hidden flex-1 flex flex-col p-6 page-fade">
-            <h2 class="text-xl font-bold text-white mt-4 mb-4">สวัสดีครับ คุณผู้ใช้งาน</h2>
-            <p class="text-xs text-slate-400 mb-6">คุณกำลังเข้าใช้งานเว็บแอปพลิเคชันระบบ MG UBONRATCHATHANI </p>
-            <button onclick="localStorage.removeItem('user'); switchPage('loginPage');" class="w-full bg-slate-800 py-3 rounded-xl font-medium text-xs mt-auto">ออกจากระบบ</button>
-        </div>
+                <div class="space-y-2.5">
+                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">บริการด่วนทั้งหมด</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="ใส่ลิงก์_LINE_OA_ตรงนี้" target="_blank" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                            <div class="w-9 h-9 bg-green-500/10 text-green-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-line text-lg"></i>
+                            </div>
+                            <span class="text-xs font-bold text-white block">จองคิวรับบริการ</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">นัดหมายเช็คระยะผ่าน LINE</span>
+                        </a>
+
+                        <button onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                            <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-phone text-base"></i>
+                            </div>
+                            <span class="text-xs font-bold text-white block">ติดต่อพนักงาน</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
+                        </button>
+
+                        <button onclick="changeView('location')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                            <div class="w-9 h-9 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-map-location-dot text-base"></i>
+                            </div>
+                            <span class="text-xs font-bold text-white block">ที่ตั้งบริษัท</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">แผนที่และการนำทางมาศูนย์</span>
+                        </button>
+
+                        <button onclick="triggerLogout()" class="bg-[#181f32] hover:bg-red-950/20 border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                            <div class="w-9 h-9 bg-slate-800 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
+                                <i class="fa-solid fa-power-off text-base"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-300 group-hover:text-red-400 block">ออกจากระบบ</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">ล็อกเอาท์ปิดเซสชันปลอดภัย</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-contact" class="hidden p-5 space-y-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่และฝ่ายขาย
+                </h3>
+                <p class="text-xs text-slate-400">คุณสามารถกดโทรออกสายด่วนเพื่อติดต่อทีมงาน MG M2 Motorsport ได้ทันทีค่ะ:</p>
+
+                <div class="space-y-3">
+                    <a href="tel:045243444" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-red-500/10 text-[#e50012] rounded-full flex items-center justify-center"><i class="fa-solid fa-phone-volume"></i></div>
+                            <div>
+                                <span class="text-xs font-bold text-white block">เบอร์โทรศัพท์ศูนย์บริการหลัก</span>
+                                <span class="text-[10px] text-slate-400">โทร. 045-243-444 (คลิกเพื่อโทรออก)</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                    </a>
+
+                    <a href="tel:0912345678" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center"><i class="fa-solid fa-headset"></i></div>
+                            <div>
+                                <span class="text-xs font-bold text-white block">ที่ปรึกษาการขายด่วน (Sales हॉटलाइन)</span>
+                                <span class="text-[10px] text-slate-400">โทร. 091-234-5678 (คลิกเพื่อโทรออก)</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div id="page-location" class="hidden p-5 space-y-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัทสำนักงานใหญ่
+                </h3>
+                
+                <div class="w-full h-48 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-center items-center text-center p-4 relative overflow-hidden shadow-inner">
+                    <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#e50012_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    <i class="fa-solid fa-location-crosshairs text-3xl text-red-500 mb-2 animate-bounce"></i>
+                    <span class="text-xs font-bold text-white block">MG Ubonratchathani (M2 Motorsport)</span>
+                    <span class="text-[10px] text-slate-500 mt-1 max-w-[280px]">ตำบลในเมือง อำเภอเมืองอุบลราชธานี จังหวัดอุบลราชธานี</span>
+                </div>
+
+                <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">ข้อมูลการเดินทางติดต่อ</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        โชว์รูมและศูนย์บริการมาตรฐานครบวงจรขนาดใหญ่ ตั้งอยู่ในพิกัดเขตอำเภอเมืองอุบลราชธานี เดินทางสะดวก พร้อมรองรับระบบสถานีชาร์จความเร็วสูงสำหรับรถยนต์ EV ค๊า
+                    </p>
+                    <a href="https://maps.google.com" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors">
+                        <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
+                    </a>
+                </div>
+            </div>
+
+        </main>
+
+        <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
+            <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-house-chimney text-lg"></i>
+                <span class="text-[10px] tracking-wide">หน้าแรก</span>
+            </button>
+            <a href="ใส่ลิงก์_LINE_OA_ตรงนี้" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-brands fa-line text-lg"></i>
+                <span class="text-[10px] tracking-wide">จองคิว</span>
+            </a>
+            <button onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-phone text-lg"></i>
+                <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
+            </button>
+            <button onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-map-pin text-lg"></i>
+                <span class="text-[10px] tracking-wide">ที่ตั้ง</span>
+            </button>
+        </nav>
 
     </div>
 
     <script>
-        // จองตัวแปรสำหรับเก็บบันทึก Event การติดตั้งแอปพลิเคชันจาก Browser ระบบ
-        let deferredPrompt;
+        let installTrigger = null;
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // ป้องกันไม่ให้ Browser แสดง Banner อัตโนมัติเริ่มต้นของระบบเบราว์เซอร์เอง
-            e.preventDefault();
-            // บันทึก Event ไว้เรียกใช้ผ่านปุ่มติดตั้งที่เราออกแบบดีไซน์เอง
-            deferredPrompt = e;
-            // สั่งเปิดกล่อง UI โนติสแอปพลิเคชันที่เราดีไซน์ไว้ด้านล่างจอ
-            document.getElementById('pwaPrompt').classList.remove('hidden');
+        // ดักจับและตรวจจับสัญญาณการติดตั้งแอป PWA
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            installTrigger = event;
+            document.getElementById('pwaAlertBanner').classList.remove('hidden');
         });
 
-        function triggerPwaInstall() {
-            if (deferredPrompt) {
-                // เรียกหน้าจอคอนเฟิร์มติดตั้งของระบบโทรศัพท์ขึ้นมาแสดงผล
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    }
-                    deferredPrompt = null;
-                    document.getElementById('pwaPrompt').classList.add('hidden');
+        function executePwaInstall() {
+            if (installTrigger) {
+                installTrigger.prompt();
+                installTrigger.userChoice.then((choice) => {
+                    installTrigger = null;
+                    document.getElementById('pwaAlertBanner').classList.add('hidden');
                 });
             }
         }
 
-        function dismissPwaPrompt() {
-            document.getElementById('pwaPrompt').classList.add('hidden');
+        function closePwaBanner() {
+            document.getElementById('pwaAlertBanner').classList.add('hidden');
         }
 
-        // ลงทะเบียน Register Service Worker สำหรับใช้งานโหมดแอปพลิเคชันออฟไลน์
+        // ฟังก์ชันจัดการสมัครสมาชิก
+        function processRegister(event) {
+            event.preventDefault();
+            
+            const profile = {
+                fullname: document.getElementById('reg-name').value,
+                phone: document.getElementById('reg-phone').value,
+                email: document.getElementById('reg-email').value
+            };
+
+            localStorage.setItem('mg_client_session', JSON.stringify(profile));
+            
+            document.getElementById('appHeader').classList.remove('hidden');
+            document.getElementById('bottomNav').classList.remove('hidden');
+            document.getElementById('client-name').innerText = `คุณ ${profile.fullname}`;
+            
+            changeView('home');
+        }
+
+        // ระบบนำทางสลับหน้าจอเว็บแอป (SPA View Switcher)
+        function changeView(viewId) {
+            const allViews = ['register', 'home', 'contact', 'location'];
+            allViews.forEach(v => {
+                const layer = document.getElementById(`page-${v}`);
+                if (layer) {
+                    layer.classList.add('hidden');
+                    layer.classList.remove('page-active');
+                }
+            });
+
+            const targetLayer = document.getElementById(`page-${viewId}`);
+            targetLayer.classList.remove('hidden');
+            targetLayer.classList.add('page-active');
+
+            const navButtons = ['home', 'contact', 'location'];
+            navButtons.forEach(btn => {
+                const element = document.getElementById(`btn-nav-${btn}`);
+                if (element) {
+                    if (btn === viewId) {
+                        element.classList.remove('text-slate-400');
+                        element.classList.add('text-red-500', 'font-bold');
+                    } else {
+                        element.classList.remove('text-red-500', 'font-bold');
+                        element.classList.add('text-slate-400');
+                    }
+                }
+            });
+        }
+
+        // ระบบออกจากระบบอย่างปลอดภัย
+        function triggerLogout() {
+            if (confirm('คุณต้องการออกจากระบบการควบคุมแอปพลิเคชันใช่ไหมค๊า?')) {
+                document.getElementById('appHeader').classList.add('hidden');
+                document.getElementById('bottomNav').classList.add('hidden');
+                
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-phone').value = '';
+                document.getElementById('reg-email').value = '';
+                document.getElementById('reg-password').value = '';
+                
+                localStorage.removeItem('mg_client_session');
+                changeView('register');
+            }
+        }
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(reg => console.log('Service Worker Registered Successfully', reg))
-                    .catch(err => console.log('Service Worker Registration Failed', err));
+                navigator.serviceWorker.register('service-worker.js');
             });
-        }
-
-        function switchPage(pageId) {
-            ['registerPage', 'loginPage', 'dashboardPage'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById(pageId).classList.remove('hidden');
-        }
-
-        function handleRegister(event) {
-            event.preventDefault();
-            localStorage.setItem('user', 'active');
-            showDashboard();
-        }
-
-        function showDashboard() {
-            switchPage('dashboardPage');
         }
     </script>
 </body>
