@@ -546,72 +546,68 @@
         }
 
         // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (แก้ไข Parameter ตรงกันแล้ว) =================
-        async function processRequestEmailOTP(event) {
-            event.preventDefault();
+      async function processRequestEmailOTP(event) {
+    event.preventDefault();
+    
+    // 1. ดึงค่าอีเมลจากช่องกรอกข้อมูลในหน้ากู้รหัสผ่าน
+    const emailInput = document.getElementById('forgot-email').value.trim().toLowerCase();
+    const storedAccount = localStorage.getItem('mg_client_account');
+    
+    const submitBtn = document.getElementById('btn-submit-forgot');
+    const submitText = document.getElementById('text-submit-forgot');
+
+    if (!storedAccount) {
+        alert('❌ ไม่พบข้อมูลบัญชีผู้ใช้งานในระบบเครื่องนี้ค่ะ');
+        return;
+    }
+
+    const parsedAccount = JSON.parse(storedAccount);
+    if (parsedAccount.email !== emailInput) {
+        alert('❌ อีเมลไม่ตรงกับที่ลงทะเบียนไว้ในเครื่องนี้ค่ะ');
+        return;
+    }
+
+    try {
+        // ล็อกปุ่มกันกดย้ำ
+        submitBtn.disabled = true;
+        submitText.innerText = "กำลังส่งรหัส OTP...";
+
+        globalPasswordText = parsedAccount.password;
+        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        const currentLocalTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+
+        // 2. เตรียมตัวแปรแปรส่งไปให้ตรงกับ {{email}}, {{passcode}}, {{time}} ใน EmailJS
+        const templateParams = {
+            email: emailInput,             
+            passcode: generatedOTP,         
+            time: currentLocalTime                 
+        };
+
+        // 3. ยิงคำสั่งส่งเมล (ใช้ Service ID และ Template ID ที่ตรงกับหน้าเว็บของคุณชินอิจิ)
+        // บริการ: service_7etoscl | เทมเพลต: template_c1sevkg | คีย์สาธารณะ: KSS0THK1eB1HxrAsn
+        const response = await emailjs.send('service_7etoscl', 'template_c1sevkg', templateParams, 'KSS0THK1eB1HxrAsn');
+
+        if (response.status === 200 || response.text === 'OK') {
+            document.getElementById('target-email-display').innerText = `ระบบได้ส่ง OTP ไปยังอีเมล ${emailInput} แล้วค่ะ`;
+            document.getElementById('forgot-step-1').classList.add('hidden');
+            document.getElementById('forgot-step-2').classList.remove('hidden');
+            document.getElementById('otp-code').value = '';
+            document.getElementById('forgot-result-box').classList.add('hidden');
             
-            const emailInput = document.getElementById('forgot-email').value.trim().toLowerCase();
-            const storedAccount = localStorage.getItem('mg_client_account');
-            
-            const submitBtn = document.getElementById('btn-submit-forgot');
-            const submitText = document.getElementById('text-submit-forgot');
-            const closeBtn = document.getElementById('btn-close-forgot');
-
-            if (!storedAccount) {
-                showStatusModal('แจ้งเตือนการลงทะเบียน', 'ไม่พบข้อมูลผู้ใช้งานใดๆ ในระบบเครื่องนี้ค่ะ กรุณาลงทะเบียนสร้างบัญชีก่อนนะคะ', 'warning');
-                return;
-            }
-
-            const parsedAccount = JSON.parse(storedAccount);
-            if (parsedAccount.email !== emailInput) {
-                showStatusModal('ข้อมูลไม่ถูกต้อง', 'อีเมลนี้ไม่ตรงกับที่คุณใช้ลงทะเบียนไว้ในเครื่องนี้ค่ะ กรุณาตรวจสอบใหม่อีกครั้งนะค', 'error');
-                return;
-            }
-
-            try {
-                // อัปเดตสถานะปุ่มป้องกันการกดย้ำระหว่างเชื่อมต่อ API
-                submitBtn.disabled = true;
-                closeBtn.disabled = true;
-                submitBtn.classList.replace('bg-amber-500', 'bg-slate-700');
-                submitBtn.classList.add('cursor-not-allowed');
-                submitText.innerText = "กำลังส่งเมล...";
-
-                globalPasswordText = parsedAccount.password;
-                generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-                document.getElementById('target-email-display').innerText = `ระบบส่ง OTP ไปที่อีเมล ${emailInput} แล้วค่ะ`;
-
-                // คํานวณเวลาปัจจุบันของระบบเพื่อให้แสดงผลบนอีเมลปลายทางอย่างถูกต้อง
-                const currentLocalTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
-
-                // ✨ [FIXED] อัปเดตโครงสร้างคู่ตัวแปร Parameter (email, passcode, time) ให้เป็นตัวพิมพ์เล็กตรงตาม Template ใน EmailJS เป๊ะๆ ค่ะ!
-                const templateParams = {
-                    email: emailInput,             
-                    passcode: generatedOTP,         
-                    time: currentLocalTime                 
-                };
-
-                // เรียกยิงผ่าน Service ID และ Template ID 'wu4hhx7' ด้วยสิทธิ์ที่จับคู่สมบูรณ์
-                await emailjs.send('service_7etoscl', 'wu4hhx7', templateParams, 'KSS0THK1eB1HxrAsn');
-
-                // สลับหน้าจอไปยังขั้นตอนกรอกรหัสยืนยัน
-                document.getElementById('forgot-step-1').classList.add('hidden');
-                document.getElementById('forgot-step-2').classList.remove('hidden');
-                document.getElementById('otp-code').value = '';
-                document.getElementById('forgot-result-box').classList.add('hidden');
-                
-                startOTPTimer();
-                showStatusModal('ส่งรหัส OTP สำเร็จ', `คิมได้สั่งงานยิง API ส่งรหัสเข้าเมล ${emailInput} เรียบร้อยแล้วค่ะ! อย่าลืมเช็คที่กล่องจดหมายขยะ (Spam) ด้วยนะคะ`, 'success');
-
-            } catch (error) {
-                console.error('EmailJS Connection Error Detail:', error);
-                showStatusModal('สัญญาณขัดข้อง', 'เกิดข้อผิดพลาดในการรับส่งสัญญาณกับเซิร์ฟเวอร์ EmailJS กรุณาตรวจสอบการเชื่อมต่อเน็ตนะคะ', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                closeBtn.disabled = false;
-                submitBtn.classList.replace('bg-slate-700', 'bg-amber-500');
-                submitBtn.classList.remove('cursor-not-allowed');
-                submitText.innerText = "ส่งรหัสเข้าเมลฟรี";
-            }
+            startOTPTimer();
+            alert('🎉 ส่งรหัสสำเร็จแล้วค่ะ! รบกวนตรวจสอบในกล่องจดหมาย หรือกล่องจดหมายขยะ (Spam) นะคะ');
+        } else {
+            alert('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์: ' + response.text);
         }
+
+    } catch (error) {
+        console.error('EmailJS Error:', error);
+        alert('❌ ส่งไม่สำเร็จ: ' + (error.text || error.message || error));
+    } finally {
+        submitBtn.disabled = false;
+        submitText.innerText = "ส่งรหัสเข้าเมลฟรี";
+    }
+}
 
         function startOTPTimer() {
             let timeLeft = 60;
