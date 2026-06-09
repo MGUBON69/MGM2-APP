@@ -524,6 +524,713 @@
             document.getElementById('forgot-step-1').classList.remove('hidden');
         }
 
+        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (ตรวจสอบข้อมูลจริงเรียบร้อยแล้ว) =================
+        async function processRequestEmailOTP(event) {
+            event.preventDefault();
+            
+            const emailInput = document.getElementById('forgot-email').value.trim().toLowerCase();
+            const storedAccount = localStorage.getItem('mg_client_account');
+            
+            const submitBtn = document.getElementById('btn-submit-forgot');
+            const submitText = document.getElementById('text-submit-forgot');
+            const closeBtn = document.getElementById('btn-close-forgot');
+
+            if (!storedAccount) {
+                alert('ไม่พบข้อมูลผู้ใช้งานใดๆ ในระบบเครื่องนี้ค่ะ กรุณาลงทะเบียนก่อนนะคะคุณชินอิจิ');
+                return;
+            }
+
+            const parsedAccount = JSON.parse(storedAccount);
+            if (parsedAccount.email !== emailInput) {
+                alert('อีเมลนี้ไม่ตรงกับที่คุณชินอิจิใช้ลงทะเบียนไว้ค่ะ กรุณาตรวจสอบใหม่อีกครั้งนะคะ');
+                return;
+            }
+
+            try {
+                // อัปเดตสถานะปุ่มป้องกันการกดย้ำระหว่างเชื่อมต่อ API
+                submitBtn.disabled = true;
+                closeBtn.disabled = true;
+                submitBtn.classList.replace('bg-amber-500', 'bg-slate-700');
+                submitBtn.classList.add('cursor-not-allowed');
+                submitText.innerText = "กำลังส่งเมล...";
+
+                globalPasswordText = parsedAccount.password;
+                generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+                document.getElementById('target-email-display').innerText = `ระบบส่ง OTP ไปที่อีเมล ${emailInput} แล้วค่ะ`;
+
+                // แฟล็กแมปปิ้งตัวแปรตรงกับหน้าแดชบอร์ดในไฟล์ image_36461f.png เป๊ะๆ (email, passcode, time)
+                const templateParams = {
+                    email: emailInput,             
+                    passcode: generatedOTP,         
+                    time: "21:55 น."                 
+                };
+
+                // ✨ [FIXED] อัปเดตแก้ไขกลับไปใช้ Template ID จริง 'wu4hhx7' ตามที่เห็นในช่องเบราว์เซอร์ของรูปภาพค่ะ!
+                await emailjs.send('service_7etoscl', 'wu4hhx7', templateParams, 'KSS0THK1eB1HxrAsn');
+
+                // สลับหน้าจอไปยังขั้นตอนกรอกรหัสยืนยัน
+                document.getElementById('forgot-step-1').classList.add('hidden');
+                document.getElementById('forgot-step-2').classList.remove('hidden');
+                document.getElementById('otp-code').value = '';
+                document.getElementById('forgot-result-box').classList.add('hidden');
+                
+                startOTPTimer();
+                alert(`เชื่อมต่อและส่งสัญญาณสำเร็จแล้วค่ะคุณชินอิจิ!\n\nรหัส OTP ส่งตรงเข้าอีเมลของคุณผ่านเทมเพลตที่ถูกต้องแล้วค่ะ ✨`);
+
+            } catch (error) {
+                console.error('EmailJS Connection Error Detail:', error);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย ส่งเมลไม่สำเร็จเนื่องจากรหัสขัดข้องค่ะ!');
+            } finally {
+                submitBtn.disabled = false;
+                closeBtn.disabled = false;
+                submitBtn.classList.replace('bg-slate-700', 'bg-amber-500');
+                submitBtn.classList.remove('cursor-not-allowed');
+                submitText.innerText = "ส่งรหัสเข้าเมลฟรี";
+            }
+        }
+
+        function startOTPTimer() {
+            let timeLeft = 60;
+            const timerDisplay = document.getElementById('otp-timer');
+            clearInterval(countdownInterval);
+            
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    timerDisplay.innerHTML = `<button type="button" onclick="processRequestEmailOTP(event)" class="text-amber-500 font-bold underline cursor-pointer">กดส่งอีเมลอีกครั้ง</button>`;
+                } else {
+                    timerDisplay.innerText = `ส่งรหัสใหม่อีกครั้งได้ใน ${timeLeft} วินาที`;
+                }
+            }, 1000);
+        }
+
+        function processVerifyEmailOTP(event) {
+            event.preventDefault();
+            const userInputOTP = document.getElementById('otp-code').value.trim();
+
+            if (userInputOTP === generatedOTP) {
+                clearInterval(countdownInterval);
+                document.getElementById('forgot-password-output').innerText = '•'.repeat(globalPasswordText.length);
+                
+                const eyeIcon = document.getElementById('forgot-eye-icon');
+                if (eyeIcon) {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                }
+                
+                document.getElementById('forgot-result-box').classList.remove('hidden');
+                return;
+            }
+            alert('รหัส OTP ในเมลไม่ถูกต้อง กรุณาเช็คตัวเลขแล้วลองใหม่อีกครั้งค่ะคุณชินอิจิ');
+        }
+
+        function changeView(viewId) {
+            const allViews = ['register', 'login', 'home', 'contact', 'location'];
+            allViews.forEach(v => {
+                const layer = document.getElementById(`page-${v}`);
+                if (layer) {
+                    layer.classList.add('hidden');
+                    layer.classList.remove('page-active');
+                }
+            });
+
+            const targetLayer = document.getElementById(`page-${viewId}`);
+            if (targetLayer) {
+                targetLayer.classList.remove('hidden');
+                targetLayer.classList.add('page-active');
+            }
+
+            document.getElementById('reg-password').type = 'password';
+            document.getElementById('login-password').type = 'password';
+            const regEye = document.getElementById('reg-eye-icon');
+            const loginEye = document.getElementById('login-eye-icon');
+            if (regEye) { regEye.classList.remove('fa-eye'); regEye.classList.add('fa-eye-slash'); }
+            if (loginEye) { loginEye.classList.remove('fa-eye'); loginEye.classList.add('fa-eye-slash'); }
+
+            const navButtons = ['home', 'contact', 'location'];
+            navButtons.forEach(btn => {
+                const element = document.getElementById(`btn-nav-${btn}`);
+                if (element) {
+                    if (btn === viewId) {
+                        element.classList.remove('text-slate-400');
+                        element.classList.add('text-red-500', 'font-bold');
+                    } else {
+                        element.classList.remove('text-red-500', 'font-bold');
+                        element.classList.add('text-slate-400');
+                    }
+                }
+            });
+        }
+
+        function triggerLogout() {
+            if (confirm('คุณชินอิจิต้องการออกจากระบบใช่ไหมคะ?')) {
+                document.getElementById('appHeader').classList.add('hidden');
+                document.getElementById('bottomNav').classList.add('hidden');
+                
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-phone').value = '';
+                document.getElementById('reg-email').value = '';
+                document.getElementById('reg-password').value = '';
+                
+                sessionStorage.removeItem('mg_is_logged_in');
+                changeView('login');
+            }
+        }
+
+        function checkLoginSession() {
+            const storedAccount = localStorage.getItem('mg_client_account');
+            const isLoggedIn = sessionStorage.getItem('mg_is_logged_in');
+            
+            if (storedAccount && isLoggedIn === 'true') {
+                const parsedAccount = JSON.parse(storedAccount);
+                if (parsedAccount && parsedAccount.fullname) {
+                    loginUserSuccess(parsedAccount.fullname);
+                    return;
+                }
+            }
+            if (storedAccount) { changeView('login'); } else { changeView('register'); }
+        }
+
+        window.addEventListener('DOMContentLoaded', checkLoginSession);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js').catch(err => {
+                    console.log('Service Worker skipped.');
+                });
+            });
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MG UBON - Smart Full System V3</title>
+    
+    <!-- PWA Configurations -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Third-party Styles & Scripts via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- EmailJS SDK สำหรับส่งอีเมลจากฝั่ง Frontend -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // ผูก Public Key ของคุณชินอิจิอย่างถูกต้อง
+            emailjs.init("KSS0THK1eB1HxrAsn"); 
+        })();
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #0b0f19;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .page-active {
+            animation: cubicSlide 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
+        }
+        @keyframes cubicSlide {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen text-slate-200 p-0 md:p-6">
+
+    <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
+        
+        <!-- ================= MODAL: แก้ไขชื่อผู้ลงทะเบียน ================= -->
+        <div id="editNameModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center text-[#e50012]">
+                        <i class="fa-solid fa-user-pen text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">แก้ไขชื่อผู้ลงทะเบียน</h4>
+                        <p class="text-[11px] text-slate-400">กรุณาระบุชื่อ-นามสกุลใหม่ของคุณชินอิจิค่ะ</p>
+                    </div>
+                </div>
+                <form onsubmit="saveNewName(event)" class="space-y-4">
+                    <div>
+                        <input type="text" id="new-profile-name" required placeholder="กรอกชื่อ-นามสกุลใหม่ที่นี่"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    <div class="flex justify-end gap-2 text-xs font-semibold pt-2">
+                        <button type="button" onclick="closeEditModal()" class="text-slate-400 hover:text-white py-2 px-3 cursor-pointer">ยกเลิก</button>
+                        <button type="submit" class="bg-[#e50012] hover:bg-[#c4000f] text-white px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer">บันทึกข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ================= MODAL: ลืมรหัสผ่าน (Forgot Password) ================= -->
+        <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-envelope-open-text text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">กู้คืนรหัสผ่านด้วย Email OTP</h4>
+                        <p class="text-[11px] text-slate-400">ระบบจะส่งรหัสความปลอดภัย 6 หลักไปที่เมลของคุณค่ะ</p>
+                    </div>
+                </div>
+                
+                <!-- ขั้นตอนที่ 1: กรอกอีเมลสมาชิกเพื่อรับ OTP -->
+                <form id="forgot-step-1" onsubmit="processRequestEmailOTP(event)" class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-[11px] text-slate-400 font-medium">ระบุอีเมลที่ใช้ลงทะเบียน</label>
+                        <input type="email" id="forgot-email" required placeholder="เช่น yourname@gmail.com"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 text-xs transition-all">
+                    </div>
+                    <div class="flex justify-end gap-2 text-xs font-semibold pt-2">
+                        <button type="button" id="btn-close-forgot" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white py-2 px-3 cursor-pointer">ปิดหน้าต่าง</button>
+                        <button type="submit" id="btn-submit-forgot" class="bg-amber-500 hover:bg-amber-600 text-[#0b0f19] px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane"></i> <span id="text-submit-forgot">ส่งรหัสเข้าเมลฟรี</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- ขั้นตอนที่ 2: กรอกรหัส OTP 6 หลักที่ได้รับจากอีเมล -->
+                <form id="forgot-step-2" onsubmit="processVerifyEmailOTP(event)" class="hidden space-y-4 mt-2">
+                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
+                        <span id="target-email-display" class="text-[11px] text-amber-400 block font-medium">ระบบได้ส่ง OTP ไปยังอีเมลของคุณแล้ว</span>
+                        <span class="text-[10px] text-slate-400 block mt-1">กรุณาเช็คในกล่องข้อความเข้า หรือกล่องจดหมายขยะ (Spam)</span>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[11px] text-slate-400 font-medium">กรอกรหัส OTP 6 หลัก</label>
+                        <div class="flex gap-2 justify-center my-2">
+                            <input type="text" id="otp-code" required maxlength="6" pattern="[0-9]{6}" placeholder="******" 
+                                class="w-full tracking-[1em] text-center bg-[#0b0f19] border border-slate-800 rounded-xl py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 text-base font-bold transition-all">
+                        </div>
+                        <div class="text-center">
+                            <span id="otp-timer" class="text-[11px] text-slate-500">ส่งรหัสใหม่อีกครั้งได้ใน 60 วินาที</span>
+                        </div>
+                    </div>
+
+                    <!-- โซนแสดงผลรหัสผ่านเมื่อยืนยัน OTP ถูกต้อง -->
+                    <div id="forgot-result-box" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center relative animate-pulse">
+                        <span class="text-[11px] text-emerald-400 block font-medium">ยืนยันสำเร็จ! รหัสผ่านของคุณคือ</span>
+                        <div class="flex items-center justify-center gap-2 mt-0.5 relative pr-8">
+                            <span id="forgot-password-output" class="text-base font-bold text-white tracking-widest block select-all">PASSWORD</span>
+                            <button type="button" onclick="togglePasswordVisibility('forgot-password-output', 'forgot-eye-icon', true)" class="absolute right-2 text-slate-400 hover:text-white cursor-pointer p-1">
+                                <i id="forgot-eye-icon" class="fa-solid fa-eye-slash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-2 text-xs font-semibold pt-2">
+                        <button type="button" onclick="backToStep1()" class="text-slate-400 hover:text-white py-2 px-3 cursor-pointer">ย้อนกลับ</button>
+                        <button type="submit" id="btn-verify-otp" class="bg-emerald-500 hover:bg-emerald-600 text-[#0b0f19] px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer">ตรวจสอบรหัส OTP</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ================= BANNER: แจ้งเตือนติดตั้ง PWA ================= -->
+        <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-xs font-bold text-white">เพิ่ม MG UBON ลงหน้าจอหลัก</h4>
+                    <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">ติดตั้งแอปพลิเคชันลงบนมือถือเพื่อการใช้งานที่รวดเร็วยิ่งขึ้นค่ะ</p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-4 text-xs font-semibold">
+                <button onclick="closePwaBanner()" class="text-slate-400 hover:text-white py-1.5 px-2 cursor-pointer">ไว้ทีหลัง</button>
+                <button onclick="executePwaInstall()" class="bg-[#e50012] hover:bg-[#c4000f] text-white px-3 py-1.5 rounded-xl shadow-md transition-colors cursor-pointer">ติดตั้งทันที</button>
+            </div>
+        </div>
+
+        <!-- ================= GLOBAL APP HEADER ================= -->
+        <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-2">
+                <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
+                <span class="text-xs font-semibold tracking-wide text-slate-300">M2 MOTORSPORT</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span class="text-[11px] text-slate-400 font-medium">ระบบออนไลน์</span>
+            </div>
+        </header>
+
+        <!-- ================= MAIN CONTENT SCROLL AREA ================= -->
+        <main class="flex-1 flex flex-col overflow-y-auto pb-24">
+
+            <!-- PAGE: Register -->
+            <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
+                <div class="text-center mt-4 mb-6">
+                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
+                    <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการ</p>
+                </div>
+
+                <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">ชื่อ-นามสกุล</label>
+                        <input type="text" id="reg-name" required placeholder="เช่น นาย เออเบิล วิ่งไกล"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">เบอร์โทรศัพท์</label>
+                        <input type="tel" id="reg-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">อีเมล</label>
+                        <input type="email" id="reg-email" required placeholder="เช่น yourname@gmail.com"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
+                        <div class="relative">
+                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
+                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer p-1">
+                                <i id="reg-eye-icon" class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
+                        สร้างบัญชีสมาชิก
+                    </button>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-xs text-slate-400">มีบัญชีผู้ใช้งานแล้วใช่ไหม? 
+                            <button type="button" onclick="changeView('login')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PAGE: Login -->
+            <div id="page-login" class="hidden flex-1 flex flex-col p-6">
+                <div class="text-center mt-4 mb-6">
+                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h2>
+                    <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
+                </div>
+
+                <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">อีเมลผู้ใช้งาน</label>
+                        <input type="email" id="login-email" required placeholder="เช่น yourname@gmail.com"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
+                            <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-amber-500 hover:text-amber-400 transition-colors font-medium cursor-pointer">ลืมรหัสผ่านด้วย Email OTP?</button>
+                        </div>
+                        <div class="relative">
+                            <input type="password" id="login-password" required placeholder="••••••••••••"
+                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer p-1">
+                                <i id="login-eye-icon" class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
+                        เข้าสู่ระบบผู้ใช้งาน
+                    </button>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-xs text-slate-400">ยังไม่มีบัญชีสมาชิกสมาชิก? 
+                            <button type="button" onclick="changeView('register')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PAGE: Home Dashboard -->
+            <div id="page-home" class="hidden p-5 space-y-5">
+                <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
+                    <div>
+                        <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
+                        <h3 id="client-name" class="text-lg font-bold text-white">คุณชินอิจิ</h3>
+                        <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชัน MGM2 ✨</p>
+                    </div>
+                    <button onclick="openEditModal()" class="w-12 h-12 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner cursor-pointer transition-colors" title="แก้ไขชื่อ">
+                        <i class="fa-solid fa-user-gear text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-2.5">
+                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">เข้าถึงง่าย แค่ปลายนิ้ว</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        
+                        <a href="https://lin.ee/Ov20t55" target="_blank" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                            <div class="w-9 h-9 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-line text-xl"></i>
+                            </div>
+                            <span class="text-xs font-bold text-white block">จองคิวรับบริการ</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">นัดหมายเช็คระยะผ่าน LINE OA</span>
+                        </a>
+
+                        <button onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                            <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-phone text-base"></i>
+                            </div>
+                            <span class="text-xs font-bold text-white block">ติดต่อพนักงาน</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
+                        </button>
+
+                        <button onclick="changeView('location')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                            <div class="w-9 h-9 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-map-location-dot text-base"></i>
+                            </div>
+                            <span class="text-xs font-bold text-white block">ที่ตั้งบริษัท</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
+                        </button>
+
+                        <button onclick="triggerLogout()" class="bg-[#181f32] hover:bg-red-950/20 border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                            <div class="w-9 h-9 bg-slate-800 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
+                                <i class="fa-solid fa-power-off text-base"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-300 group-hover:text-red-400 block">ออกจากระบบ</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">ล็อกเอาท์ปิดเซสชันความปลอดภัย</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: Contact List -->
+            <div id="page-contact" class="hidden p-5 space-y-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่
+                </h3>
+                <p class="text-xs text-slate-400">คุณสามารถกดโทรออกสายด่วนเพื่อติดต่อทีมงาน MG M2 Motorsport ได้ทันทีค่ะ:</p>
+
+                <div class="space-y-3">
+                    <a href="tel:0930641144" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-red-500/10 text-[#e50012] rounded-full flex items-center justify-center"><i class="fa-solid fa-phone-volume"></i></div>
+                            <div>
+                                <span class="text-xs font-bold text-white block">เบอร์โทรศัพท์ศูนย์บริการ</span>
+                                <span class="text-[10px] text-slate-400">โทร. 093-064-1144</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
+                    </a>
+
+                    <a href="tel:0996193126" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center"><i class="fa-solid fa-headset"></i></div>
+                            <div>
+                                <span class="text-xs font-bold text-white block">ฝ่ายขาย</span>
+                                <span class="text-[10px] text-slate-400">โทร. 099-619-3126</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- PAGE: Location & Maps -->
+            <div id="page-location" class="hidden p-5 space-y-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัทสำนักงานใหญ่
+                </h3>
+                
+                <div class="w-full h-48 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-center items-center text-center p-4 relative overflow-hidden shadow-inner">
+                    <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#e50012_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    <i class="fa-solid fa-location-crosshairs text-3xl text-red-500 mb-2 animate-bounce"></i>
+                    <span class="text-xs font-bold text-white block">MG Ubonratchathani (M2 Motorsport)</span>
+                    <span class="text-[10px] text-slate-400 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
+                </div>
+
+                <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3 shadow-sm">
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">ข้อมูลการเดินทางติดต่อ</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        ศูนย์บริการมาตรฐาน พร้อมรองรับระบบสถานีชาร์จความเร็วสูงสำหรับรถไฟฟ้า
+                    </p>
+                    <a href="https://maps.google.com" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
+                        <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
+                    </a>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+        <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
+            <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-house-chimney text-lg"></i>
+                <span class="text-[10px] tracking-wide">หน้าแรก</span>
+            </button>
+            <a href="https://lin.ee/Ov20t55" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16 text-center">
+                <i class="fa-brands fa-line text-lg"></i>
+                <span class="text-[10px] tracking-wide">จองคิว</span>
+            </a>
+            <button onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-phone text-lg"></i>
+                <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
+            </button>
+            <button onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-map-pin text-lg"></i>
+                <span class="text-[10px] tracking-wide">ที่ตั้ง</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- ================= JAVASCRIPT APPLICATION LOGIC ================= -->
+    <script>
+        let installTrigger = null;
+        let globalPasswordText = ''; 
+        let generatedOTP = ''; 
+        let countdownInterval = null;
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            installTrigger = event;
+            document.getElementById('pwaAlertBanner').classList.remove('hidden');
+        });
+
+        function executePwaInstall() {
+            if (installTrigger) {
+                installTrigger.prompt();
+                installTrigger.userChoice.then(() => {
+                    installTrigger = null;
+                    document.getElementById('pwaAlertBanner').classList.add('hidden');
+                });
+            }
+        }
+
+        function closePwaBanner() {
+            document.getElementById('pwaAlertBanner').classList.add('hidden');
+        }
+
+        function togglePasswordVisibility(elementId, iconId, isTextSpan = false) {
+            const element = document.getElementById(elementId);
+            const icon = document.getElementById(iconId);
+            
+            if (isTextSpan) {
+                if (element.innerText.includes('•')) {
+                    element.innerText = globalPasswordText;
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    element.innerText = '•'.repeat(globalPasswordText.length);
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            } else {
+                if (element.type === 'password') {
+                    element.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    element.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            }
+        }
+
+        function processRegister(event) {
+            event.preventDefault();
+            const profile = {
+                fullname: document.getElementById('reg-name').value.trim(),
+                phone: document.getElementById('reg-phone').value.trim(),
+                email: document.getElementById('reg-email').value.trim().toLowerCase(),
+                password: document.getElementById('reg-password').value
+            };
+            localStorage.setItem('mg_client_account', JSON.stringify(profile));
+            sessionStorage.setItem('mg_is_logged_in', 'true');
+            loginUserSuccess(profile.fullname);
+        }
+
+        function processLogin(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('login-email').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('login-password').value;
+            const storedAccount = localStorage.getItem('mg_client_account');
+            
+            if (storedAccount) {
+                const parsedAccount = JSON.parse(storedAccount);
+                if (parsedAccount.email === emailInput && parsedAccount.password === passwordInput) {
+                    sessionStorage.setItem('mg_is_logged_in', 'true');
+                    loginUserSuccess(parsedAccount.fullname);
+                    return;
+                }
+            }
+            alert('ไม่พบข้อมูลบัญชีสมาชิก หรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งนะคะคุณชินอิจิ');
+        }
+
+        function loginUserSuccess(name) {
+            document.getElementById('appHeader').classList.remove('hidden');
+            document.getElementById('bottomNav').classList.remove('hidden');
+            document.getElementById('client-name').innerText = `คุณ ${name}`;
+            changeView('home');
+        }
+
+        function openEditModal() {
+            const storedAccount = localStorage.getItem('mg_client_account');
+            let currentName = "ชินอิจิ";
+            if (storedAccount) { currentName = JSON.parse(storedAccount).fullname; }
+            document.getElementById('new-profile-name').value = currentName;
+            document.getElementById('editNameModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
+
+        function saveNewName(event) {
+            event.preventDefault();
+            const newName = document.getElementById('new-profile-name').value.trim();
+            if (!newName) return;
+
+            const storedAccount = localStorage.getItem('mg_client_account');
+            if (storedAccount) {
+                const accountData = JSON.parse(storedAccount);
+                accountData.fullname = newName;
+                localStorage.setItem('mg_client_account', JSON.stringify(accountData));
+            }
+            document.getElementById('client-name').innerText = `คุณ ${newName}`;
+            closeEditModal();
+        }
+
+        function openForgotPasswordModal() {
+            document.getElementById('forgot-email').value = '';
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+        }
+
+        function closeForgotPasswordModal() {
+            clearInterval(countdownInterval);
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+        }
+
+        function backToStep1() {
+            clearInterval(countdownInterval);
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+        }
+
         // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS =================
         async function processRequestEmailOTP(event) {
             event.preventDefault();
