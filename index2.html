@@ -5,22 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MG UBON - Smart Full System V3</title>
     
+    <!-- PWA Configurations -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b0f19">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MG UBON">
     
+    <!-- Third-party Styles & Scripts via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- EmailJS SDK สำหรับส่งอีเมลจากฝั่ง Frontend -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // ✅ ผูก Public Key ของคุณชินอิจิเรียบร้อยค่ะ
+            // ผูก Public Key ของคุณชินอิจิอย่างถูกต้อง
             emailjs.init("KSS0THK1eB1HxrAsn"); 
         })();
     </script>
@@ -48,6 +51,7 @@
 
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
+        <!-- ================= MODAL: แก้ไขชื่อผู้ลงทะเบียน ================= -->
         <div id="editNameModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
                 <div class="flex items-center gap-3 mb-4">
@@ -72,6 +76,7 @@
             </div>
         </div>
 
+        <!-- ================= MODAL: ลืมรหัสผ่าน (Forgot Password) ================= -->
         <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
                 <div class="flex items-center gap-3 mb-4">
@@ -84,6 +89,7 @@
                     </div>
                 </div>
                 
+                <!-- ขั้นตอนที่ 1: กรอกอีเมลสมาชิกเพื่อรับ OTP -->
                 <form id="forgot-step-1" onsubmit="processRequestEmailOTP(event)" class="space-y-4">
                     <div class="space-y-1">
                         <label class="text-[11px] text-slate-400 font-medium">ระบุอีเมลที่ใช้ลงทะเบียน</label>
@@ -98,6 +104,7 @@
                     </div>
                 </form>
 
+                <!-- ขั้นตอนที่ 2: กรอกรหัส OTP 6 หลักที่ได้รับจากอีเมล -->
                 <form id="forgot-step-2" onsubmit="processVerifyEmailOTP(event)" class="hidden space-y-4 mt-2">
                     <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
                         <span id="target-email-display" class="text-[11px] text-amber-400 block font-medium">ระบบได้ส่ง OTP ไปยังอีเมลของคุณแล้ว</span>
@@ -114,6 +121,7 @@
                         </div>
                     </div>
 
+                    <!-- โซนแสดงผลรหัสผ่านเมื่อยืนยัน OTP ถูกต้อง -->
                     <div id="forgot-result-box" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center relative animate-pulse">
                         <span class="text-[11px] text-emerald-400 block font-medium">ยืนยันสำเร็จ! รหัสผ่านของคุณคือ</span>
                         <div class="flex items-center justify-center gap-2 mt-0.5 relative pr-8">
@@ -132,6 +140,7 @@
             </div>
         </div>
 
+        <!-- ================= BANNER: แจ้งเตือนติดตั้ง PWA ================= -->
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
@@ -148,6 +157,7 @@
             </div>
         </div>
 
+        <!-- ================= GLOBAL APP HEADER ================= -->
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -159,8 +169,10 @@
             </div>
         </header>
 
+        <!-- ================= MAIN CONTENT SCROLL AREA ================= -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
+            <!-- PAGE: Register -->
             <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -207,6 +219,7 @@
                 </form>
             </div>
 
+            <!-- PAGE: Login -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -246,6 +259,7 @@
                 </form>
             </div>
 
+            <!-- PAGE: Home Dashboard -->
             <div id="page-home" class="hidden p-5 space-y-5">
                 <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
                     <div>
@@ -297,6 +311,7 @@
                 </div>
             </div>
 
+            <!-- PAGE: Contact List -->
             <div id="page-contact" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่
@@ -328,6 +343,7 @@
                 </div>
             </div>
 
+            <!-- PAGE: Location & Maps -->
             <div id="page-location" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัทสำนักงานใหญ่
@@ -353,6 +369,7 @@
 
         </main>
 
+        <!-- ================= BOTTOM NAVIGATION BAR ================= -->
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
@@ -374,6 +391,7 @@
 
     </div>
 
+    <!-- ================= JAVASCRIPT APPLICATION LOGIC ================= -->
     <script>
         let installTrigger = null;
         let globalPasswordText = ''; 
@@ -489,7 +507,7 @@
             closeEditModal();
         }
 
-        // ✅ เพิ่มฟังก์ชันจัดการ เปิด-ปิด หน้าต่างลืมรหัสผ่านตามโครงสร้างระบบสากลเรียบร้อยค่ะ
+        // ฟังก์ชันจัดการ เปิด-ปิด หน้าต่างลืมรหัสผ่าน
         function openForgotPasswordModal() {
             document.getElementById('forgot-email').value = '';
             document.getElementById('forgot-step-1').classList.remove('hidden');
@@ -508,7 +526,7 @@
             document.getElementById('forgot-step-1').classList.remove('hidden');
         }
 
-        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (async/await) =================
+        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (ปรับปรุงพารามิเตอร์คู่สายตรง) =================
         async function processRequestEmailOTP(event) {
             event.preventDefault();
             
@@ -531,7 +549,7 @@
             }
 
             try {
-                // เปลี่ยน UI ป้องกันการส่งซ้ำซ้อน
+                // อัปเดตสถานะปุ่มป้องกันการกดย้ำระว่างยิง API ออกไป
                 submitBtn.disabled = true;
                 closeBtn.disabled = true;
                 submitBtn.classList.replace('bg-amber-500', 'bg-slate-700');
@@ -548,10 +566,10 @@
                     otp_code: generatedOTP
                 };
 
-                // ✅ ใช้ Service ID และ Template ID ของคุณชินอิจิในการรันคำสั่งส่งข้อมูลจริงเข้าเมลเรียบร้อยค่ะ
+                // ✅ ปรับปรุง: เรียกใช้งานโครงสร้าง API หลักอย่างเคร่งครัด พร้อมตัวแปรคีย์ที่กำหนด
                 await emailjs.send('service_7etoscl', 'template_cu6w75w', templateParams);
 
-                // เปลี่ยนหน้าต่างไปหน้าป้อน OTP
+                // สลับการแสดงผลของฟอร์มขั้นตอนไปยังส่วนรับรหัส OTP
                 document.getElementById('forgot-step-1').classList.add('hidden');
                 document.getElementById('forgot-step-2').classList.remove('hidden');
                 document.getElementById('otp-code').value = '';
@@ -561,8 +579,9 @@
                 alert(`[EmailJS Service] ยิงข้อมูลส่งออกเรียบร้อยแล้วค่ะ!\n\nเมลจริงกำลังวิ่งไปที่กล่องจดหมายของคุณชินอิจิแล้วนะคะ 🚀\n(รหัสทดสอบสำรอง: ${generatedOTP})`);
 
             } catch (error) {
-                console.error('EmailJS Connection Error:', error);
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย ส่งเมลไม่สำเร็จเนื่องจากสัญญาณขัดข้องค่ะ!');
+                // บันทึกรายละเอียดข้อผิดพลาดตัวเต็มลงบน Browser Console เพื่อการดีบักขั้นสูง
+                console.error('EmailJS Connection Error Detail:', error);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย ส่งเมลไม่สำเร็จเนื่องจากสัญญาณขัดข้องค่ะ!\n(หากปัญหายังคงอยู่ กรุณาเช็คตัวสะกดคีย์พารามิเตอร์บน Template หลังบ้านค่ะ)');
             } finally {
                 submitBtn.disabled = false;
                 closeBtn.disabled = false;
