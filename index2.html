@@ -64,6 +64,47 @@
             </div>
         </div>
 
+        <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-key text-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">กู้คืนรหัสผ่าน</h4>
+                        <p class="text-[11px] text-slate-400">กรุณากรอกข้อมูลที่ใช้ลงทะเบียนเพื่อตรวจสอบค่ะ</p>
+                    </div>
+                </div>
+                <form onsubmit="processRecoverPassword(event)" class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-[11px] text-slate-400 font-medium">อีเมลสมาชิก</label>
+                        <input type="email" id="forgot-email" required placeholder="เช่น mgurban@gmail.com"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 text-xs transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[11px] text-slate-400 font-medium">เบอร์โทรศัพท์ 10 หลัก</label>
+                        <input type="tel" id="forgot-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 text-xs transition-all">
+                    </div>
+                    
+                    <div id="forgot-result-box" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center relative">
+                        <span class="text-[11px] text-emerald-400 block font-medium">รหัสผ่านของคุณคือ</span>
+                        <div class="flex items-center justify-center gap-2 mt-0.5 relative pr-8">
+                            <span id="forgot-password-output" class="text-base font-bold text-white tracking-widest block select-all">PASSWORD</span>
+                            <button type="button" onclick="togglePasswordVisibility('forgot-password-output', 'forgot-eye-icon', true)" class="absolute right-2 text-slate-400 hover:text-white cursor-pointer p-1">
+                                <i id="forgot-eye-icon" class="fa-solid fa-eye-slash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-2 text-xs font-semibold pt-2">
+                        <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white py-2 px-3 cursor-pointer">ปิดหน้าต่าง</button>
+                        <button type="submit" id="btn-submit-forgot" class="bg-amber-500 hover:bg-amber-600 text-[#0b0f19] px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer">ตรวจสอบรหัสผ่าน</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
@@ -118,8 +159,13 @@
                     </div>
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-                        <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                        <div class="relative">
+                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
+                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer p-1">
+                                <i id="reg-eye-icon" class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
@@ -148,9 +194,17 @@
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-                        <input type="password" id="login-password" required placeholder="••••••••••••"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
+                            <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-amber-500 hover:text-amber-400 transition-colors font-medium cursor-pointer">ลืมรหัสผ่าน?</button>
+                        </div>
+                        <div class="relative">
+                            <input type="password" id="login-password" required placeholder="••••••••••••"
+                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer p-1">
+                                <i id="login-eye-icon" class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
@@ -295,6 +349,7 @@
 
     <script>
         let installTrigger = null;
+        let globalPasswordText = ''; // 🛠️ ตัวแปรเก็บรหัสผ่านจริงสําหรับหน้ากู้รหัสผ่าน
 
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
@@ -316,6 +371,36 @@
             document.getElementById('pwaAlertBanner').classList.add('hidden');
         }
 
+        // 🛠️ NEW: ฟังก์ชันสลับการมองเห็นรหัสผ่าน (ซ่อน/แสดง) ทั้งแบบ Input และ Text Span
+        function togglePasswordVisibility(elementId, iconId, isTextSpan = false) {
+            const element = document.getElementById(elementId);
+            const icon = document.getElementById(iconId);
+            
+            if (isTextSpan) {
+                // สำหรับจัดการรหัสกู้คืนที่เป็นข้อความ Text
+                if (element.innerText.includes('•')) {
+                    element.innerText = globalPasswordText;
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    element.innerText = '•'.repeat(globalPasswordText.length);
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            } else {
+                // สำหรับจัดการฟอร์มที่เป็น Input ฟิลด์ปกติ
+                if (element.type === 'password') {
+                    element.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    element.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            }
+        }
+
         // ฟังก์ชันจัดการสมัครสมาชิก (Register Form)
         function processRegister(event) {
             event.preventDefault();
@@ -328,7 +413,6 @@
             };
 
             localStorage.setItem('mg_client_account', JSON.stringify(profile));
-            // บันทึกสถานะว่ากำลังล็อกอินอยู่ลงใน Session
             sessionStorage.setItem('mg_is_logged_in', 'true');
             loginUserSuccess(profile.fullname);
         }
@@ -344,7 +428,6 @@
             if (storedAccount) {
                 const parsedAccount = JSON.parse(storedAccount);
                 if (parsedAccount.email === emailInput && parsedAccount.password === passwordInput) {
-                    // บันทึกสถานะเข้าสู่ระบบลงใน Session
                     sessionStorage.setItem('mg_is_logged_in', 'true');
                     loginUserSuccess(parsedAccount.fullname);
                     return;
@@ -361,7 +444,7 @@
             changeView('home');
         }
 
-        // ฟังก์ชันสำหรับเปิดหน้าต่างแก้ไขชื่อ (Open Name Editor)
+        // ฟังก์ชันสำหรับเปิดหน้าต่างแก้ไขชื่อ
         function openEditModal() {
             const storedAccount = localStorage.getItem('mg_client_account');
             let currentName = "ชินอิจิ";
@@ -372,12 +455,12 @@
             document.getElementById('editNameModal').classList.remove('hidden');
         }
 
-        // ฟังก์ชันสำหรับปิดหน้าต่างแก้ไขชื่อ (Close Name Editor)
+        // ฟังก์ชันสำหรับปิดหน้าต่างแก้ไขชื่อ
         function closeEditModal() {
             document.getElementById('editNameModal').classList.add('hidden');
         }
 
-        // ฟังก์ชันบันทึกชื่อใหม่ลงฐานข้อมูล LocalStorage และอัปเดต UI หน้าจอทันที
+        // ฟังก์ชันบันทึกชื่อใหม่
         function saveNewName(event) {
             event.preventDefault();
             const newName = document.getElementById('new-profile-name').value.trim();
@@ -403,6 +486,45 @@
             closeEditModal();
         }
 
+        // เปิดโมดอลลืมรหัสผ่าน
+        function openForgotPasswordModal() {
+            document.getElementById('forgot-email').value = '';
+            document.getElementById('forgot-phone').value = '';
+            document.getElementById('forgot-result-box').classList.add('hidden');
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            globalPasswordText = '';
+        }
+
+        // ปิดโมดอลลืมรหัสผ่าน
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+        }
+
+        // ประมวลผลการตรวจสอบและกู้รหัสผ่าน
+        function processRecoverPassword(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('forgot-email').value.trim().toLowerCase();
+            const phoneInput = document.getElementById('forgot-phone').value.trim();
+            const storedAccount = localStorage.getItem('mg_client_account');
+
+            if (storedAccount) {
+                const parsedAccount = JSON.parse(storedAccount);
+                if (parsedAccount.email === emailInput && parsedAccount.phone === phoneInput) {
+                    globalPasswordText = parsedAccount.password;
+                    // เริ่มต้นด้วยการซ่อนรหัสผ่านเป็นจุดรักษาสุขอนามัยความปลอดภัยข้อมูล
+                    document.getElementById('forgot-password-output').innerText = '•'.repeat(globalPasswordText.length);
+                    
+                    const eyeIcon = document.getElementById('forgot-eye-icon');
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                    
+                    document.getElementById('forgot-result-box').classList.remove('hidden');
+                    return;
+                }
+            }
+            alert('ข้อมูลไม่ถูกต้องหรือไม่พบบัญชีนี้ในระบบ กรุณาลองใหม่อีกครั้งนะคะ');
+        }
+
         // ระบบนำทางและสลับหน้าจอเลเยอร์ (SPA Router Engine)
         function changeView(viewId) {
             const allViews = ['register', 'login', 'home', 'contact', 'location'];
@@ -419,6 +541,14 @@
                 targetLayer.classList.remove('hidden');
                 targetLayer.classList.add('page-active');
             }
+
+            // คืนค่าประเภทฟิลด์รหัสผ่านกลับเป็น Password ทุกครั้งที่เปลี่ยนหน้าเพื่อความปลอดภัย
+            document.getElementById('reg-password').type = 'password';
+            document.getElementById('login-password').type = 'password';
+            const regEye = document.getElementById('reg-eye-icon');
+            const loginEye = document.getElementById('login-eye-icon');
+            if (regEye) { regEye.classList.remove('fa-eye'); regEye.classList.add('fa-eye-slash'); }
+            if (loginEye) { loginEye.classList.remove('fa-eye'); loginEye.classList.add('fa-eye-slash'); }
 
             const navButtons = ['home', 'contact', 'location'];
             navButtons.forEach(btn => {
@@ -448,20 +578,16 @@
                 document.getElementById('reg-email').value = '';
                 document.getElementById('reg-password').value = '';
                 
-                // 🛠️ แก้ไขจุดนี้: เคลียร์แค่สถานะ Session ล็อกอินออก แต่ "ไม่ลบบัญชีผู้ใช้" ออกจาก LocalStorage
                 sessionStorage.removeItem('mg_is_logged_in');
-                
-                // พาผู้ใช้กลับไปหน้า Login เพื่อให้สามารถล็อกอินซ้ำได้เลย
                 changeView('login');
             }
         }
 
-        // ฟังก์ชันตรวจสอบ Session บัญชีเมื่อแแอปพลิเคชันถูกเปิดหรือรีเฟรชหน้าจอ (Auto Login Lifecycle)
+        // ฟังก์ชันตรวจสอบ Session บัญชี
         function checkLoginSession() {
             const storedAccount = localStorage.getItem('mg_client_account');
             const isLoggedIn = sessionStorage.getItem('mg_is_logged_in');
             
-            // ถ้ารีเฟรชหน้าจอ และก่อนหน้านี้ยังคงสถานะล็อกอินอยู่ ให้ล็อกอินต่ออัตโนมัติ
             if (storedAccount && isLoggedIn === 'true') {
                 const parsedAccount = JSON.parse(storedAccount);
                 if (parsedAccount && parsedAccount.fullname) {
@@ -470,19 +596,15 @@
                 }
             }
             
-            // ถ้าไม่มีสถานะล็อกอินค้างไว้ (เช่น พึ่งกดออกจากระบบมา หรือปิดแท็บเปิดใหม่) ให้ไปหน้า Login
             if (storedAccount) {
                 changeView('login');
             } else {
-                // ถ้าในเครื่องไม่มีข้อมูลบัญชีเลยจริงๆ ให้เริ่มที่หน้าสมัครสมาชิก (Register)
                 changeView('register');
             }
         }
 
-        // รันคำสั่งตรวจสอบ Session ทันทีที่โหลดหน้าเว็บเสร็จ
         window.addEventListener('DOMContentLoaded', checkLoginSession);
 
-        // ลงทะเบียน PWA Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js').catch(err => {
