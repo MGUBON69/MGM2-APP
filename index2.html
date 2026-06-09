@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MG UBON - Smart Full System</title>
+    <title>MG UBON - Smart Full System V3</title>
     
+    <!-- PWA Core Configurations -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b0f19">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MG UBON">
     
+    <!-- Tailwind CSS v4 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Prompt) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,6 +31,7 @@
         ::-webkit-scrollbar {
             display: none;
         }
+        /* เอฟเฟกต์แอนิเมชันสำหรับเปลี่ยนหน้าจอ UI */
         .page-active {
             animation: cubicSlide 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
         }
@@ -38,8 +43,10 @@
 </head>
 <body class="flex justify-center items-center min-h-screen text-slate-200 p-0 md:p-6">
 
+    <!-- กรอบจำลองแอปพลิเคชันมือถือจริง (Mobile Chassis Container) -->
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
+        <!-- ================= 🔔 CUSTOM PWA INSTALLATION PROMPT ================= -->
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 bg-slate-700/60 rounded-xl flex items-center justify-center font-bold text-slate-300 text-lg shrink-0">G</div>
@@ -54,6 +61,7 @@
             </div>
         </div>
 
+        <!-- ================= APP HEADER ================= -->
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -65,8 +73,10 @@
             </div>
         </header>
 
+        <!-- ================= MAIN CONTENT SPACE ================= -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
+            <!-- ---------------- หน้าจอที่ 1: หน้าลงทะเบียน (REGISTER PAGE) ---------------- -->
             <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md shadow-red-950/20">MG</div>
@@ -96,13 +106,54 @@
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
                     </div>
 
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/30 transition-all active:scale-[0.99] mt-6 cursor-pointer text-sm">
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/30 transition-all active:scale-[0.99] mt-4 cursor-pointer text-sm">
                         สร้างบัญชีสมาชิก
                     </button>
+                    
+                    <!-- ปุ่มสำหรับผู้ที่มีบัญชีอยู่แล้วและต้องการเข้าสู่ระบบ -->
+                    <div class="text-center mt-4">
+                        <p class="text-xs text-slate-400">มีบัญชีผู้ใช้งานแล้วใช่ไหมค๊า? 
+                            <button type="button" onclick="changeView('login')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
+                        </p>
+                    </div>
                 </form>
             </div>
 
+            <!-- ---------------- หน้าจอที่ 2: หน้าเข้าสู่ระบบ (LOGIN PAGE) ---------------- -->
+            <div id="page-login" class="hidden flex-1 flex flex-col p-6">
+                <div class="text-center mt-4 mb-6">
+                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md shadow-red-950/20">MG</div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h2>
+                    <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบจัดการค่ะ</p>
+                </div>
+
+                <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">อีเมลผู้ใช้งาน</label>
+                        <input type="email" id="login-email" required placeholder="เช่น mgurban@gmail.com"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
+                        <input type="password" id="login-password" required placeholder="••••••••••••"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-950/30 transition-all active:scale-[0.99] mt-4 cursor-pointer text-sm">
+                        เข้าสู่ระบบผู้ใช้งาน
+                    </button>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-xs text-slate-400">ยังไม่มีบัญชีสมาชิกสมาชิก? 
+                            <button type="button" onclick="changeView('register')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ---------------- หน้าจอที่ 3: แดชบอร์ดหลัก (HOME DASHBOARD) ---------------- -->
             <div id="page-home" class="hidden p-5 space-y-5">
+                <!-- Welcome Banner -->
                 <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md">
                     <div>
                         <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
@@ -114,17 +165,21 @@
                     </div>
                 </div>
 
+                <!-- บริการด่วนทั้งหมด (Quick Launch Buttons Shortcuts) -->
                 <div class="space-y-2.5">
                     <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">บริการด่วนทั้งหมด</h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <a href="ใส่ลิงก์_LINE_OA_ตรงนี้" target="_blank" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
+                        
+                        <!-- 🟢 ปุ่มจองคิว: เชื่อมต่อยิงเข้าเปิด LINE OA จริงทันทีตามสั่ง -->
+                        <a href="https://lin.ee/xxxxxx" target="_blank" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
                             <div class="w-9 h-9 bg-green-500/10 text-green-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-brands fa-line text-lg"></i>
                             </div>
                             <span class="text-xs font-bold text-white block">จองคิวรับบริการ</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5">นัดหมายเช็คระยะผ่าน LINE</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">นัดหมายเช็คระยะผ่าน LINE OA</span>
                         </a>
 
+                        <!-- 🔵 ปุ่มติดต่อพนักงาน: สลับหน้าภายในเพื่อแสดงข้อมูลและกดโทรออกง่ายๆ -->
                         <button onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group">
                             <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-phone text-base"></i>
@@ -152,6 +207,7 @@
                 </div>
             </div>
 
+            <!-- ---------------- หน้าจอที่ 4: ติดต่อพนักงาน (CONTACT STAFF) ---------------- -->
             <div id="page-contact" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่และฝ่ายขาย
@@ -159,6 +215,7 @@
                 <p class="text-xs text-slate-400">คุณสามารถกดโทรออกสายด่วนเพื่อติดต่อทีมงาน MG M2 Motorsport ได้ทันทีค่ะ:</p>
 
                 <div class="space-y-3">
+                    <!-- คุณชินอิจิเปลี่ยนเบอร์ในแท็ก href="tel:..." และแก้ข้อความในวงเล็บได้เองอย่างอิสระเลยนะคะ -->
                     <a href="tel:045243444" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-red-500/10 text-[#e50012] rounded-full flex items-center justify-center"><i class="fa-solid fa-phone-volume"></i></div>
@@ -174,7 +231,7 @@
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center"><i class="fa-solid fa-headset"></i></div>
                             <div>
-                                <span class="text-xs font-bold text-white block">ที่ปรึกษาการขายด่วน (Sales हॉटलाइन)</span>
+                                <span class="text-xs font-bold text-white block">ที่ปรึกษาการขายด่วน (Hotline)</span>
                                 <span class="text-[10px] text-slate-400">โทร. 091-234-5678 (คลิกเพื่อโทรออก)</span>
                             </div>
                         </div>
@@ -183,6 +240,7 @@
                 </div>
             </div>
 
+            <!-- ---------------- หน้าจอที่ 5: ที่ตั้งบริษัท (COMPANY LOCATION) ---------------- -->
             <div id="page-location" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัทสำนักงานใหญ่
@@ -208,12 +266,13 @@
 
         </main>
 
+        <!-- ================= BOTTOM NAVIGATION BAR (แถบเมนูดังกล่าวจะซ่อนไว้ตอนกรอกข้อมูลฟอร์ม) ================= -->
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
                 <span class="text-[10px] tracking-wide">หน้าแรก</span>
             </button>
-            <a href="ใส่ลิงก์_LINE_OA_ตรงนี้" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+            <a href="https://lin.ee/xxxxxx" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-brands fa-line text-lg"></i>
                 <span class="text-[10px] tracking-wide">จองคิว</span>
             </a>
@@ -229,10 +288,11 @@
 
     </div>
 
+    <!-- JavaScript Smart Core Engine Orchestrator -->
     <script>
         let installTrigger = null;
 
-        // ดักจับและตรวจจับสัญญาณการติดตั้งแอป PWA
+        // ดักจับและตรวจจับสัญญาณการติดตั้งแอป PWA จากเบราว์เซอร์
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
             installTrigger = event;
@@ -242,7 +302,7 @@
         function executePwaInstall() {
             if (installTrigger) {
                 installTrigger.prompt();
-                installTrigger.userChoice.then((choice) => {
+                installTrigger.userChoice.then(() => {
                     installTrigger = null;
                     document.getElementById('pwaAlertBanner').classList.add('hidden');
                 });
@@ -253,28 +313,57 @@
             document.getElementById('pwaAlertBanner').classList.add('hidden');
         }
 
-        // ฟังก์ชันจัดการสมัครสมาชิก
+        // ฟังก์ชันจัดการสมัครสมาชิก (Register Form Controller)
         function processRegister(event) {
             event.preventDefault();
             
             const profile = {
                 fullname: document.getElementById('reg-name').value,
                 phone: document.getElementById('reg-phone').value,
-                email: document.getElementById('reg-email').value
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-password').value
             };
 
-            localStorage.setItem('mg_client_session', JSON.stringify(profile));
+            // บันทึกฐานข้อมูลผู้ใช้ลงหน่วยความจำถาวร
+            localStorage.setItem('mg_client_account', JSON.stringify(profile));
             
+            // เปิดทำงานเลเยอร์ส่วนหัวและส่วนท้ายแอป
+            loginUserSuccess(profile.fullname);
+        }
+
+        // ฟังก์ชันประมวลผลระบบเข้าสู่ระบบ (Login Form Controller)
+        function processLogin(event) {
+            event.preventDefault();
+            
+            const emailInput = document.getElementById('login-email').value;
+            const passwordInput = document.getElementById('login-password').value;
+            
+            // ดึงข้อมูลบัญชีผู้ใช้ที่เคยเซฟไว้ขึ้นมาตรวจสอบ
+            const storedAccount = localStorage.getItem('mg_client_account');
+            
+            if (storedAccount) {
+                const parsedAccount = JSON.parse(storedAccount);
+                if (parsedAccount.email === emailInput && parsedAccount.password === passwordInput) {
+                    loginUserSuccess(parsedAccount.fullname);
+                    return;
+                }
+            }
+            
+            // ดักเงื่อนไขหากไม่มีบัญชีหรือข้อมูลไม่ตรง
+            alert('ไม่พบข้อมูลบัญชีสมาชิก หรือคุณกรอกรหัสผ่านไม่ถูกต้องค๊า กรุณาตรวจสอบอีกครั้งนะคะ');
+        }
+
+        // ฟังก์ชันเมื่อล็อกอินสำเร็จ
+        function loginUserSuccess(name) {
             document.getElementById('appHeader').classList.remove('hidden');
             document.getElementById('bottomNav').classList.remove('hidden');
-            document.getElementById('client-name').innerText = `คุณ ${profile.fullname}`;
-            
+            document.getElementById('client-name').innerText = `คุณ ${name}`;
             changeView('home');
         }
 
-        // ระบบนำทางสลับหน้าจอเว็บแอป (SPA View Switcher)
+        // ระบบนำทางและสลับหน้าจอเลเยอร์ (SPA View Router Engine)
         function changeView(viewId) {
-            const allViews = ['register', 'home', 'contact', 'location'];
+            const allViews = ['register', 'login', 'home', 'contact', 'location'];
             allViews.forEach(v => {
                 const layer = document.getElementById(`page-${v}`);
                 if (layer) {
@@ -287,6 +376,7 @@
             targetLayer.classList.remove('hidden');
             targetLayer.classList.add('page-active');
 
+            // จัดการเปลี่ยนสถานะปุ่มเมนูไฮไลต์ด้านล่าง (ถ้าไม่ได้อยู่ในฟอร์ม)
             const navButtons = ['home', 'contact', 'location'];
             navButtons.forEach(btn => {
                 const element = document.getElementById(`btn-nav-${btn}`);
@@ -302,19 +392,17 @@
             });
         }
 
-        // ระบบออกจากระบบอย่างปลอดภัย
+        // ระบบสัญญานความปลอดภัย ล็อกเอาท์ออกจากแอปพลิเคชัน (Logout Execution)
         function triggerLogout() {
             if (confirm('คุณต้องการออกจากระบบการควบคุมแอปพลิเคชันใช่ไหมค๊า?')) {
                 document.getElementById('appHeader').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
                 
-                document.getElementById('reg-name').value = '';
-                document.getElementById('reg-phone').value = '';
-                document.getElementById('reg-email').value = '';
-                document.getElementById('reg-password').value = '';
+                // ล้างค่าฟิลด์ล็อกอินทั้งหมดเพื่อความปลอดภัย
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
                 
-                localStorage.removeItem('mg_client_session');
-                changeView('register');
+                changeView('login');
             }
         }
 
