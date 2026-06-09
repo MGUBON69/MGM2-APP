@@ -20,6 +20,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
+            // ✅ ผูก Public Key ของคุณชินอิจิเรียบร้อยค่ะ
             emailjs.init("KSS0THK1eB1HxrAsn"); 
         })();
     </script>
@@ -488,7 +489,26 @@
             closeEditModal();
         }
 
-        // ================= ระบบส่งเมลความปลอดภัยผ่าน async/await =================
+        // ✅ เพิ่มฟังก์ชันจัดการ เปิด-ปิด หน้าต่างลืมรหัสผ่านตามโครงสร้างระบบสากลเรียบร้อยค่ะ
+        function openForgotPasswordModal() {
+            document.getElementById('forgot-email').value = '';
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+        }
+
+        function closeForgotPasswordModal() {
+            clearInterval(countdownInterval);
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+        }
+
+        function backToStep1() {
+            clearInterval(countdownInterval);
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+        }
+
+        // ================= ระบบส่งอีเมลความปลอดภัยด้วย EmailJS (async/await) =================
         async function processRequestEmailOTP(event) {
             event.preventDefault();
             
@@ -511,7 +531,7 @@
             }
 
             try {
-                // ป้องกันการกดย้ำระหว่างรอการทำงานของ API
+                // เปลี่ยน UI ป้องกันการส่งซ้ำซ้อน
                 submitBtn.disabled = true;
                 closeBtn.disabled = true;
                 submitBtn.classList.replace('bg-amber-500', 'bg-slate-700');
@@ -528,10 +548,10 @@
                     otp_code: generatedOTP
                 };
 
-                // ยิงไปเซิร์ฟเวอร์ EmailJS
+                // ✅ ใช้ Service ID และ Template ID ของคุณชินอิจิในการรันคำสั่งส่งข้อมูลจริงเข้าเมลเรียบร้อยค่ะ
                 await emailjs.send('service_7etoscl', 'template_cu6w75w', templateParams);
 
-                // เปลี่ยน UI ไปหน้ากรอกรหัสสำเร็จ
+                // เปลี่ยนหน้าต่างไปหน้าป้อน OTP
                 document.getElementById('forgot-step-1').classList.add('hidden');
                 document.getElementById('forgot-step-2').classList.remove('hidden');
                 document.getElementById('otp-code').value = '';
@@ -588,7 +608,6 @@
             alert('รหัส OTP ในเมลไม่ถูกต้อง กรุณาเช็คตัวเลขแล้วลองใหม่อีกครั้งค่ะ');
         }
 
-        // ================= FIX LINE: แก้ไขบั๊กตัดแท็กทิ้งเรียบร้อยแล้วค่ะ =================
         function changeView(viewId) {
             const allViews = ['register', 'login', 'home', 'contact', 'location'];
             allViews.forEach(v => {
@@ -601,7 +620,6 @@
 
             const targetLayer = document.getElementById(`page-${viewId}`);
             if (targetLayer) {
-                // ✅ แก้ไข: ลบ targetLayer.remove('hidden') ออกแล้ว หน้าเว็บไม่มีวันหายชัวร์ค่ะ!
                 targetLayer.classList.remove('hidden');
                 targetLayer.classList.add('page-active');
             }
