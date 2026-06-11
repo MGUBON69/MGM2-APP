@@ -48,6 +48,7 @@
 
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
+        <!-- Edit Name Modal -->
         <div id="editNameModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
                 <div class="flex items-center gap-3 mb-4">
@@ -72,6 +73,7 @@
             </div>
         </div>
 
+        <!-- Forgot Password Modal -->
         <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active relative overflow-hidden">
                 
@@ -129,6 +131,7 @@
             </div>
         </div>
 
+        <!-- PWA Alert Banner -->
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
@@ -145,6 +148,7 @@
             </div>
         </div>
 
+        <!-- Header -->
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -156,8 +160,10 @@
             </div>
         </header>
 
+        <!-- Main Content -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
+            <!-- Register Page -->
             <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -204,6 +210,7 @@
                 </form>
             </div>
 
+            <!-- Login Page -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -243,6 +250,7 @@
                 </form>
             </div>
 
+            <!-- Home Page -->
             <div id="page-home" class="hidden p-5 space-y-5">
                 <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
                     <div>
@@ -294,6 +302,7 @@
                 </div>
             </div>
 
+            <!-- Contact Page -->
             <div id="page-contact" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่
@@ -325,6 +334,7 @@
                 </div>
             </div>
 
+            <!-- Location Page -->
             <div id="page-location" class="hidden p-5 space-y-4">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัท
@@ -350,6 +360,7 @@
 
         </main>
 
+        <!-- Bottom Navigation -->
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
@@ -376,7 +387,6 @@
         let generatedOTP = "";          // ตัวแปรเก็บรหัสความปลอดภัย OTP ชั่วคราว
         let globalPasswordText = '';     // ตัวแปรเก็บรหัสผ่านจริงสำหรับการส่งกลับเข้าช่องฟอร์มล็อกอินหลัก
         let countdownTimer = null;       // คอนโทรลเลอร์ควบคุมเวลานับถอยหลังอายุรหัส OTP
-        let currentLoggedInEmail = "";   // เก็บอีเมลของผู้ใช้ที่กำลังล็อกอินอยู่เพื่อใช้อ้างอิงการแก้ไขข้อมูล
 
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
@@ -462,7 +472,6 @@
             if (arrayData) {
                 accounts = JSON.parse(arrayData);
             } else if (oldData) {
-                // สำหรับดักและแปลงข้อมูลแบบเก่า (V2) มาเป็นระบบอาเรย์แบบใหม่โดยอัติโนมัติ
                 try {
                     const parsedOld = JSON.parse(oldData);
                     if (parsedOld && parsedOld.email) {
@@ -474,6 +483,11 @@
             return accounts;
         }
 
+        // ฟังก์ชันดึงอีเมลที่ล็อกอินค้างไว้ปัจจุบันในเครื่องนั้นๆ (ช่วยจำจำสถานะข้าม Platform)
+        function getCurrentLoginEmail() {
+            return localStorage.getItem('mg_current_login_email') || "";
+        }
+
         // ฟังก์ชันจัดการสมัครสมาชิกพร้อมตัวช่วย [ป้องกันการกรอกอีเมลซ้ำ]
         function processRegister(event) {
             event.preventDefault();
@@ -481,7 +495,6 @@
             const emailInput = document.getElementById('reg-email').value.trim().toLowerCase();
             let accounts = getAllAccounts();
 
-            // ตรวจสอบความซ้ำซ้อนของอีเมลในระบบ
             const isEmailDuplicate = accounts.some(acc => acc.email === emailInput);
             if (isEmailDuplicate) {
                 alert('ขออภัยค่ะ! อีเมลนี้ได้ทำการลงทะเบียนในระบบเรียบร้อยแล้ว กรุณาใช้อีเมลอื่น หรือกดเข้าสู่ระบบได้เลยค่ะ');
@@ -495,14 +508,15 @@
                 password: document.getElementById('reg-password').value
             };
 
-            // เพิ่มข้อมูลชุดใหม่เข้าไปใน Array และจัดเก็บซ้ำแบบปลอดภัย
             accounts.push(profile);
             localStorage.setItem('mg_client_accounts_list', JSON.stringify(accounts));
-            localStorage.setItem('mg_client_account', JSON.stringify(profile)); // คงไว้เพื่อความเสถียรของฟังก์ชันเดิม
+            localStorage.setItem('mg_client_account', JSON.stringify(profile)); 
             
-            sessionStorage.setItem('mg_is_logged_in', 'true');
-            currentLoggedInEmail = profile.email;
-            loginUserSuccess(profile.fullname);
+            // ใช้ localStorage แทน sessionStorage เพื่อผูกเซสชันข้ามแพลตฟอร์ม (PWA / Web App) ให้ชื่อตรงกัน
+            localStorage.setItem('mg_is_logged_in', 'true');
+            localStorage.setItem('mg_current_login_email', profile.email);
+            
+            syncUIAndRenderName();
         }
 
         // ฟังก์ชันประมวลผลระบบเข้าสู่ระบบ (Login Form)
@@ -513,38 +527,47 @@
             const passwordInput = document.getElementById('login-password').value;
             const accounts = getAllAccounts();
             
-            // ค้นหาบัญชีจากอาเรย์รวมที่มีอีเมลและรหัสผ่านตรงกัน
             const matchedAccount = accounts.find(acc => acc.email === emailInput && acc.password === passwordInput);
             
             if (matchedAccount) {
-                sessionStorage.setItem('mg_is_logged_in', 'true');
-                localStorage.setItem('mg_client_account', JSON.stringify(matchedAccount)); // Sync ข้อมูลเซสชันปัจจุบัน
-                currentLoggedInEmail = matchedAccount.email;
-                loginUserSuccess(matchedAccount.fullname);
+                localStorage.setItem('mg_is_logged_in', 'true');
+                localStorage.setItem('mg_client_account', JSON.stringify(matchedAccount)); 
+                localStorage.setItem('mg_current_login_email', matchedAccount.email);
+                
+                syncUIAndRenderName();
                 return;
             }
             alert('ไม่พบข้อมูลบัญชีสมาชิก หรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งนะคะ');
         }
 
-        // ฟังก์ชันเมื่อล็อกอินสำเร็จ
-        function loginUserSuccess(name) {
+        // ฟังก์ชันซิงค์การแสดงผลหน้า UI และดึงชื่อจาก Single Source of Truth ป้องกันชื่อคนละชื่อ
+        function syncUIAndRenderName() {
+            const loggedInEmail = getCurrentLoginEmail();
+            const accounts = getAllAccounts();
+            
+            // ค้นหาชื่อล่าสุดจาก Array บัญชีโดยตรงเสมอ ไม่ดึงจากก้อน Cache เก่าแยกแพลตฟอร์ม
+            const currentAccount = accounts.find(acc => acc.email === loggedInEmail);
+            
             document.getElementById('appHeader').classList.remove('hidden');
             document.getElementById('bottomNav').classList.remove('hidden');
-            document.getElementById('client-name').innerText = `คุณ ${name}`;
+            
+            if (currentAccount) {
+                document.getElementById('client-name').innerText = `คุณ ${currentAccount.fullname}`;
+            } else {
+                document.getElementById('client-name').innerText = `คุณลูกค้า`;
+            }
             changeView('home');
         }
 
         // ฟังก์ชันสำหรับเปิดหน้าต่างแก้ไขชื่อ
         function openEditModal() {
+            const loggedInEmail = getCurrentLoginEmail();
             const accounts = getAllAccounts();
-            const matchedAccount = accounts.find(acc => acc.email === currentLoggedInEmail);
+            const matchedAccount = accounts.find(acc => acc.email === loggedInEmail);
             let currentName = "ลูกค้า";
             
             if (matchedAccount) {
                 currentName = matchedAccount.fullname;
-            } else {
-                const fallback = localStorage.getItem('mg_client_account');
-                if (fallback) currentName = JSON.parse(fallback).fullname;
             }
             
             document.getElementById('new-profile-name').value = currentName;
@@ -556,29 +579,24 @@
             document.getElementById('editNameModal').classList.add('hidden');
         }
 
-        // ฟังก์ชันบันทึกชื่อใหม่ (อัปเดตลง Array และซิงค์กลับอย่างสมบูรณ์แบบ)
+        // ฟังก์ชันบันทึกชื่อใหม่ (กระจายข้อมูลลง Array กลางเพื่ออัปเดตชื่อให้ตรงกันทุกแพลตฟอร์ม)
         function saveNewName(event) {
             event.preventDefault();
             const newName = document.getElementById('new-profile-name').value.trim();
             if (!newName) return;
 
+            const loggedInEmail = getCurrentLoginEmail();
             let accounts = getAllAccounts();
-            let updatedIndex = accounts.findIndex(acc => acc.email === currentLoggedInEmail);
+            let updatedIndex = accounts.findIndex(acc => acc.email === loggedInEmail);
 
             if (updatedIndex !== -1) {
                 accounts[updatedIndex].fullname = newName;
+                // บันทึกกลับลง Array สิทธิ์ขาด
                 localStorage.setItem('mg_client_accounts_list', JSON.stringify(accounts));
                 localStorage.setItem('mg_client_account', JSON.stringify(accounts[updatedIndex]));
-                document.getElementById('client-name').innerText = `คุณ ${newName}`;
-            } else {
-                // กรณีฉุกเฉินหากหา index ไม่เจอ ให้เขียนทับแบบเก่าเพื่อรักษางานไว้
-                const fallback = localStorage.getItem('mg_client_account');
-                if (fallback) {
-                    const fallbackData = JSON.parse(fallback);
-                    fallbackData.fullname = newName;
-                    localStorage.setItem('mg_client_account', JSON.stringify(fallbackData));
-                    document.getElementById('client-name').innerText = `คุณ ${newName}`;
-                }
+                
+                // สั่ง UI เรนเดอร์ชื่อใหม่ทันที
+                syncUIAndRenderName();
             }
             closeEditModal();
         }
@@ -599,7 +617,7 @@
             clearInterval(countdownTimer);
         }
 
-        // ระบบจำลองส่ง OTP และกู้คืนรหัสผ่านผ่านโครงสร้าง EmailJS เดิมของคุณลูกค้า
+        // ระบบกู้คืนรหัสผ่านด้วย Email OTP
         function processRequestEmailOTP(event) {
             event.preventDefault();
             const targetEmail = document.getElementById('forgot-email').value.trim().toLowerCase();
@@ -613,15 +631,12 @@
                 return;
             }
 
-            // สุ่มรหัส 6 หลัก
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
             document.getElementById('target-email-display').innerText = `รหัส OTP ถูกส่งไปที่: ${targetEmail}`;
             
-            // เปลี่ยนหน้าฟอร์มไปยังจุดรับรหัส OTP
             document.getElementById('forgot-step-1').classList.add('hidden');
             document.getElementById('forgot-step-2').classList.remove('hidden');
             
-            // เริ่มนับเวลาถอยหลัง 60 วินาที
             let timeLeft = 60;
             const timerDisplay = document.getElementById('otp-timer');
             timerDisplay.innerText = `${timeLeft}s`;
@@ -637,7 +652,6 @@
                 }
             }, 1000);
 
-            // แจ้งรหัสผ่าน Alert จำลองกรณี EmailJS ยังไม่ได้ผูก Template จริง
             alert(`[ระบบความปลอดภัยจำลอง OTP] รหัสผ่านของคุณคือ: ${generatedOTP}`);
         }
 
@@ -667,14 +681,13 @@
         // ระบบออกจากระบบล็อกเอาท์ความปลอดภัย
         function triggerLogout() {
             if (confirm('คุณต้องการออกจากระบบในเวลานี้ใช่ไหมคะ?')) {
-                sessionStorage.removeItem('mg_is_logged_in');
+                localStorage.removeItem('mg_is_logged_in');
                 localStorage.removeItem('mg_client_account');
-                currentLoggedInEmail = "";
+                localStorage.removeItem('mg_current_login_email');
                 
                 document.getElementById('appHeader').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
                 
-                // ล้างฟอร์มทั้งหมด
                 document.getElementById('reg-name').value = "";
                 document.getElementById('reg-phone').value = "";
                 document.getElementById('reg-email').value = "";
@@ -686,19 +699,14 @@
             }
         }
 
-        // ตรวจสอบเช็คสถานะ Session เมื่อเปิดเข้าหน้าเว็บครั้งแรก
+        // ตรวจสอบเช็คสถานะระบบด้วยกลไกใหม่แบบข้ามช่องทางและแพลตฟอร์มเมื่อหน้าเว็บโหลดเสร็จ
         window.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = sessionStorage.getItem('mg_is_logged_in');
-            const sessionAccount = localStorage.getItem('mg_client_account');
+            const isLoggedIn = localStorage.getItem('mg_is_logged_in');
+            const loggedInEmail = getCurrentLoginEmail();
             
-            if (isLoggedIn === 'true' && sessionAccount) {
-                try {
-                    const parsed = JSON.parse(sessionAccount);
-                    currentLoggedInEmail = parsed.email;
-                    loginUserSuccess(parsed.fullname);
-                } catch (e) {
-                    changeView('register');
-                }
+            if (isLoggedIn === 'true' && loggedInEmail) {
+                // ซิงค์ชื่อและทางเข้าหน้าหลักทันทีเพื่อให้แอป PWA และเว็บเป็นชื่อเดียวกัน
+                syncUIAndRenderName();
             } else {
                 changeView('register');
             }
