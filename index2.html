@@ -19,7 +19,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-        // เริ่มต้นเปิดระบบ EmailJS ด้วย Public Key ของคุณชินอิจิ
+        // เริ่มต้นเปิดระบบ EmailJS ด้วย Public Key ของคุณลูกค้า
         (function() {
             emailjs.init("KSS0THK1eB1HxrAsn");
         })();
@@ -247,7 +247,7 @@
                 <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
                     <div>
                         <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
-                        <h3 id="client-name" class="text-lg font-bold text-white">คุณชินอิจิ</h3>
+                        <h3 id="client-name" class="text-lg font-bold text-white">คุณลูกค้า</h3>
                         <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชัน MGM2 ✨</p>
                     </div>
                     <button onclick="openEditModal()" class="w-12 h-12 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner cursor-pointer transition-colors" title="แก้ไขชื่อ">
@@ -471,7 +471,7 @@
         // ฟังก์ชันสำหรับเปิดหน้าต่างแก้ไขชื่อ
         function openEditModal() {
             const storedAccount = localStorage.getItem('mg_client_account');
-            let currentName = "ชินอิจิ";
+            let currentName = "ลูกค้า";
             if (storedAccount) {
                 currentName = JSON.parse(storedAccount).fullname;
             }
@@ -601,7 +601,7 @@
             if (userOTP === generatedOTP) {
                 clearInterval(countdownTimer); // ล้างหน่วยความจำตัวจับเวลา
                 
-                alert(`🔓 ยืนยันตัวตนสำเร็จค่ะคุณชินอิจิ!\nรหัสผ่านเข้าสู่ระบบของคุณคือ: ${globalPasswordText}`);
+                alert(`🔓 ยืนยันตัวตนสำเร็จค่ะคุณลูกค้า!\nรหัสผ่านเข้าสู่ระบบของคุณคือ: ${globalPasswordText}`);
                 
                 // สั่งปิดตัวหน้าต่างโมดอลหลักวับหายไปในพริบตา
                 document.getElementById('forgotPasswordModal').classList.add('hidden');
@@ -689,7 +689,7 @@
 
         // ฟังก์ชันออกจากระบบ
         function triggerLogout() {
-            if (confirm('คุณชินอิจิต้องการออกจากระบบความปลอดภัยใช่หรือไม่คะ?')) {
+            if (confirm('คุณลูกค้าต้องการออกจากระบบความปลอดภัยใช่หรือไม่คะ?')) {
                 sessionStorage.removeItem('mg_is_logged_in');
                 document.getElementById('appHeader').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
