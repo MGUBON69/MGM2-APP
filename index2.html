@@ -689,7 +689,7 @@
 
         // ฟังก์ชันออกจากระบบ
         function triggerLogout() {
-            if (confirm('คุณลูกค้าต้องการออกจากระบบความปลอดภัยใช่หรือไม่คะ?')) {
+            if (confirm('คุณลูกค้าต้องการออกจากระบบใช่หรือไม่คะ?')) {
                 sessionStorage.removeItem('mg_is_logged_in');
                 document.getElementById('appHeader').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
