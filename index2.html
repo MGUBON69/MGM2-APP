@@ -589,76 +589,88 @@
         }
 
         // ขั้นตอนที่ 1: ยิงส่งรหัส OTP ไปที่ Email ผ่าน EmailJS
-        function processRequestEmailOTP(event) {
-            event.preventDefault();
-            const emailInput = document.getElementById('forgot-email').value;
-            const resultBox = document.getElementById('forgot-result-box');
-            const btnSubmit = document.getElementById('btn-submit-forgot');
+// ฟังก์ชันส่งอีเมลกู้คืนรหัสผ่าน (ก๊อปปี้หรือเทียบกับโค้ดเดิมของคุณได้เลย)
+function processRequestEmailOTP(event) {
+    event.preventDefault();
+    
+    const emailInput = document.getElementById('forgot-email').value.trim();
+    if (!emailInput) {
+        showToast('กรุณากรอกอีเมลด้วยค่ะ', 'error');
+        return;
+    }
 
-            // ตรวจสอบก่อนว่าอีเมลนี้เคยลงทะเบียนไว้ในระบบจำลองไหม
-            const savedUser = localStorage.getItem(`user_${emailInput}`);
-            if (!savedUser) {
-                resultBox.innerText = 'ไม่พบข้อมูลอีเมลนี้ในระบบสมาชิกค่ะ';
-                resultBox.classList.remove('hidden');
-                return;
-            }
+    // 1. สร้างรหัส OTP 6 หลัก และคำนวณเวลาหมดอายุ
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 15); // รีเซ็ตหมดอายุใน 15 นาทีตามเทมเพลต
+    const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
 
-            resultBox.classList.add('hidden');
-            btnSubmit.disabled = true;
-            document.getElementById('text-submit-forgot').innerText = 'กำลังส่งรหัส...';
+    // เก็บอีเมลเป้าหมายไว้ใช้ในขั้นตอนถัดไป
+    recoveryTargetEmail = emailInput;
 
-            // สุ่มรหัสผ่าน 6 หลัก และ คำนวณเวลา
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            const expiryTimeText = calculateExpiryTime();
-            recoveryTargetEmail = emailInput;
+    // 2. ⭐️ ตั้งค่า Parameter ให้ตรงกับ {{email}}, {{passcode}}, {{time}} ในหน้าเว็บ EmailJS ของคุณ เป๊ะๆ
+    const templateParams = {
+        email: recoveryTargetEmail,   // เชื่อมโยงกับ {{email}}
+        passcode: generatedOTP,       // เชื่อมโยงกับ {{passcode}}
+        time: timeString              // เชื่อมโยงกับ {{time}}
+    };
 
-            // ผูกข้อมูลตัวแปรเข้ากับเครื่องหมายปาท่องโก๋ {{ }} ใน Template ของคุณ
-            const templateParams = {
-                email: recoveryTargetEmail,
-                'Company Name': 'M2 MOTORSPORT',
-                passcode: generatedOTP,
-                time: expiryTimeText
-            };
+    // เปลี่ยนสถานะปุ่มชั่วคราวระหว่างส่ง
+    const btnSubmit = document.getElementById('btn-submit-forgot');
+    const textSubmit = document.getElementById('text-submit-forgot');
+    btnSubmit.disabled = true;
+    textSubmit.innerText = "กำลังส่งรหัส...";
 
-            // เรียกยิงผ่าน EmailJS SDK
-            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
-                .then((response) => {
-                    console.log('EmailJS Success:', response.status, response.text);
-                    showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
-                    
-                    // เปลี่ยนไป Step 2 ยืนยันรหัส
-                    document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
-                    document.getElementById('forgot-step-1').classList.add('hidden');
-                    document.getElementById('forgot-step-2').classList.remove('hidden');
-                    
-                    startOTPTimer();
-                    btnSubmit.disabled = false;
-                    document.getElementById('text-submit-forgot').innerText = 'ส่งรหัสเข้าเมลฟรี';
-                }, (error) => {
-                    console.error('EmailJS Error:', error);
-                    resultBox.innerText = 'เกิดข้อผิดพลาดจากระบบส่งอีเมล กรุณาลองใหม่อีกครั้ง';
-                    resultBox.classList.remove('hidden');
-                    btnSubmit.disabled = false;
-                    document.getElementById('text-submit-forgot').innerText = 'ส่งรหัสเข้าเมลฟรี';
-                });
-        }
+    // 3. ยิงผ่าน EmailJS SDK โดยใช้ตัวแปร Global ที่คุณประกาศไว้ด้านบน
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
+        .then((response) => {
+            console.log('EmailJS Success:', response.status, response.text);
+            showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
 
-        // ตัวนับเวลากดส่งรหัสซ้ำใหม่ (60 วินาที)
-        function startOTPTimer() {
-            otpTimeLeft = 60;
-            const timerEl = document.getElementById('otp-timer');
-            timerEl.innerText = `${otpTimeLeft}s`;
+            // เปลี่ยนหน้าไปสเต็ปกรอก OTP
+            document.getElementById('forgot-step-1').classList.add('hidden');
+            document.getElementById('forgot-step-2').classList.remove('hidden');
+            document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
             
+            // เริ่มนับเวลาถอยหลังกรอกรหัส (เช่น 60 วินาที)
+            startOTPTimer();
+        })
+        .catch((error) => {
+            console.error('EmailJS Error Details:', error);
+            showToast('ระบบอีเมลขัดข้อง กรุณาเช็คการเชื่อมต่อของคุณค่ะ', 'error');
+            
+            // เปิดแสดงกล่องแจ้งเตือนรายละเอียด Error บนหน้าจอ
+            const resultBox = document.getElementById('forgot-result-box');
+            if (resultBox) {
+                resultBox.classList.remove('hidden');
+                resultBox.innerText = `Error: ${error.text || 'ไม่สามารถส่งอีเมลได้ ตรวจสอบสถานะการเชื่อมต่อกับ Gmail ใน EmailJS'}`;
+            }
+        })
+        .finally(() => {
+            // คืนค่าปุ่มกดให้ทำงานปกติ
+            btnSubmit.disabled = false;
+            textSubmit.innerText = "ส่งรหัสเข้าเมลฟรี";
+        });
+}
+
+// ฟังก์ชันนับเวลาถอยหลัง (แถมให้เผื่อระบบต้องการใช้งานคู่กัน)
+function startOTPTimer() {
+    clearInterval(countdownTimer);
+    otpTimeLeft = 60;
+    const timerEl = document.getElementById('otp-timer');
+    
+    countdownTimer = setInterval(() => {
+        otpTimeLeft--;
+        if (timerEl) timerEl.innerText = `${otpTimeLeft}s`;
+        
+        if (otpTimeLeft <= 0) {
             clearInterval(countdownTimer);
-            countdownTimer = setInterval(() => {
-                otpTimeLeft--;
-                timerEl.innerText = `${otpTimeLeft}s`;
-                if(otpTimeLeft <= 0) {
-                    clearInterval(countdownTimer);
-                    timerEl.innerText = "หมดเวลา";
-                }
-            }, 1000);
+            if (timerEl) timerEl.innerText = `หมดเวลา`;
+            // สามารถเพิ่มโค้ดให้สุ่ม OTP ใหม่ หรือให้กดส่งใหม่ตรงนี้ได้
         }
+    }, 1000);
+}
 
         // ขั้นตอนที่ 2: ตรวจสอบความถูกต้องของรหัส OTP ที่กรอกเข้ามา
         function processVerifyOTP(event) {
