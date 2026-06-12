@@ -167,6 +167,35 @@
             </div>
         </div>
 
+        <!-- ========================================== -->
+        <!--  UI PART: LOGOUT CONFIRMATION MODAL        -->
+        <!-- ========================================== -->
+        <div id="logoutConfirmationModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
+                <div class="flex flex-col items-center text-center">
+                    <!-- Icon Warning สไตล์สปอร์ตหรู -->
+                    <div class="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center text-[#e50012] text-2xl mb-4 shadow-inner">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <!-- หัวข้อและรายละเอียด -->
+                    <h4 class="text-base font-bold text-white mb-2">คุณชินอิจิตอนนี้ต้องการออกจากระบบใช่ไหมคะ?</h4>
+                    <p class="text-xs text-slate-400 mb-6 leading-relaxed">หากคุณชินอิจิออกจากระบบ เซสชันความปลอดภัยปัจจุบันจะถูกทำลาย และคุณจะต้องล็อกอินเข้าใหม่อีกครั้งเพื่อรับบริการค่ะ</p>
+                    
+                    <!-- ปุ่มกดยืนยัน Action -->
+                    <div class="flex w-full gap-3 text-xs font-semibold">
+                        <!-- ปุ่มยกเลิกไม่ยอมออก -->
+                        <button type="button" onclick="closeLogoutModal()" class="flex-1 text-slate-400 bg-slate-800 hover:bg-slate-700 hover:text-white py-3 px-4 rounded-xl transition-all cursor-pointer">
+                            ยกเลิก
+                        </button>
+                        <!-- ปุ่มยืนยันว่าจะออกจากระบบ -->
+                        <button type="button" onclick="executeLogoutAction()" class="flex-1 bg-[#e50012] hover:bg-[#c4000f] text-white py-3 px-4 rounded-xl shadow-md transition-all cursor-pointer">
+                            ใช่, ออกจากระบบ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -471,259 +500,33 @@
         }
 
         // ==========================================
-        // 🔑 SYSTEM MEMBERSHIP ENGINE (LOGIN & REGISTER)
+        //  LOGOUT CONTROLLERS & LOGIC MODIFICATIONS
         // ==========================================
 
-        function processRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('reg-name').value.trim();
-            const phone = document.getElementById('reg-phone').value.trim();
-            const email = document.getElementById('reg-email').value.trim().toLowerCase();
-            const password = document.getElementById('reg-password').value;
-
-            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
-            
-            // ตรวจสอบว่ามีอีเมลนี้ในระบบหรือยัง
-            if (accounts.some(u => u.email === email)) {
-                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ', 'error');
-                return;
-            }
-
-            // บันทึกบัญชีผู้ใช้ใหม่ลง LocalStorage
-            const newUser = { name, phone, email, password };
-            accounts.push(newUser);
-            localStorage.setItem('mg_users', JSON.stringify(accounts));
-
-            showToast('สร้างบัญชีสมาชิกสำเร็จแล้ว! สามารถเข้าสู่ระบบได้ทันทีค่ะ');
-            e.target.reset();
-            changeView('login');
-        }
-
-        function processLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value.trim().toLowerCase();
-            const password = document.getElementById('login-password').value;
-
-            const accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
-            const user = accounts.find(u => u.email === email && u.password === password);
-
-            if (!user) {
-                showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่ค่ะ', 'error');
-                return;
-            }
-
-            // บันทึกเซสชันล็อกอินสำเร็จลงทั้งตัวแปรและ sessionStorage (เพื่อรองรับการรีเฟรช)
-            activeUserSession = user;
-            sessionStorage.setItem('mg_active_session', JSON.stringify(user));
-            document.getElementById('client-name').innerText = user.name;
-            
-            showToast('ยินดีต้อนรับเข้าสู่ระบบสำเร็จค่ะ');
-            e.target.reset();
-            changeView('home');
-        }
-
+        // เมื่อกดออกจากระบบจากหน้าหลัก แทนที่จะล็อกเอาท์ทันที ให้แสดง Modal ถามย้ำก่อน
         function triggerLogout() {
+            document.getElementById('logoutConfirmationModal').classList.remove('hidden');
+        }
+
+        // ฟังก์ชันปิดกล่องข้อความยืนยันออกจากระบบเมื่อยกเลิก
+        function closeLogoutModal() {
+            document.getElementById('logoutConfirmationModal').classList.add('hidden');
+        }
+
+        // เมื่อผู้ลงทะเบียนคลิกคำสั่งกดยืนยันออกจากระบบอย่างแน่นอน
+        function executeLogoutAction() {
+            // ปิด Modal แผงแจ้งเตือนก่อน
+            closeLogoutModal();
+            
+            // ทำลายเซสชันล้างสิทธิ์ความปลอดภัยและสลับหน้าจอกลับไปยังหน้า Login เดิมของคุณชินอิจิ
             activeUserSession = null;
-            sessionStorage.removeItem('mg_active_session'); // ล้างข้อมูล session ออกเมื่อกดออกจากระบบ
-            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ');
+            showToast("ออกจากระบบและเคลียร์เซสชันเรียบร้อยแล้วค่ะ", "success");
             changeView('login');
         }
 
-        // ==========================================
-        // 🔒 EMAIL OTP ENGINE (FORGOT PASSWORD)
-        // ==========================================
-        
-        function processRequestEmailOTP(e) {
-            e.preventDefault();
-            const email = document.getElementById('forgot-email').value.trim().toLowerCase();
-            const accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
-            const checkUser = accounts.find(u => u.email === email);
-
-            if(!checkUser) {
-                const errBox = document.getElementById('forgot-result-box');
-                errBox.innerText = "ไม่พบข้อมูลบัญชีที่ระบุ กรุณาตรวจสอบอีเมลใหม่อีกครั้งค่ะ";
-                errBox.classList.remove('hidden');
-                return;
-            }
-
-            recoveryTargetEmail = email;
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log(`[Developer Trace Debug Link] Security Recovery OTP: ${generatedOTP}`);
-
-            const btnSubmit = document.getElementById('btn-submit-forgot');
-            btnSubmit.disabled = true;
-            document.getElementById('text-submit-forgot').innerText = "กำลังประมวลผล...";
-
-            const expiryTime = getExpiryTimeFormatted();
-
-            emailjs.send("service_default", "gwsnbje", {
-                email: recoveryTargetEmail,    
-                passcode: generatedOTP,        
-                time: expiryTime               
-            }).then(() => {
-                showToast('ส่งรหัส OTP เรียบร้อยแล้ว โปรดตรวจสอบกล่องข้อความในอีเมล');
-                startOtpClock();
-                document.getElementById('target-email-display').innerText = `ระบบส่งรหัสความปลอดภัยไปที่ ${recoveryTargetEmail}`;
-                document.getElementById('forgot-step-1').classList.add('hidden');
-                document.getElementById('forgot-step-2').classList.remove('hidden');
-            }).catch((err) => {
-                console.error('EmailJS Service Failure:', err);
-                showToast('การส่งเมลขัดข้อง! กำลังจำลองระบบกู้คืนอัตโนมัติ', 'error');
-                startOtpClock();
-                document.getElementById('target-email-display').innerText = `รหัส ชั่วคราว : ${generatedOTP}`;
-                document.getElementById('forgot-step-1').classList.add('hidden');
-                document.getElementById('forgot-step-2').classList.remove('hidden');
-            }).finally(() => {
-                btnSubmit.disabled = false;
-                document.getElementById('text-submit-forgot').innerText = "ส่งรหัสเข้าเมลฟรี";
-            });
-        }
-
-        function getExpiryTimeFormatted() {
-            const expiryDate = new Date(Date.now() + 15 * 60 * 1000);
-            return expiryDate.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + " น.";
-        }
-
-        function startOtpClock() {
-            clearInterval(countdownTimer);
-            otpTimeLeft = 60;
-            const timerDisplay = document.getElementById('otp-timer');
-            timerDisplay.innerText = `${otpTimeLeft}s`;
-            
-            countdownTimer = setInterval(() => {
-                otpTimeLeft--;
-                timerDisplay.innerText = `${otpTimeLeft}s`;
-                if(otpTimeLeft <= 0){
-                    clearInterval(countdownTimer);
-                    showToast('รหัส OTP หมดอายุการใช้งานแล้ว กรุณากดส่งใหม่อีกครั้งค่ะ', 'error');
-                }
-            }, 1000);
-        }
-
-        function processVerifyOTP(e) {
-            e.preventDefault();
-            const typedOtp = document.getElementById('otp-code').value.trim();
-            if(otpTimeLeft <= 0) {
-                showToast('รหัส OTP หมดอายุแล้ว โปรดย้อนกลับไปส่งใหม่', 'error');
-                return;
-            }
-            if(typedOtp === generatedOTP) {
-                clearInterval(countdownTimer);
-                showToast('ยืนยันรหัส OTP ถูกต้อง กรุณาตั้งรหัสผ่านใหม่ค่ะ');
-                document.getElementById('forgot-step-2').classList.add('hidden');
-                document.getElementById('forgot-step-3').classList.remove('hidden');
-            } else {
-                showToast('รหัส OTP ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งค่ะ', 'error');
-            }
-        }
-
-        function processSaveNewPassword(e) {
-            e.preventDefault();
-            const newPass = document.getElementById('new-reset-password').value;
-            const confirmPass = document.getElementById('new-reset-password-confirm').value;
-
-            if(newPass !== confirmPass) {
-                showToast('รหัสผ่านทั้งสองช่องไม่ตรงกันค่ะ', 'error');
-                return;
-            }
-
-            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
-            const index = accounts.findIndex(u => u.email === recoveryTargetEmail);
-
-            if(index !== -1) {
-                accounts[index].password = newPass;
-                localStorage.setItem('mg_users', JSON.stringify(accounts));
-                showToast('เปลี่ยนรหัสผ่านใหม่สำเร็จ สามารถเข้าสู่ระบบได้เลยค่ะ');
-                closeForgotPasswordModal();
-                changeView('login');
-            } else {
-                showToast('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
-            }
-        }
-
-        // ==========================================
-        // 👤 MODAL PROFILE EDIT UTILITIES
-        // ==========================================
-
-        function openEditModal() {
-            if(activeUserSession) {
-                document.getElementById('new-profile-name').value = activeUserSession.name;
-                document.getElementById('editNameModal').classList.remove('hidden');
-            }
-        }
-
-        function closeEditModal() {
-            document.getElementById('editNameModal').classList.add('hidden');
-        }
-
-        function saveNewName(e) {
-            e.preventDefault();
-            const newName = document.getElementById('new-profile-name').value.trim();
-            if(!newName) return;
-
-            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
-            const index = accounts.findIndex(u => u.email === activeUserSession.email);
-
-            if(index !== -1) {
-                accounts[index].name = newName;
-                localStorage.setItem('mg_users', JSON.stringify(accounts));
-                
-                activeUserSession.name = newName;
-                sessionStorage.setItem('mg_active_session', JSON.stringify(activeUserSession)); // อัปเดตข้อมูลใน Session ด้วย
-                document.getElementById('client-name').innerText = newName;
-                
-                showToast('แก้ไขชื่อผู้ลงทะเบียนสำเร็จแล้วค่ะ');
-                closeEditModal();
-            }
-        }
-
-        function openForgotPasswordModal() {
-            document.getElementById('forgot-result-box').classList.add('hidden');
-            document.getElementById('forgot-step-1').classList.remove('hidden');
-            document.getElementById('forgot-step-2').classList.add('hidden');
-            document.getElementById('forgot-step-3').classList.add('hidden');
-            document.getElementById('forgotPasswordModal').classList.remove('hidden');
-        }
-
-        function closeForgotPasswordModal() {
-            clearInterval(countdownTimer);
-            document.getElementById('forgotPasswordModal').classList.add('hidden');
-        }
-
-        function backToStep1() {
-            clearInterval(countdownTimer);
-            document.getElementById('forgot-step-2').classList.add('hidden');
-            document.getElementById('forgot-step-1').classList.remove('hidden');
-        }
-
-        // ฟังก์ชันซ่อน/แสดงรหัสผ่าน
-        function togglePasswordVisibility(inputId, iconId) {
-            const input = document.getElementById(inputId);
-            const icon = document.getElementById(iconId);
-            if(input.type === "password") {
-                input.type = "text";
-                icon.className = "fa-solid fa-eye";
-            } else {
-                input.type = "password";
-                icon.className = "fa-solid fa-eye-slash";
-            }
-        }
-        
-        // ==========================================
-        // 🔄 AUTOMATIC LOGIN SESSION CHECKER (RELOAD PROTECTION)
-        // ==========================================
+        // เริ่มต้นการจำลองหน้าแรก (เพื่อการทดสอบ)
         window.addEventListener('DOMContentLoaded', () => {
-            const savedSession = sessionStorage.getItem('mg_active_session');
-            
-            if (savedSession) {
-                // หากพบข้อมูลการล็อกอินค้างไว้ ให้ดึงข้อมูลมาใช้งานและเปิดหน้า Home ทันที
-                activeUserSession = JSON.parse(savedSession);
-                document.getElementById('client-name').innerText = activeUserSession.name;
-                changeView('home');
-            } else {
-                // หากไม่มีข้อมูล ให้แสดงหน้าล็อกอินเริ่มต้นตามเดิม
-                changeView('login');
-            }
+            changeView('login');
         });
     </script>
 </body>
