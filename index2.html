@@ -500,37 +500,65 @@
         }
 
         // ระบบจำลองการลงทะเบียนและการเข้าสู่ระบบแบบ Local Storage
-        function processRegister(event) {
-            event.preventDefault();
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
+     // ฟังก์ชันสมัครสมาชิกใหม่ + ป้องกันอีเมลซ้ำ
+function processRegister(event) {
+    event.preventDefault(); // ป้องกันการรีเฟรชหน้าจอตอนกด Submit Form
 
-            const userData = { name, phone, email, password };
-            localStorage.setItem(`user_${email}`, JSON.stringify(userData));
-            
-            showToast('สร้างบัญชีสมาชิกสำเร็จแล้วค่ะ!', 'success');
-            changeView('login');
+    // ดึงค่าจาก Input ฟอร์มสมัครสมาชิก
+    const nameInput = document.getElementById('reg-name').value.trim();
+    const phoneInput = document.getElementById('reg-phone').value.trim();
+    const emailInput = document.getElementById('reg-email').value.trim().toLowerCase(); // ปรับเป็นตัวพิมพ์เล็กเพื่อความแม่นยำ
+    const passwordInput = document.getElementById('reg-password').value;
+
+    // 1. ดึงฐานข้อมูลผู้ใช้เดิมจาก localStorage (ถ้าไม่มีให้สร้างเป็น Array ว่าง)
+    let userDatabase = [];
+    const localData = localStorage.getItem('appUserDatabase');
+    if (localData) {
+        try {
+            userDatabase = JSON.parse(localData);
+        } catch (e) {
+            console.error("Error parsing user database", e);
+            userDatabase = [];
         }
+    }
 
-        function processLogin(event) {
-            event.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+    // 2. 🛡️ เช็คว่าอีเมลนี้เคยลงทะเบียนไว้แล้วหรือยัง (จุดป้องกันอีเมลซ้ำ)
+    const isEmailDuplicate = userDatabase.some(user => user.email === emailInput);
 
-            const savedUser = localStorage.getItem(`user_${email}`);
-            if (savedUser) {
-                const userData = JSON.parse(savedUser);
-                if (userData.password === password) {
-                    activeUserSession = userData;
-                    localStorage.setItem('activeUserSession', JSON.stringify(userData));
-                    updateUIWithSession();
-                    showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับค่ะ', 'success');
-                    changeView('home');
-                    return;
-                }
-            }
+    if (isEmailDuplicate) {
+        // หากเจออีเมลซ้ำในระบบ ให้แจ้งเตือนและหยุดการทำงานทันที
+        showToast('อีเมลนี้ถูกใช้งานในระบบแล้วค่ะ กรุณาใช้อีเมลอื่น', 'error');
+        return; 
+    }
+
+    // 3. ถ้าไม่ซ้ำ -> สร้าง Object ข้อมูลผู้ใช้ใหม่
+    const newUser = {
+        name: nameInput,
+        phone: phoneInput,
+        email: emailInput,
+        password: passwordInput, // ในระบบจริงควรแฮชรหัสผ่าน แต่ใน Client-side จะเก็บแบบนี้เพื่อเช็คล็อกอินง่ายๆ
+        registeredAt: new Date().toISOString()
+    };
+
+    // 4. บันทึกผู้ใช้ใหม่ลงใน Array ฐานข้อมูล และเซฟกลับไปที่ localStorage
+    userDatabase.push(newUser);
+    localStorage.setItem('appUserDatabase', JSON.stringify(userDatabase));
+
+    // 5. ล็อกอินให้ผู้ใช้ใหม่ทันที (สร้าง Session)
+    activeUserSession = {
+        name: newUser.name,
+        email: newUser.email
+    };
+    localStorage.setItem('activeUserSession', JSON.stringify(activeUserSession));
+
+    // แจ้งเตือนความสำเร็จและเปลี่ยนหน้าไปยังหน้าหลัก (Home)
+    showToast('สร้างบัญชีสมาชิกสำเร็จแล้วค่ะ ยินดีต้อนรับค่ะ', 'success');
+    updateUIWithSession();
+    changeView('home');
+
+    // เคลียร์ฟอร์มสมัครสมาชิก
+    event.target.reset();
+}
             showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'error');
         }
 
