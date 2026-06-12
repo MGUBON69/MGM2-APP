@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
@@ -512,8 +512,9 @@
                 return;
             }
 
-            // บันทึกเซสชันล็อกอินสำเร็จ
+            // บันทึกเซสชันล็อกอินสำเร็จลงทั้งตัวแปรและ sessionStorage (เพื่อรองรับการรีเฟรช)
             activeUserSession = user;
+            sessionStorage.setItem('mg_active_session', JSON.stringify(user));
             document.getElementById('client-name').innerText = user.name;
             
             showToast('ยินดีต้อนรับเข้าสู่ระบบสำเร็จค่ะ');
@@ -523,6 +524,7 @@
 
         function triggerLogout() {
             activeUserSession = null;
+            sessionStorage.removeItem('mg_active_session'); // ล้างข้อมูล session ออกเมื่อกดออกจากระบบ
             showToast('ออกจากระบบเรียบร้อยแล้วค่ะ');
             changeView('login');
         }
@@ -667,6 +669,7 @@
                 localStorage.setItem('mg_users', JSON.stringify(accounts));
                 
                 activeUserSession.name = newName;
+                sessionStorage.setItem('mg_active_session', JSON.stringify(activeUserSession)); // อัปเดตข้อมูลใน Session ด้วย
                 document.getElementById('client-name').innerText = newName;
                 
                 showToast('แก้ไขชื่อผู้ลงทะเบียนสำเร็จแล้วค่ะ');
@@ -706,8 +709,22 @@
             }
         }
         
-        // บังคับแสดงหน้า Login เริ่มต้น
-        changeView('login');
+        // ==========================================
+        // 🔄 AUTOMATIC LOGIN SESSION CHECKER (RELOAD PROTECTION)
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedSession = sessionStorage.getItem('mg_active_session');
+            
+            if (savedSession) {
+                // หากพบข้อมูลการล็อกอินค้างไว้ ให้ดึงข้อมูลมาใช้งานและเปิดหน้า Home ทันที
+                activeUserSession = JSON.parse(savedSession);
+                document.getElementById('client-name').innerText = activeUserSession.name;
+                changeView('home');
+            } else {
+                // หากไม่มีข้อมูล ให้แสดงหน้าล็อกอินเริ่มต้นตามเดิม
+                changeView('login');
+            }
+        });
     </script>
 </body>
 </html>
