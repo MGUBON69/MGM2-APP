@@ -500,65 +500,37 @@
         }
 
         // ระบบจำลองการลงทะเบียนและการเข้าสู่ระบบแบบ Local Storage
-     // ฟังก์ชันสมัครสมาชิกใหม่ + ป้องกันอีเมลซ้ำ
-function processRegister(event) {
-    event.preventDefault(); // ป้องกันการรีเฟรชหน้าจอตอนกด Submit Form
+        function processRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
 
-    // ดึงค่าจาก Input ฟอร์มสมัครสมาชิก
-    const nameInput = document.getElementById('reg-name').value.trim();
-    const phoneInput = document.getElementById('reg-phone').value.trim();
-    const emailInput = document.getElementById('reg-email').value.trim().toLowerCase(); // ปรับเป็นตัวพิมพ์เล็กเพื่อความแม่นยำ
-    const passwordInput = document.getElementById('reg-password').value;
-
-    // 1. ดึงฐานข้อมูลผู้ใช้เดิมจาก localStorage (ถ้าไม่มีให้สร้างเป็น Array ว่าง)
-    let userDatabase = [];
-    const localData = localStorage.getItem('appUserDatabase');
-    if (localData) {
-        try {
-            userDatabase = JSON.parse(localData);
-        } catch (e) {
-            console.error("Error parsing user database", e);
-            userDatabase = [];
+            const userData = { name, phone, email, password };
+            localStorage.setItem(`user_${email}`, JSON.stringify(userData));
+            
+            showToast('สร้างบัญชีสมาชิกสำเร็จแล้วค่ะ!', 'success');
+            changeView('login');
         }
-    }
 
-    // 2. 🛡️ เช็คว่าอีเมลนี้เคยลงทะเบียนไว้แล้วหรือยัง (จุดป้องกันอีเมลซ้ำ)
-    const isEmailDuplicate = userDatabase.some(user => user.email === emailInput);
+        function processLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
 
-    if (isEmailDuplicate) {
-        // หากเจออีเมลซ้ำในระบบ ให้แจ้งเตือนและหยุดการทำงานทันที
-        showToast('อีเมลนี้ถูกใช้งานในระบบแล้วค่ะ กรุณาใช้อีเมลอื่น', 'error');
-        return; 
-    }
-
-    // 3. ถ้าไม่ซ้ำ -> สร้าง Object ข้อมูลผู้ใช้ใหม่
-    const newUser = {
-        name: nameInput,
-        phone: phoneInput,
-        email: emailInput,
-        password: passwordInput, // ในระบบจริงควรแฮชรหัสผ่าน แต่ใน Client-side จะเก็บแบบนี้เพื่อเช็คล็อกอินง่ายๆ
-        registeredAt: new Date().toISOString()
-    };
-
-    // 4. บันทึกผู้ใช้ใหม่ลงใน Array ฐานข้อมูล และเซฟกลับไปที่ localStorage
-    userDatabase.push(newUser);
-    localStorage.setItem('appUserDatabase', JSON.stringify(userDatabase));
-
-    // 5. ล็อกอินให้ผู้ใช้ใหม่ทันที (สร้าง Session)
-    activeUserSession = {
-        name: newUser.name,
-        email: newUser.email
-    };
-    localStorage.setItem('activeUserSession', JSON.stringify(activeUserSession));
-
-    // แจ้งเตือนความสำเร็จและเปลี่ยนหน้าไปยังหน้าหลัก (Home)
-    showToast('สร้างบัญชีสมาชิกสำเร็จแล้วค่ะ ยินดีต้อนรับค่ะ', 'success');
-    updateUIWithSession();
-    changeView('home');
-
-    // เคลียร์ฟอร์มสมัครสมาชิก
-    event.target.reset();
-}
+            const savedUser = localStorage.getItem(`user_${email}`);
+            if (savedUser) {
+                const userData = JSON.parse(savedUser);
+                if (userData.password === password) {
+                    activeUserSession = userData;
+                    localStorage.setItem('activeUserSession', JSON.stringify(userData));
+                    updateUIWithSession();
+                    showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับค่ะ', 'success');
+                    changeView('home');
+                    return;
+                }
+            }
             showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'error');
         }
 
@@ -617,88 +589,76 @@ function processRegister(event) {
         }
 
         // ขั้นตอนที่ 1: ยิงส่งรหัส OTP ไปที่ Email ผ่าน EmailJS
-// ฟังก์ชันส่งอีเมลกู้คืนรหัสผ่าน (ก๊อปปี้หรือเทียบกับโค้ดเดิมของคุณได้เลย)
-function processRequestEmailOTP(event) {
-    event.preventDefault();
-    
-    const emailInput = document.getElementById('forgot-email').value.trim();
-    if (!emailInput) {
-        showToast('กรุณากรอกอีเมลด้วยค่ะ', 'error');
-        return;
-    }
-
-    // 1. สร้างรหัส OTP 6 หลัก และคำนวณเวลาหมดอายุ
-    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + 15); // รีเซ็ตหมดอายุใน 15 นาทีตามเทมเพลต
-    const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
-
-    // เก็บอีเมลเป้าหมายไว้ใช้ในขั้นตอนถัดไป
-    recoveryTargetEmail = emailInput;
-
-    // 2. ⭐️ ตั้งค่า Parameter ให้ตรงกับ {{email}}, {{passcode}}, {{time}} ในหน้าเว็บ EmailJS ของคุณ เป๊ะๆ
-    const templateParams = {
-        email: recoveryTargetEmail,   // เชื่อมโยงกับ {{email}}
-        passcode: generatedOTP,       // เชื่อมโยงกับ {{passcode}}
-        time: timeString              // เชื่อมโยงกับ {{time}}
-    };
-
-    // เปลี่ยนสถานะปุ่มชั่วคราวระหว่างส่ง
-    const btnSubmit = document.getElementById('btn-submit-forgot');
-    const textSubmit = document.getElementById('text-submit-forgot');
-    btnSubmit.disabled = true;
-    textSubmit.innerText = "กำลังส่งรหัส...";
-
-    // 3. ยิงผ่าน EmailJS SDK โดยใช้ตัวแปร Global ที่คุณประกาศไว้ด้านบน
-    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
-        .then((response) => {
-            console.log('EmailJS Success:', response.status, response.text);
-            showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
-
-            // เปลี่ยนหน้าไปสเต็ปกรอก OTP
-            document.getElementById('forgot-step-1').classList.add('hidden');
-            document.getElementById('forgot-step-2').classList.remove('hidden');
-            document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
-            
-            // เริ่มนับเวลาถอยหลังกรอกรหัส (เช่น 60 วินาที)
-            startOTPTimer();
-        })
-        .catch((error) => {
-            console.error('EmailJS Error Details:', error);
-            showToast('ระบบอีเมลขัดข้อง กรุณาเช็คการเชื่อมต่อของคุณค่ะ', 'error');
-            
-            // เปิดแสดงกล่องแจ้งเตือนรายละเอียด Error บนหน้าจอ
+        function processRequestEmailOTP(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('forgot-email').value;
             const resultBox = document.getElementById('forgot-result-box');
-            if (resultBox) {
-                resultBox.classList.remove('hidden');
-                resultBox.innerText = `Error: ${error.text || 'ไม่สามารถส่งอีเมลได้ ตรวจสอบสถานะการเชื่อมต่อกับ Gmail ใน EmailJS'}`;
-            }
-        })
-        .finally(() => {
-            // คืนค่าปุ่มกดให้ทำงานปกติ
-            btnSubmit.disabled = false;
-            textSubmit.innerText = "ส่งรหัสเข้าเมลฟรี";
-        });
-}
+            const btnSubmit = document.getElementById('btn-submit-forgot');
 
-// ฟังก์ชันนับเวลาถอยหลัง (แถมให้เผื่อระบบต้องการใช้งานคู่กัน)
-function startOTPTimer() {
-    clearInterval(countdownTimer);
-    otpTimeLeft = 60;
-    const timerEl = document.getElementById('otp-timer');
-    
-    countdownTimer = setInterval(() => {
-        otpTimeLeft--;
-        if (timerEl) timerEl.innerText = `${otpTimeLeft}s`;
-        
-        if (otpTimeLeft <= 0) {
-            clearInterval(countdownTimer);
-            if (timerEl) timerEl.innerText = `หมดเวลา`;
-            // สามารถเพิ่มโค้ดให้สุ่ม OTP ใหม่ หรือให้กดส่งใหม่ตรงนี้ได้
+            // ตรวจสอบก่อนว่าอีเมลนี้เคยลงทะเบียนไว้ในระบบจำลองไหม
+            const savedUser = localStorage.getItem(`user_${emailInput}`);
+            if (!savedUser) {
+                resultBox.innerText = 'ไม่พบข้อมูลอีเมลนี้ในระบบสมาชิกค่ะ';
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            resultBox.classList.add('hidden');
+            btnSubmit.disabled = true;
+            document.getElementById('text-submit-forgot').innerText = 'กำลังส่งรหัส...';
+
+            // สุ่มรหัสผ่าน 6 หลัก และ คำนวณเวลา
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            const expiryTimeText = calculateExpiryTime();
+            recoveryTargetEmail = emailInput;
+
+            // ผูกข้อมูลตัวแปรเข้ากับเครื่องหมายปาท่องโก๋ {{ }} ใน Template ของคุณ
+            const templateParams = {
+                email: recoveryTargetEmail,
+                'Company Name': 'M2 MOTORSPORT',
+                passcode: generatedOTP,
+                time: expiryTimeText
+            };
+
+            // เรียกยิงผ่าน EmailJS SDK
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
+                .then((response) => {
+                    console.log('EmailJS Success:', response.status, response.text);
+                    showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
+                    
+                    // เปลี่ยนไป Step 2 ยืนยันรหัส
+                    document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
+                    document.getElementById('forgot-step-1').classList.add('hidden');
+                    document.getElementById('forgot-step-2').classList.remove('hidden');
+                    
+                    startOTPTimer();
+                    btnSubmit.disabled = false;
+                    document.getElementById('text-submit-forgot').innerText = 'ส่งรหัสเข้าเมลฟรี';
+                }, (error) => {
+                    console.error('EmailJS Error:', error);
+                    resultBox.innerText = 'เกิดข้อผิดพลาดจากระบบส่งอีเมล กรุณาลองใหม่อีกครั้ง';
+                    resultBox.classList.remove('hidden');
+                    btnSubmit.disabled = false;
+                    document.getElementById('text-submit-forgot').innerText = 'ส่งรหัสเข้าเมลฟรี';
+                });
         }
-    }, 1000);
-}
+
+        // ตัวนับเวลากดส่งรหัสซ้ำใหม่ (60 วินาที)
+        function startOTPTimer() {
+            otpTimeLeft = 60;
+            const timerEl = document.getElementById('otp-timer');
+            timerEl.innerText = `${otpTimeLeft}s`;
+            
+            clearInterval(countdownTimer);
+            countdownTimer = setInterval(() => {
+                otpTimeLeft--;
+                timerEl.innerText = `${otpTimeLeft}s`;
+                if(otpTimeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    timerEl.innerText = "หมดเวลา";
+                }
+            }, 1000);
+        }
 
         // ขั้นตอนที่ 2: ตรวจสอบความถูกต้องของรหัส OTP ที่กรอกเข้ามา
         function processVerifyOTP(event) {
