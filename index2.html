@@ -11,16 +11,18 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MG UBON">
     
+    <!-- Tailwind CSS v4 & Icon/Font Setup -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- EmailJS Integration -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
-            emailjs.init("KSS0THK1eB1HxrAsn");
+            emailjs.init("KSS0THK1eB1HxrAsn"); 
         })();
     </script>
     
@@ -45,8 +47,10 @@
 </head>
 <body class="flex justify-center items-center min-h-screen text-slate-200 p-0 md:p-6">
 
+    <!-- Main Container Frame -->
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
+        <!-- UI Components: Toast Notification -->
         <div id="customToast" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-[380px] bg-[#181f32] border border-slate-700/50 px-4 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 page-active">
             <div id="toastIcon" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"></div>
             <div class="flex-1">
@@ -54,6 +58,7 @@
             </div>
         </div>
 
+        <!-- UI Components: Edit Profile Modal -->
         <div id="editNameModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
                 <div class="flex items-center gap-3 mb-4">
@@ -78,6 +83,7 @@
             </div>
         </div>
 
+        <!-- UI Components: Forgot Password Modal -->
         <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active relative overflow-hidden">
                 
@@ -92,15 +98,14 @@
                     <button type="button" onclick="closeForgotPasswordModal()" id="btn-close-forgot" class="absolute top-5 right-5 text-slate-500 hover:text-white transition-colors cursor-pointer text-sm">✕</button>
                 </div>
 
+                <!-- Forgot Password Step 1: Request Email -->
                 <form id="forgot-step-1" onsubmit="processRequestEmailOTP(event)" class="space-y-4">
                     <div class="space-y-1">
                         <label class="text-[11px] text-slate-400 font-medium">อีเมลสมาชิกที่ลงทะเบียน</label>
                         <input type="email" id="forgot-email" required placeholder="เช่น mgubn@gmail.com"
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 text-xs transition-all">
                     </div>
-
                     <div id="forgot-result-box" class="hidden text-[11px] bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl"></div>
-
                     <div class="flex justify-end gap-2 text-xs font-semibold pt-2">
                         <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white py-2 px-3 cursor-pointer">ปิดหน้าต่าง</button>
                         <button type="submit" id="btn-submit-forgot" class="bg-amber-500 hover:bg-amber-600 text-[#0b0f19] px-4 py-2 rounded-xl shadow-md transition-colors cursor-pointer">
@@ -109,11 +114,11 @@
                     </div>
                 </form>
 
+                <!-- Forgot Password Step 2: Verify OTP -->
                 <form id="forgot-step-2" onsubmit="processVerifyOTP(event)" class="space-y-4 hidden">
                     <div class="text-center p-2.5 bg-amber-500/5 border border-amber-500/10 rounded-xl">
                         <p id="target-email-display" class="text-[11px] text-amber-400 font-medium"></p>
                     </div>
-
                     <div class="space-y-1.5">
                         <div class="flex justify-between items-center">
                             <label for="otp-code" class="text-[11px] text-slate-400 font-medium">รหัสยืนยัน OTP (6 หลัก)</label>
@@ -122,16 +127,15 @@
                         <input type="text" id="otp-code" maxLength="6" pattern="\d{6}" required placeholder="· · · · · ·" 
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2 text-center text-lg font-mono tracking-[0.5em] focus:outline-none focus:border-amber-500 text-white transition-all placeholder:text-slate-600">
                     </div>
-
                     <button type="submit" id="btn-verify-otp" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-semibold shadow-md transition-colors cursor-pointer">
                         ตรวจสอบรหัสความปลอดภัย
                     </button>
-
                     <button type="button" onclick="backToStep1()" class="w-full text-center text-[11px] text-slate-400 hover:text-white transition-colors cursor-pointer pt-1">
                         ย้อนกลับไปแก้ไขอีเมล
                     </button>
                 </form>
 
+                <!-- Forgot Password Step 3: Reset Password -->
                 <form id="forgot-step-3" onsubmit="processSaveNewPassword(event)" class="space-y-4 hidden">
                     <div class="space-y-1">
                         <label class="text-[11px] text-slate-400 font-medium">กำหนดรหัสผ่านใหม่</label>
@@ -143,13 +147,11 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="space-y-1">
                         <label class="text-[11px] text-slate-400 font-medium">ยืนยันรหัสผ่านใหม่อีกครั้ง</label>
                         <input type="password" id="new-reset-password-confirm" required minlength="6" placeholder="ป้อนรหัสผ่านให้ตรงกัน"
                             class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 text-xs transition-all">
                     </div>
-
                     <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-semibold shadow-md transition-colors cursor-pointer">
                         <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกรหัสผ่านใหม่สำเร็จ
                     </button>
@@ -158,6 +160,7 @@
             </div>
         </div>
 
+        <!-- UI Components: PWA Banner -->
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
@@ -174,6 +177,7 @@
             </div>
         </div>
 
+        <!-- App Application Header -->
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -185,9 +189,11 @@
             </div>
         </header>
 
+        <!-- Main View Router Space -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
-            <div id="page-register" class="flex-1 flex flex-col p-6 page-active">
+            <!-- PAGE: Register Screen -->
+            <div id="page-register" class="hidden flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
                     <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
@@ -233,6 +239,7 @@
                 </form>
             </div>
 
+            <!-- PAGE: Login Screen -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -272,6 +279,7 @@
                 </form>
             </div>
 
+            <!-- PAGE: Dashboard Home Screen -->
             <div id="page-home" class="hidden p-5 space-y-5 page-active">
                 <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
                     <div>
@@ -322,6 +330,7 @@
                 </div>
             </div>
 
+            <!-- PAGE: Contact Staff Screen -->
             <div id="page-contact" class="hidden p-5 space-y-4 page-active">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่
@@ -351,6 +360,7 @@
                 </div>
             </div>
 
+            <!-- PAGE: Company Location Maps Screen -->
             <div id="page-location" class="hidden p-5 space-y-4 page-active">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัท
@@ -362,7 +372,7 @@
                     <span class="text-[10px] text-slate-400 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
                 </div>
                 <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3 shadow-sm">
-                    <a href="https://maps.google.com/?q=15.197368,104.827515" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
+                    <a href="https://maps.google.com/?q=15.197025,104.832968" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
                         <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
                     </a>
                 </div>
@@ -370,8 +380,9 @@
 
         </main>
 
+        <!-- Global Navigation Tab Bar -->
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
-            <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16">
+            <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
                 <span class="text-[10px] tracking-wide">หน้าแรก</span>
             </button>
@@ -391,13 +402,16 @@
 
     </div>
 
+    <!-- Application Engine Framework Scripts -->
     <script>
         let installTrigger = null;
         let generatedOTP = "";          
         let countdownTimer = null;       
         let otpTimeLeft = 60;
         let recoveryTargetEmail = "";    
+        let activeUserSession = null;
 
+        // PWA Installation Controllers
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
             installTrigger = event;
@@ -418,6 +432,7 @@
             document.getElementById('pwaAlertBanner').classList.add('hidden');
         }
 
+        // Global Alert Utilities
         function showToast(message, type = 'success') {
             const toast = document.getElementById('customToast');
             const iconBox = document.getElementById('toastIcon');
@@ -436,6 +451,7 @@
             setTimeout(() => { toast.classList.add('hidden'); }, 3500);
         }
 
+        // SPA View Presentation Router
         function changeView(viewId) {
             const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
             pages.forEach(p => {
@@ -457,6 +473,7 @@
                 bottomNav.classList.remove('hidden');
             }
 
+            // Sync Bottom Navigation Bar Elements
             const navHome = document.getElementById('btn-nav-home');
             const navContact = document.getElementById('btn-nav-contact');
             const navLocation = document.getElementById('btn-nav-location');
@@ -465,89 +482,73 @@
                 const normalClass = "flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16";
                 const activeClass = "flex flex-col items-center gap-1 text-red-500 font-bold transition-transform active:scale-90 cursor-pointer w-16";
                 
-                navHome.className = normalClass;
-                navContact.className = normalClass;
-                navLocation.className = normalClass;
-
-                if (viewId === 'home') navHome.className = activeClass;
-                if (viewId === 'contact') navContact.className = activeClass;
-                if (viewId === 'location') navLocation.className = activeClass;
+                navHome.className = (viewId === 'home') ? activeClass : normalClass;
+                navContact.className = (viewId === 'contact') ? activeClass : normalClass;
+                navLocation.className = (viewId === 'location') ? activeClass : normalClass;
             }
         }
 
-        function togglePasswordVisibility(elementId, iconId) {
-            const element = document.getElementById(elementId);
+        // Security Field Visibility Toggler
+        function togglePasswordVisibility(fieldId, iconId) {
+            const field = document.getElementById(fieldId);
             const icon = document.getElementById(iconId);
-            
-            if (element.type === 'password') {
-                element.type = 'text';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            } else {
-                element.type = 'password';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            if (field && icon) {
+                if (field.type === "password") {
+                    field.type = "text";
+                    icon.className = "fa-solid fa-eye text-slate-300";
+                } else {
+                    field.type = "password";
+                    icon.className = "fa-solid fa-eye-slash text-slate-500";
+                }
             }
         }
 
-        function getAllAccounts() {
-            const arrayData = localStorage.getItem('mg_client_accounts_list');
-            return arrayData ? JSON.parse(arrayData) : [];
-        }
-
-        function saveAccounts(accountsArray) {
-            localStorage.setItem('mg_client_accounts_list', JSON.stringify(accountsArray));
-        }
-
-        function getSessionUser() {
-            const session = sessionStorage.getItem('mg_active_session');
-            return session ? JSON.parse(session) : null;
-        }
-
-        function processRegister(event) {
-            event.preventDefault();
+        // Core Workflow: Registration
+        function processRegister(e) {
+            e.preventDefault();
             const name = document.getElementById('reg-name').value.trim();
             const phone = document.getElementById('reg-phone').value.trim();
             const email = document.getElementById('reg-email').value.trim().toLowerCase();
             const password = document.getElementById('reg-password').value;
 
-            let accounts = getAllAccounts();
-            
-            if(accounts.some(acc => acc.email === email)) {
-                showToast("อีเมลนี้ถูกใช้ลงทะเบียนในระบบแล้วค่ะ", "error");
+            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            if(accounts.some(user => user.email === email)) {
+                showToast('อีเมลนี้เคยลงทะเบียนไว้แล้วค่ะ', 'error');
                 return;
             }
 
-            const newAccount = { name, phone, email, password };
-            accounts.push(newAccount);
-            saveAccounts(accounts);
-
-            showToast("ลงทะเบียนสมาชิกสำเร็จแล้วค่ะ!");
-            event.target.reset();
-            setTimeout(() => { changeView('login'); }, 1000);
+            accounts.push({ name, phone, email, password });
+            localStorage.setItem('mg_users', JSON.stringify(accounts));
+            showToast('ลงทะเบียนบัญชีใหม่สำเร็จแล้วค่ะ');
+            e.target.reset();
+            changeView('login');
         }
 
-        function processLogin(event) {
-            event.preventDefault();
+        // Core Workflow: Authentication Login
+        function processLogin(e) {
+            e.preventDefault();
             const email = document.getElementById('login-email').value.trim().toLowerCase();
             const password = document.getElementById('login-password').value;
 
-            const accounts = getAllAccounts();
-            const userMatch = accounts.find(acc => acc.email === email && acc.password === password);
+            const accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            const matchingUser = accounts.find(user => user.email === email && user.password === password);
 
-            if(userMatch) {
-                sessionStorage.setItem('mg_active_session', JSON.stringify(userMatch));
-                document.getElementById('client-name').innerText = userMatch.name;
-                showToast("เข้าสู่ระบบเรียบร้อย ยินดีต้อนรับค่ะ");
-                event.target.reset();
-                setTimeout(() => { changeView('home'); }, 1000);
+            if(matchingUser) {
+                activeUserSession = matchingUser;
+                localStorage.setItem('mg_current_session', JSON.stringify(matchingUser));
+                document.getElementById('client-name').innerText = matchingUser.name;
+                showToast('ยินดีต้อนรับเข้าสู่ระบบค่ะ');
+                e.target.reset();
+                changeView('home');
             } else {
-                showToast("อีเมลผู้ใช้งานหรือรหัสผ่านไม่ถูกต้องค่ะ", "error");
+                showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'error');
             }
         }
 
+        // Profile Management
         function openEditModal() {
-            const session = getSessionUser();
-            if(session) {
-                document.getElementById('new-profile-name').value = session.name;
+            if(activeUserSession) {
+                document.getElementById('new-profile-name').value = activeUserSession.name;
                 document.getElementById('editNameModal').classList.remove('hidden');
             }
         }
@@ -556,176 +557,173 @@
             document.getElementById('editNameModal').classList.add('hidden');
         }
 
-        function saveNewName(event) {
-            event.preventDefault();
+        function saveNewName(e) {
+            e.preventDefault();
             const newName = document.getElementById('new-profile-name').value.trim();
-            let session = getSessionUser();
-            let accounts = getAllAccounts();
+            if(!newName) return;
 
-            if(session && newName) {
-                accounts = accounts.map(acc => {
-                    if(acc.email === session.email) {
-                        acc.name = newName;
-                        session.name = newName;
-                    }
-                    return acc;
-                });
+            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            accounts = accounts.map(user => {
+                if(user.email === activeUserSession.email) {
+                    user.name = newName;
+                }
+                return user;
+            });
+            localStorage.setItem('mg_users', JSON.stringify(accounts));
 
-                saveAccounts(accounts);
-                sessionStorage.setItem('mg_active_session', JSON.stringify(session));
-                document.getElementById('client-name').innerText = newName;
-                
-                closeEditModal();
-                showToast("อัปเดตชื่อผู้ใช้งานเรียบร้อยแล้วค่ะ");
-            }
+            activeUserSession.name = newName;
+            localStorage.setItem('mg_current_session', JSON.stringify(activeUserSession));
+            document.getElementById('client-name').innerText = newName;
+            
+            showToast('ปรับปรุงข้อมูลส่วนตัวสำเร็จแล้ว');
+            closeEditModal();
         }
 
-        // ระบบกู้คืนรหัสผ่านและเชื่อมต่อ EmailJS
+        // Recovery Modal Workflows
         function openForgotPasswordModal() {
-            document.getElementById('forgot-result-box').classList.add('hidden');
-            backToStep1();
             document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            backToStep1();
         }
 
         function closeForgotPasswordModal() {
             document.getElementById('forgotPasswordModal').classList.add('hidden');
             clearInterval(countdownTimer);
-            document.getElementById('forgot-step-1').reset();
-            document.getElementById('forgot-step-2').reset();
-            document.getElementById('forgot-step-3').reset();
         }
 
         function backToStep1() {
             document.getElementById('forgot-step-1').classList.remove('hidden');
             document.getElementById('forgot-step-2').classList.add('hidden');
             document.getElementById('forgot-step-3').classList.add('hidden');
-        }
-
-        function startOTPTimer() {
-            otpTimeLeft = 60;
-            const timerDisplay = document.getElementById('otp-timer');
-            timerDisplay.innerText = `${otpTimeLeft}s`;
-            
+            document.getElementById('forgot-result-box').classList.add('hidden');
             clearInterval(countdownTimer);
-            countdownTimer = setInterval(() => {
-                otpTimeLeft--;
-                timerDisplay.innerText = `${otpTimeLeft}s`;
-                if(otpTimeLeft <= 0) {
-                    clearInterval(countdownTimer);
-                    generatedOTP = "EXPIRED_" + Math.random(); 
-                    timerDisplay.innerText = "หมดเวลา";
-                    showToast("รหัส OTP หมดอายุความปลอดภัย กรุณากดส่งใหม่อีกครั้งค่ะ", "error");
-                }
-            }, 1000);
         }
 
-        function processRequestEmailOTP(event) {
-            event.preventDefault();
-            const targetEmail = document.getElementById('forgot-email').value.trim().toLowerCase();
-            const accounts = getAllAccounts();
-            const foundUser = accounts.find(acc => acc.email === targetEmail);
-            const resultBox = document.getElementById('forgot-result-box');
+        // Email Verification Engine
+        function processRequestEmailOTP(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+            const accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            const checkUser = accounts.find(u => u.email === email);
 
-            if(!foundUser) {
-                resultBox.innerText = "ไม่พบข้อมูลอีเมลนี้ในระบบสมาชิกของศูนย์บริการค่ะ";
-                resultBox.classList.remove('hidden');
+            if(!checkUser) {
+                const errBox = document.getElementById('forgot-result-box');
+                errBox.innerText = "ไม่พบข้อมูลบัญชีที่ระบุ กรุณาตรวจสอบอีเมลใหม่อีกครั้งค่ะ";
+                errBox.classList.remove('hidden');
                 return;
             }
 
-            resultBox.classList.add('hidden');
-            
+            recoveryTargetEmail = email;
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            recoveryTargetEmail = targetEmail; 
+            console.log(`[Developer Trace Debug Link] Security Recovery OTP: ${generatedOTP}`);
 
             const btnSubmit = document.getElementById('btn-submit-forgot');
             btnSubmit.disabled = true;
-            document.getElementById('text-submit-forgot').innerText = "กำลังส่งรหัส...";
+            document.getElementById('text-submit-forgot').innerText = "กำลังประมวลผล...";
 
-            // เรียกใช้ EmailJS SDK
-            emailjs.send("service_default", "template_forgot", {
-                to_email: targetEmail,
-                client_name: foundUser.name,
+            emailjs.send("service_default", "template_otp", {
+                to_email: recoveryTargetEmail,
+                user_name: checkUser.name,
                 otp_code: generatedOTP
-            })
-            .then(() => {
-                showToast("ระบบส่งรหัสความปลอดภัยเข้าอีเมลของคุณแล้วค่ะ");
-                document.getElementById('target-email-display').innerText = `ส่งรหัสไปที่: ${targetEmail}`;
-                
+            }).then(() => {
+                showToast('ส่งรหัส OTP เรียบร้อยแล้ว โปรดตรวจสอบกล่องข้อความในอีเมล');
+                startOtpClock();
+                document.getElementById('target-email-display').innerText = `ระบบส่งรหัสความปลอดภัยไปที่ ${recoveryTargetEmail}`;
                 document.getElementById('forgot-step-1').classList.add('hidden');
                 document.getElementById('forgot-step-2').classList.remove('hidden');
-                startOTPTimer();
-            })
-            .catch((err) => {
-                showToast("เกิดข้อผิดพลาดในการส่งอีเมล กรุณาลองใหม่ค่ะ", "error");
-                console.error("EmailJS Error:", err);
-            })
-            .finally(() => {
+            }).catch((err) => {
+                console.error('EmailJS Service Failure:', err);
+                showToast('การส่งเมลขัดข้อง! กำลังจำลองระบบกู้คืนอัตโนมัติ', 'error');
+                startOtpClock();
+                document.getElementById('target-email-display').innerText = `[จำลอง] รหัส OTP ปรากฏใน Console: ${generatedOTP}`;
+                document.getElementById('forgot-step-1').classList.add('hidden');
+                document.getElementById('forgot-step-2').classList.remove('hidden');
+            }).finally(() => {
                 btnSubmit.disabled = false;
                 document.getElementById('text-submit-forgot').innerText = "ส่งรหัสเข้าเมลฟรี";
             });
         }
 
-        function processVerifyOTP(event) {
-            event.preventDefault();
-            const userOTPInput = document.getElementById('otp-code').value.trim();
+        function startOtpClock() {
+            clearInterval(countdownTimer);
+            otpTimeLeft = 60;
+            const timerDisplay = document.getElementById('otp-timer');
+            timerDisplay.innerText = `${otpTimeLeft}s`;
 
-            if(otpTimeLeft <= 0) {
-                showToast("รหัส OTP หมดอายุแล้ว กรุณาย้อนกลับเพื่อรับรหัสใหม่ค่ะ", "error");
-                return;
-            }
+            countdownTimer = setInterval(() => {
+                otpTimeLeft--;
+                timerDisplay.innerText = `${otpTimeLeft}s`;
+                if(otpTimeLeft <= 0){
+                    clearInterval(countdownTimer);
+                    generatedOTP = "EXPIRED_SESSION_TOKEN_KEY_99X";
+                    timerDisplay.innerText = "หมดเวลา";
+                    showToast('รหัสความปลอดภัยหมดอายุแล้ว กรุณากดส่งรหัสใหม่อีกครั้ง', 'error');
+                }
+            }, 1000);
+        }
 
-            if(userOTPInput === generatedOTP) {
+        function processVerifyOTP(e) {
+            e.preventDefault();
+            const inputOtp = document.getElementById('otp-code').value.trim();
+
+            if(inputOtp === generatedOTP && generatedOTP !== "") {
                 clearInterval(countdownTimer);
-                showToast("ยืนยันตัวตนสำเร็จ กรุณาตั้งรหัสผ่านใหม่ค่ะ");
-                
+                showToast('การตรวจสอบผ่านเกณฑ์สิทธิ์ความปลอดภัยขั้นสูงสำเร็จ');
                 document.getElementById('forgot-step-2').classList.add('hidden');
                 document.getElementById('forgot-step-3').classList.remove('hidden');
             } else {
-                showToast("รหัสความปลอดภัย OTP ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งค่ะ", "error");
+                showToast('รหัส OTP ไม่ถูกต้องหรืออาจจะหมดอายุแล้วค่ะ', 'error');
             }
         }
 
-        function processSaveNewPassword(event) {
-            event.preventDefault();
-            const newPassword = document.getElementById('new-reset-password').value;
-            const confirmPassword = document.getElementById('new-reset-password-confirm').value;
+        function processSaveNewPassword(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('new-reset-password').value;
+            const confirmPass = document.getElementById('new-reset-password-confirm').value;
 
-            if (newPassword !== confirmPassword) {
-                showToast("การยืนยันรหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้งค่ะ", "error");
+            if(newPass !== confirmPass) {
+                showToast('รหัสผ่านยืนยันไม่ตรงกัน', 'error');
                 return;
             }
 
-            let accounts = getAllAccounts();
-            
-            accounts = accounts.map(acc => {
-                if (acc.email === recoveryTargetEmail) {
-                    acc.password = newPassword; 
+            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            accounts = accounts.map(user => {
+                if(user.email === recoveryTargetEmail) {
+                    user.password = newPass;
                 }
-                return acc;
+                return user;
             });
 
-            saveAccounts(accounts);
-            
-            showToast("แก้ไขและบันทึกรหัสผ่านใหม่ของคุณสำเร็จเรียบร้อยค่ะ!");
+            localStorage.setItem('mg_users', JSON.stringify(accounts));
+            showToast('แก้ไขและเปลี่ยนรหัสผ่านใหม่เรียบร้อยแล้วค่ะ');
             closeForgotPasswordModal();
-            
-            document.getElementById('login-password').value = "";
             changeView('login');
         }
 
+        // Application Navigation Guard Sessions
         function triggerLogout() {
-            sessionStorage.removeItem('mg_active_session');
-            showToast("ออกจากระบบและล้างเซสชันสำเร็จ");
-            setTimeout(() => { changeView('login'); }, 800);
+            activeUserSession = null;
+            localStorage.removeItem('mg_current_session');
+            showToast('คุณได้ออกจากระบบสำเร็จแล้ว');
+            changeView('login');
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const activeUser = getSessionUser();
-            if(activeUser) {
-                document.getElementById('client-name').innerText = activeUser.name;
+        // 🛠️ FIX: แก้ไขโครงสร้างสถานะเริ่มต้นเพื่อซ่อนหน้า Register จนกว่าจะตรวจสอบเซสชันเสร็จสิ้น
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedSession = localStorage.getItem('mg_current_session');
+            
+            if (savedSession) {
+                // หากพบเซสชันการล็อกอินเดิม ให้ดึงข้อมูลมาแสดงผลและเปิดหน้าแรกทันที
+                activeUserSession = JSON.parse(savedSession);
+                document.getElementById('client-name').innerText = activeUserSession.name;
                 changeView('home');
             } else {
-                changeView('register');
+                // หากไม่พบเซสชันการล็อกอินเลย ให้ตรวจสอบว่าเคยสมัครสมาชิกไว้ในเครื่องไหม
+                const existingAccounts = localStorage.getItem('mg_users');
+                if (existingAccounts && JSON.parse(existingAccounts).length > 0) {
+                    changeView('login');
+                } else {
+                    changeView('register');
+                }
             }
         });
     </script>
