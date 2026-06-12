@@ -442,6 +442,89 @@
             
             const activePage = document.getElementById(`page-${viewId}`);
             if (activePage) activePage.classList.remove('hidden');
+
+            // จัดการซ่อน/แสดง Header และ บาร์เมนูด้านล่างให้เหมาะสมกับหน้านั้นๆ
+            const header = document.getElementById('appHeader');
+            const bottomNav = document.getElementById('bottomNav');
+            
+            if (viewId === 'login' || viewId === 'register') {
+                if(header) header.classList.add('hidden');
+                if(bottomNav) bottomNav.classList.add('hidden');
+            } else {
+                if(header) header.classList.remove('hidden');
+                if(bottomNav) bottomNav.classList.remove('hidden');
+                
+                // ไฮไลต์ปุ่มเมนูที่กำลังทำงานอยู่
+                ['home', 'contact', 'location'].forEach(m => {
+                    const btn = document.getElementById(`btn-nav-${m}`);
+                    if(btn) {
+                        if(m === viewId) {
+                            btn.classList.add('text-red-500');
+                            btn.classList.remove('text-slate-400');
+                        } else {
+                            btn.classList.remove('text-red-500');
+                            btn.classList.add('text-slate-400');
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==========================================
+        // 🔑 SYSTEM MEMBERSHIP ENGINE (LOGIN & REGISTER)
+        // ==========================================
+
+        function processRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const email = document.getElementById('reg-email').value.trim().toLowerCase();
+            const password = document.getElementById('reg-password').value;
+
+            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            
+            // ตรวจสอบว่ามีอีเมลนี้ในระบบหรือยัง
+            if (accounts.some(u => u.email === email)) {
+                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ', 'error');
+                return;
+            }
+
+            // บันทึกบัญชีผู้ใช้ใหม่ลง LocalStorage
+            const newUser = { name, phone, email, password };
+            accounts.push(newUser);
+            localStorage.setItem('mg_users', JSON.stringify(accounts));
+
+            showToast('สร้างบัญชีสมาชิกสำเร็จแล้ว! สามารถเข้าสู่ระบบได้ทันทีค่ะ');
+            e.target.reset();
+            changeView('login');
+        }
+
+        function processLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+
+            const accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            const user = accounts.find(u => u.email === email && u.password === password);
+
+            if (!user) {
+                showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่ค่ะ', 'error');
+                return;
+            }
+
+            // บันทึกเซสชันล็อกอินสำเร็จ
+            activeUserSession = user;
+            document.getElementById('client-name').innerText = user.name;
+            
+            showToast('ยินดีต้อนรับเข้าสู่ระบบสำเร็จค่ะ');
+            e.target.reset();
+            changeView('home');
+        }
+
+        function triggerLogout() {
+            activeUserSession = null;
+            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ');
+            changeView('login');
         }
 
         // ==========================================
@@ -469,14 +552,12 @@
             btnSubmit.disabled = true;
             document.getElementById('text-submit-forgot').innerText = "กำลังประมวลผล...";
 
-            // 🕒 เรียกคำนวณเวลาหมดอายุ (+15 นาที) ส่งเข้าตัวแปร expiryTime
             const expiryTime = getExpiryTimeFormatted();
 
-            // ส่งข้อมูลไป EmailJS เทมเพลตไอดี gwsnbje จับคู่ตัวแปรอย่างถูกต้องตามฟอร์ม
             emailjs.send("service_default", "gwsnbje", {
-                email: recoveryTargetEmail,    // โยงเข้าปีกกา {{email}}
-                passcode: generatedOTP,        // โยงเข้าปีกกา {{passcode}}
-                time: expiryTime               // โยงเข้าปีกกา {{time}}
+                email: recoveryTargetEmail,    
+                passcode: generatedOTP,        
+                time: expiryTime               
             }).then(() => {
                 showToast('ส่งรหัส OTP เรียบร้อยแล้ว โปรดตรวจสอบกล่องข้อความในอีเมล');
                 startOtpClock();
@@ -496,7 +577,6 @@
             });
         }
 
-        // 📌 ฟังก์ชันคำนวณเวลาหมดอายุ (วางแยกอิสระ ไม่ซ้อนทับฟังก์ชันอื่น)
         function getExpiryTimeFormatted() {
             const expiryDate = new Date(Date.now() + 15 * 60 * 1000);
             return expiryDate.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + " น.";
@@ -518,7 +598,82 @@
             }, 1000);
         }
 
-        // สคริปต์เสริมช่วยจัดการเปิด-ปิด Modal สำหรับระบบลืมรหัสผ่าน
+        function processVerifyOTP(e) {
+            e.preventDefault();
+            const typedOtp = document.getElementById('otp-code').value.trim();
+            if(otpTimeLeft <= 0) {
+                showToast('รหัส OTP หมดอายุแล้ว โปรดย้อนกลับไปส่งใหม่', 'error');
+                return;
+            }
+            if(typedOtp === generatedOTP) {
+                clearInterval(countdownTimer);
+                showToast('ยืนยันรหัส OTP ถูกต้อง กรุณาตั้งรหัสผ่านใหม่ค่ะ');
+                document.getElementById('forgot-step-2').classList.add('hidden');
+                document.getElementById('forgot-step-3').classList.remove('hidden');
+            } else {
+                showToast('รหัส OTP ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งค่ะ', 'error');
+            }
+        }
+
+        function processSaveNewPassword(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('new-reset-password').value;
+            const confirmPass = document.getElementById('new-reset-password-confirm').value;
+
+            if(newPass !== confirmPass) {
+                showToast('รหัสผ่านทั้งสองช่องไม่ตรงกันค่ะ', 'error');
+                return;
+            }
+
+            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            const index = accounts.findIndex(u => u.email === recoveryTargetEmail);
+
+            if(index !== -1) {
+                accounts[index].password = newPass;
+                localStorage.setItem('mg_users', JSON.stringify(accounts));
+                showToast('เปลี่ยนรหัสผ่านใหม่สำเร็จ สามารถเข้าสู่ระบบได้เลยค่ะ');
+                closeForgotPasswordModal();
+                changeView('login');
+            } else {
+                showToast('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
+            }
+        }
+
+        // ==========================================
+        // 👤 MODAL PROFILE EDIT UTILITIES
+        // ==========================================
+
+        function openEditModal() {
+            if(activeUserSession) {
+                document.getElementById('new-profile-name').value = activeUserSession.name;
+                document.getElementById('editNameModal').classList.remove('hidden');
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editNameModal').classList.add('hidden');
+        }
+
+        function saveNewName(e) {
+            e.preventDefault();
+            const newName = document.getElementById('new-profile-name').value.trim();
+            if(!newName) return;
+
+            let accounts = JSON.parse(localStorage.getItem('mg_users')) || [];
+            const index = accounts.findIndex(u => u.email === activeUserSession.email);
+
+            if(index !== -1) {
+                accounts[index].name = newName;
+                localStorage.setItem('mg_users', JSON.stringify(accounts));
+                
+                activeUserSession.name = newName;
+                document.getElementById('client-name').innerText = newName;
+                
+                showToast('แก้ไขชื่อผู้ลงทะเบียนสำเร็จแล้วค่ะ');
+                closeEditModal();
+            }
+        }
+
         function openForgotPasswordModal() {
             document.getElementById('forgot-result-box').classList.add('hidden');
             document.getElementById('forgot-step-1').classList.remove('hidden');
@@ -538,6 +693,7 @@
             document.getElementById('forgot-step-1').classList.remove('hidden');
         }
 
+        // ฟังก์ชันซ่อน/แสดงรหัสผ่าน
         function togglePasswordVisibility(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -550,7 +706,7 @@
             }
         }
         
-        // บังคับเปลี่ยนไปหน้า Login เริ่มต้นเพื่อทดสอบแอปพลิเคชัน
+        // บังคับแสดงหน้า Login เริ่มต้น
         changeView('login');
     </script>
 </body>
