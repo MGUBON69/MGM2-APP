@@ -20,7 +20,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
-            // ยืนยันสิทธิ์เริ่มต้นการใช้งาน EmailJS ด้วย Public Key
+            // ยืนยันสิทธิ์เริ่มต้นการใช้งาน EmailJS ด้วย Public Key ของคุณชินอิจิ
             emailjs.init("KSS0THK1eB1HxrAsn"); 
         })();
     </script>
@@ -51,7 +51,6 @@
 
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
-        <!-- CUSTOM TOAST ALERT -->
         <div id="customToast" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-[380px] bg-[#181f32] border border-slate-700/50 px-4 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 page-active">
             <div id="toastIcon" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"></div>
             <div class="flex-1">
@@ -59,7 +58,6 @@
             </div>
         </div>
 
-        <!-- EDIT PROFILE NAME MODAL -->
         <div id="editNameModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active">
                 <div class="flex items-center gap-3 mb-4">
@@ -84,7 +82,6 @@
             </div>
         </div>
 
-        <!-- FORGOT PASSWORD MODAL -->
         <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active relative overflow-hidden">
                 
@@ -157,7 +154,6 @@
             </div>
         </div>
 
-        <!-- 🚨 LOGOUT CONFIRMATION MODAL -->
         <div id="logoutConfirmModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/70 backdrop-blur-xs opacity-0 pointer-events-none modal-animate">
             <div class="absolute inset-0" onclick="closeLogoutModal()"></div>
             <div class="w-full max-w-[360px] bg-[#181f32] border border-slate-800/80 p-6 rounded-2xl shadow-2xl transform scale-95 modal-animate relative z-10 text-center">
@@ -178,7 +174,6 @@
             </div>
         </div>
 
-        <!-- PWA INSTALLATION BANNER -->
         <div id="pwaAlertBanner" class="hidden absolute bottom-24 left-4 right-4 bg-[#1e293b] border border-slate-800 p-4 rounded-2xl shadow-2xl z-50 page-active">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 bg-red-600/10 rounded-xl flex items-center justify-center font-bold text-red-500 text-lg shrink-0">
@@ -195,7 +190,6 @@
             </div>
         </div>
 
-        <!-- APPLICATION HEADER -->
         <header id="appHeader" class="hidden bg-[#181f32] border-b border-slate-800/60 px-5 py-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-2">
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
@@ -207,10 +201,8 @@
             </div>
         </header>
 
-        <!-- MAIN SPA CONTENT ROUTER -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
-            <!-- PAGE REGISTER -->
             <div id="page-register" class="hidden flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -257,7 +249,6 @@
                 </form>
             </div>
 
-            <!-- PAGE LOGIN -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
@@ -297,7 +288,6 @@
                 </form>
             </div>
 
-            <!-- PAGE HOME -->
             <div id="page-home" class="hidden p-5 space-y-5 page-active">
                 <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
                     <div>
@@ -348,7 +338,6 @@
                 </div>
             </div>
 
-            <!-- PAGE CONTACT -->
             <div id="page-contact" class="hidden p-5 space-y-4 page-active">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่
@@ -378,7 +367,6 @@
                 </div>
             </div>
 
-            <!-- PAGE LOCATION -->
             <div id="page-location" class="hidden p-5 space-y-4 page-active">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัท
@@ -390,7 +378,7 @@
                     <span class="text-[10px] text-slate-400 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
                 </div>
                 <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3 shadow-sm">
-                    <a href="https://maps.google.com/?q=MG+Ubonratchathani+(M2+Motorsport)" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
+                    <a href="https://maps.google.com" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
                         <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
                     </a>
                 </div>
@@ -398,7 +386,6 @@
 
         </main>
 
-        <!-- APPLICATION BOTTOM NAVIGATION -->
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
@@ -429,7 +416,6 @@
         
         // --- 📥 INITIALIZE LOCAL DATABASE & SESSIONS ---
         window.addEventListener('DOMContentLoaded', () => {
-            // สร้างฐานข้อมูลจำลองสำหรับเก็บรายชื่ออีเมลผู้ใช้งานใน LocalStorage (ถ้ายังไม่มี)
             if (!localStorage.getItem('mg_registered_emails')) {
                 const defaultDatabase = ["test@gmail.com", "admin@m2motorsport.com"];
                 localStorage.setItem('mg_registered_emails', JSON.stringify(defaultDatabase));
@@ -451,217 +437,64 @@
             }
         });
 
-        // PWA Banner Controls
-        window.addEventListener('beforeinstallprompt', (event) => {
-            event.preventDefault();
-            installTrigger = event;
-            document.getElementById('pwaAlertBanner').classList.remove('hidden');
-        });
-
-        function executePwaInstall() {
-            if (installTrigger) {
-                installTrigger.prompt();
-                installTrigger.userChoice.then(() => {
-                    installTrigger = null;
-                    document.getElementById('pwaAlertBanner').classList.add('hidden');
-                });
-            }
-        }
-
-        function closePwaBanner() {
-            document.getElementById('pwaAlertBanner').classList.add('hidden');
-        }
-
-        // Global Alert Utilities
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('customToast');
-            const iconBox = document.getElementById('toastIcon');
-            const msgText = document.getElementById('toastMessage');
-            
-            msgText.innerText = message;
-            if(type === 'success') {
-                iconBox.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
-                iconBox.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-            } else {
-                iconBox.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-400";
-                iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
-            }
-            
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 3500);
-        }
-
-        // SPA View Router
-        function changeView(viewId) {
+        // --- 🧭 SPA ROUTER (เปลี่ยนหน้าบนแอป) ---
+        function changeView(viewName) {
             const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
-            pages.forEach(p => {
-                const el = document.getElementById(p);
-                if (el) el.classList.add('hidden');
-            });
+            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
             
-            const activePage = document.getElementById(`page-${viewId}`);
-            if (activePage) activePage.classList.remove('hidden');
-
             const header = document.getElementById('appHeader');
-            const bottomNav = document.getElementById('bottomNav');
-            
-            if (viewId === 'login' || viewId === 'register') {
-                if(header) header.classList.add('hidden');
-                if(bottomNav) bottomNav.classList.add('hidden');
+            const nav = document.getElementById('bottomNav');
+
+            if (viewName === 'register') {
+                document.getElementById('page-register').classList.remove('hidden');
+                header.classList.add('hidden');
+                nav.classList.add('hidden');
+            } else if (viewName === 'login') {
+                document.getElementById('page-login').classList.remove('hidden');
+                header.classList.add('hidden');
+                nav.classList.add('hidden');
             } else {
-                if(header) header.classList.remove('hidden');
-                if(bottomNav) bottomNav.classList.remove('hidden');
-                
-                localStorage.setItem('mg_last_view', viewId);
-                
-                ['home', 'contact', 'location'].forEach(m => {
-                    const btn = document.getElementById(`btn-nav-${m}`);
-                    if(btn) {
-                        if(m === viewId) {
-                            btn.className = "flex flex-col items-center gap-1 text-red-500 transition-transform active:scale-90 cursor-pointer w-16";
-                        } else {
-                            btn.className = "flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16";
-                        }
+                document.getElementById(`page-${viewName}`).classList.remove('hidden');
+                header.classList.remove('hidden');
+                nav.classList.remove('hidden');
+                localStorage.setItem('mg_last_view', viewName);
+                updateNavHighlight(viewName);
+            }
+        }
+
+        function updateNavHighlight(viewName) {
+            const navs = ['home', 'contact', 'location'];
+            navs.forEach(n => {
+                const btn = document.getElementById(`btn-nav-${n}`);
+                if(btn) {
+                    if (n === viewName) {
+                        btn.classList.remove('text-slate-400');
+                        btn.classList.add('text-[#e50012]');
+                    } else {
+                        btn.classList.remove('text-[#e50012]');
+                        btn.classList.add('text-slate-400');
                     }
-                });
-            }
-        }
-
-        function togglePasswordVisibility(inputId, iconId) {
-            const field = document.getElementById(inputId);
-            const icon = document.getElementById(iconId);
-            if(field && icon) {
-                if(field.type === 'password') {
-                    field.type = 'text';
-                    icon.className = "fa-solid fa-eye";
-                } else {
-                    field.type = 'password';
-                    icon.className = "fa-solid fa-eye-slash";
                 }
-            }
+            });
         }
 
-        // --- 🚪 CONFIRMATION LOGOUT LOGIC ---
-        function triggerLogout() {
-            const modal = document.getElementById('logoutConfirmModal');
-            const box = modal.querySelector('.transform');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0', 'pointer-events-none');
-                box.classList.remove('scale-95');
-                box.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeLogoutModal() {
-            const modal = document.getElementById('logoutConfirmModal');
-            const box = modal.querySelector('.transform');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            box.classList.remove('scale-100');
-            box.classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); }, 250);
-        }
-
-        function confirmLogout() {
-            closeLogoutModal();
-            localStorage.removeItem('mg_user_session');
-            localStorage.removeItem('mg_last_view');
-            showToast('หนูพาออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
-            setTimeout(() => { window.location.reload(); }, 1000);
-        }
-
-        // --- 🔐 AUTHENTICATION BUSINESS PROCESS ---
-        function processLogin(event) {
-            event.preventDefault();
-            const emailInput = document.getElementById('login-email').value.trim().toLowerCase();
-            const emailDatabase = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
-
-            // ตรวจสอบเบื้องต้นว่าอีเมลนี้ถูกเปิดใช้งานในระบบแล้วหรือไม่
-            if (!emailDatabase.includes(emailInput) && emailInput !== "shinichi@gmail.com") {
-                showToast('ไม่พบอีเมลนี้ในระบบกรุณาลงทะเบียนก่อนค่ะ', 'error');
-                return;
-            }
-
-            localStorage.setItem('mg_user_session', 'active');
-            showToast('ยินดีต้อนรับกลับมาค่ะ', 'success');
-            setTimeout(() => { changeView('home'); }, 1000);
-        }
-
-        function processRegister(event) {
-            event.preventDefault();
-            const inputName = document.getElementById('reg-name').value.trim();
-            const inputEmail = document.getElementById('reg-email').value.trim().toLowerCase();
-            
-            // ดึงข้อมูลฐานข้อมูลอีเมลล่าสุดจาก LocalStorage
-            let emailDatabase = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
-
-            // 🛑 VALIDATION LAYER: ตรวจสอบความซ้ำซ้อนของอีเมลในระบบ
-            if (emailDatabase.includes(inputEmail)) {
-                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ', 'error');
-                return; 
-            }
-
-            // เพิ่มข้อมูลอีเมลใหม่ลงในระบบจำลองเพื่อล็อกไม่ให้สมัครซ้ำได้อีก
-            emailDatabase.push(inputEmail);
-            localStorage.setItem('mg_registered_emails', JSON.stringify(emailDatabase));
-
-            // บันทึกโปรไฟล์ส่วนตัว
-            localStorage.setItem('mg_profile_name', inputName);
-            document.getElementById('client-name').innerText = inputName;
-            
-            showToast('หนูบันทึกข้อมูลและลงทะเบียนสำเร็จแล้วค่ะ', 'success');
-            localStorage.setItem('mg_user_session', 'active');
-            setTimeout(() => { changeView('home'); }, 1200);
-        }
-
-        // Name Management
-        function openEditModal() {
-            const modal = document.getElementById('editNameModal');
-            const currentName = document.getElementById('client-name').innerText;
-            document.getElementById('new-profile-name').value = currentName === "คุณลูกค้า" ? "" : currentName;
-            modal.classList.remove('hidden');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editNameModal').classList.add('hidden');
-        }
-
-        function saveNewName(event) {
-            event.preventDefault();
-            const newName = document.getElementById('new-profile-name').value;
-            if(newName.trim() !== "") {
-                localStorage.setItem('mg_profile_name', newName);
-                document.getElementById('client-name').innerText = newName;
-                closeEditModal();
-                showToast('หนูอัปเดตชื่อให้เรียบร้อยค่ะ', 'success');
-            }
-        }
-
-        // Forgot Password Flows
-        function openForgotPasswordModal() {
-            document.getElementById('forgotPasswordModal').classList.remove('hidden');
-            backToStep1();
-        }
-
-        function closeForgotPasswordModal() {
-            document.getElementById('forgotPasswordModal').classList.add('hidden');
-            if(countdownTimer) clearInterval(countdownTimer);
-        }
-
-        function backToStep1() {
-            document.getElementById('forgot-step-1').classList.remove('hidden');
-            document.getElementById('forgot-step-2').classList.add('hidden');
-            document.getElementById('forgot-step-3').classList.add('hidden');
-            document.getElementById('forgot-result-box').classList.add('hidden');
-            if(countdownTimer) clearInterval(countdownTimer);
-        }
-
+        // --- ✉️ EMAILJS: ฟังก์ชันส่ง OTP สำหรับกู้คืนรหัสผ่าน ---
         function processRequestEmailOTP(event) {
             event.preventDefault();
-            const emailInput = document.getElementById('forgot-email').value.trim().toLowerCase();
+            const emailInput = document.getElementById('forgot-email').value.trim();
+            const resultBox = document.getElementById('forgot-result-box');
             const btnSubmit = document.getElementById('btn-submit-forgot');
             const textSubmit = document.getElementById('text-submit-forgot');
-            const resultBox = document.getElementById('forgot-result-box');
+
+            resultBox.classList.add('hidden');
+
+            // ตรวจสอบความถูกต้องของอีเมลในระบบ LocalStorage
+            let registeredEmails = JSON.stringify(localStorage.getItem('mg_registered_emails'));
+            if (!registeredEmails.includes(emailInput)) {
+                resultBox.innerText = "❌ ไม่พบอีเมลนี้ในระบบลงทะเบียนของเราค่ะ";
+                resultBox.classList.remove('hidden');
+                return;
+            }
 
             recoveryTargetEmail = emailInput;
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
@@ -670,76 +503,220 @@
             textSubmit.innerText = "กำลังจัดส่งรหัส...";
 
             const templateParams = {
-                to_email: recoveryTargetEmail,
-                otp_code: generatedOTP
+                email: recoveryTargetEmail,    // ตรงกับ To Email ในเว็บ EmailJS {{email}}
+                passcode: generatedOTP,        // ตรงกับ Content {{passcode}}
+                time: "15 นาที"                // ตรงกับ Content {{time}}
             };
 
-            emailjs.send('service_default', 'template_forgot', templateParams)
+            emailjs.send('service_7etoscl', 'gwsnbje', templateParams)
                 .then(() => {
                     showToast('จัดส่งรหัส OTP เรียบร้อยแล้วค่ะ', 'success');
-                    btnSubmit.disabled = false;
-                    textSubmit.innerText = "ส่งรหัสเข้าเมลฟรี";
                     
+                    // สลับไปยังหน้ากรอก OTP (Step 2)
                     document.getElementById('forgot-step-1').classList.add('hidden');
                     document.getElementById('forgot-step-2').classList.remove('hidden');
-                    document.getElementById('target-email-display').innerText = `ส่งรหัสสุ่มไปที่: ${recoveryTargetEmail}`;
-                    
-                    startOTPTimer();
-                }, (error) => {
+                    document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
+                    startOtpTimer();
+                })
+                .catch((error) => {
                     console.error('EmailJS Error:', error);
+                    showToast('เกิดข้อผิดพลาดในการส่ง กรุณาลองใหม่ค่ะ', 'error');
+                })
+                .finally(() => {
                     btnSubmit.disabled = false;
                     textSubmit.innerText = "ส่งรหัสเข้าเมลฟรี";
-                    resultBox.classList.remove('hidden');
-                    resultBox.innerText = "ระบบจัดส่งล้มเหลว กรุณาตรวจสอบการตั้งค่า EmailJS หรือ Public Key ค่ะ";
                 });
         }
 
-        function startOTPTimer() {
+        // --- ⏰ OTP COUNTDOWN TIMER ---
+        function startOtpTimer() {
+            clearInterval(countdownTimer);
             otpTimeLeft = 60;
             const timerDisplay = document.getElementById('otp-timer');
             timerDisplay.innerText = `${otpTimeLeft}s`;
-            
-            if(countdownTimer) clearInterval(countdownTimer);
-            
+
             countdownTimer = setInterval(() => {
                 otpTimeLeft--;
                 timerDisplay.innerText = `${otpTimeLeft}s`;
-                if(otpTimeLeft <= 0) {
+                if (otpTimeLeft <= 0) {
                     clearInterval(countdownTimer);
-                    generatedOTP = "EXPIRED_CODE_XYZ";
-                    timerDisplay.innerText = "หมดเวลา";
-                    showToast('รหัสความปลอดภัยหมดอายุแล้วค่ะ', 'error');
+                    showToast('รหัส OTP หมดอายุแล้ว กรุณากดส่งใหม่อีกครั้งค่ะ', 'error');
+                    backToStep1();
                 }
             }, 1000);
         }
 
+        // --- 🔍 VERIFY OTP & SAVE NEW PASSWORD ---
         function processVerifyOTP(event) {
             event.preventDefault();
-            const userOTP = document.getElementById('otp-code').value;
-            if(userOTP === generatedOTP && generatedOTP !== "EXPIRED_CODE_XYZ") {
+            const codeInput = document.getElementById('otp-code').value.trim();
+
+            if (codeInput === generatedOTP && otpTimeLeft > 0) {
                 clearInterval(countdownTimer);
-                showToast('ตรวจสอบสิทธิ์ถูกต้องเรียบร้อยค่ะ', 'success');
+                showToast('ยืนยันตัวตนสำเร็จ! กรุณากำหนดรหัสใหม่ค่ะ', 'success');
                 document.getElementById('forgot-step-2').classList.add('hidden');
                 document.getElementById('forgot-step-3').classList.remove('hidden');
             } else {
-                showToast('รหัสความปลอดภัยไม่ถูกต้องค่ะ', 'error');
+                showToast('รหัส OTP ไม่ถูกต้อง กรุณาเช็กข้อความในกล่องจดหมายค่ะ', 'error');
             }
         }
 
         function processSaveNewPassword(event) {
             event.preventDefault();
-            const p1 = document.getElementById('new-reset-password').value;
-            const p2 = document.getElementById('new-reset-password-confirm').value;
+            const newPass = document.getElementById('new-reset-password').value;
+            const confirmPass = document.getElementById('new-reset-password-confirm').value;
 
-            if(p1 !== p2) {
-                showToast('รหัสผ่านป้อนไม่ตรงกันค่ะ', 'error');
+            if (newPass !== confirmPass) {
+                showToast('รหัสผ่านทั้งสองช่องไม่ตรงกันค่ะ', 'error');
                 return;
             }
-            showToast('อัปเดตรหัสผ่านใหม่เรียบร้อยแล้วค่ะ', 'success');
+
+            showToast('เปลี่ยนรหัสผ่านใหม่สำเร็จเรียบร้อยแล้วค่ะ! ✨', 'success');
+            closeForgotPasswordModal();
+        }
+
+        function backToStep1() {
+            clearInterval(countdownTimer);
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+        }
+
+        // --- 👤 ACCOUNT MANAGEMENT: REGISTER & LOGIN ---
+        function processRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            
+            let currentDb = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+            if (!currentDb.includes(email)) {
+                currentDb.push(email);
+                localStorage.setItem('mg_registered_emails', JSON.stringify(currentDb));
+            }
+
+            localStorage.setItem('mg_profile_name', name);
+            document.getElementById('client-name').innerText = name;
+            localStorage.setItem('mg_user_session', 'active');
+            
+            showToast('สร้างบัญชีและเข้าสู่ระบบสำเร็จแล้วค่ะ! 🎉', 'success');
+            changeView('home');
+        }
+
+        function processLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            
+            let registeredEmails = localStorage.getItem('mg_registered_emails');
+            if (registeredEmails && registeredEmails.includes(email)) {
+                localStorage.setItem('mg_user_session', 'active');
+                if(!localStorage.getItem('mg_profile_name')) {
+                    localStorage.setItem('mg_profile_name', 'คุณลูกค้า MG Ubon');
+                }
+                document.getElementById('client-name').innerText = localStorage.getItem('mg_profile_name');
+                showToast('ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ ✨', 'success');
+                changeView('home');
+            } else {
+                showToast('ไม่พบข้อมูลผู้ใช้งาน กรุณาลงทะเบียนใหม่ค่ะ', 'error');
+            }
+        }
+
+        // --- 📝 PROFILE UPDATE ---
+        function saveNewName(event) {
+            event.preventDefault();
+            const newName = document.getElementById('new-profile-name').value.trim();
+            if (newName) {
+                localStorage.setItem('mg_profile_name', newName);
+                document.getElementById('client-name').innerText = newName;
+                showToast('อัปเดตชื่อผู้ใช้งานเรียบร้อยแล้วค่ะ', 'success');
+                closeEditModal();
+            }
+        }
+
+        // --- 🔒 MODALS HANDLERS (เปิด/ปิด หน้าต่าง) ---
+        function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
+        function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
+        
+        function openForgotPasswordModal() { 
+            document.getElementById('forgotPasswordModal').classList.remove('hidden'); 
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-3').classList.add('hidden');
+        }
+        function closeForgotPasswordModal() { 
+            document.getElementById('forgotPasswordModal').classList.add('hidden'); 
+            clearInterval(countdownTimer);
+        }
+
+        function triggerLogout() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.classList.remove('hidden');
             setTimeout(() => {
-                closeForgotPasswordModal();
-                changeView('login');
-            }, 1500);
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.querySelector('.transform').classList.remove('scale-95');
+            }, 10);
+        }
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 250);
+        }
+        function confirmLogout() {
+            localStorage.removeItem('mg_user_session');
+            closeLogoutModal();
+            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
+            changeView('login');
+        }
+
+        // --- 🖲️ UTILS: TOGGLE PASSWORD EYE ICON ---
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        }
+
+        // --- 🔔 CUSTOM TOAST NOTIFICATION ---
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('customToast');
+            const iconBox = document.getElementById('toastIcon');
+            const msgBox = document.getElementById('toastMessage');
+
+            msgBox.innerText = message;
+            
+            if (type === 'success') {
+                iconBox.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
+                iconBox.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else {
+                iconBox.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-400";
+                iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 350);
+        }
+
+        // --- 📲 PWA BANNER HANDLERS ---
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            installTrigger = e;
+            document.getElementById('pwaAlertBanner').classList.remove('hidden');
+        });
+        function closePwaBanner() { document.getElementById('pwaAlertBanner').classList.add('hidden'); }
+        function executePwaInstall() {
+            if (installTrigger) {
+                installTrigger.prompt();
+                installTrigger.userChoice.then(() => {
+                    installTrigger = null;
+                    closePwaBanner();
+                });
+            }
         }
     </script>
 </body>
