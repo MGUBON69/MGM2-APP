@@ -637,22 +637,29 @@
             changeView('home');
         }
 
-        function processRegister(event) {
-            event.preventDefault();
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            
-            let currentEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
-            if (!currentEmails.includes(email)) {
-                currentEmails.push(email);
-                localStorage.setItem('mg_registered_emails', JSON.stringify(currentEmails));
-            }
-            
-            localStorage.setItem('mg_profile_name', name);
-            document.getElementById('client-name').innerText = name;
-            localStorage.setItem('mg_user_session', 'active');
-            changeView('home');
-        }
+     function processRegister(event) {
+    event.preventDefault();
+    const name = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value;
+    
+    let currentEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+    
+    // ตรวจสอบว่ามีอีเมลนี้ในระบบหรือยัง
+    if (currentEmails.includes(email)) {
+        showToast("❌ อีเมลนี้ถูกลงทะเบียนในระบบแล้วค่ะ กรุณาใช้อีเมลอื่น", "error");
+        return; // หยุดการทำงาน ไม่ให้ลงทะเบียนต่อ
+    }
+    
+    // ถ้ายังไม่มีอีเมลในระบบ ให้บันทึกใหม่
+    currentEmails.push(email);
+    localStorage.setItem('mg_registered_emails', JSON.stringify(currentEmails));
+    
+    localStorage.setItem('mg_profile_name', name);
+    document.getElementById('client-name').innerText = name;
+    localStorage.setItem('mg_user_session', 'active');
+    changeView('home');
+    showToast("✅ ลงทะเบียนสำเร็จ ยินดีต้อนรับค่ะ", "success");
+}
 
         function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
         function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
