@@ -20,7 +20,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
-            // ยืนยันสิทธิ์เริ่มต้นการใช้งาน EmailJS ด้วย Public Key ของคุณชินอิจิ
             emailjs.init("KSS0THK1eB1HxrAsn"); 
         })();
     </script>
@@ -414,7 +413,6 @@
         let otpTimeLeft = 60;
         let recoveryTargetEmail = "";    
         
-        // --- 📥 INITIALIZE LOCAL DATABASE & SESSIONS ---
         window.addEventListener('DOMContentLoaded', () => {
             if (!localStorage.getItem('mg_registered_emails')) {
                 const defaultDatabase = ["test@gmail.com", "admin@m2motorsport.com"];
@@ -437,7 +435,6 @@
             }
         });
 
-        // --- 🧭 SPA ROUTER (เปลี่ยนหน้าบนแอป) ---
         function changeView(viewName) {
             const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
             pages.forEach(p => document.getElementById(p).classList.add('hidden'));
@@ -478,7 +475,6 @@
             });
         }
 
-        // --- ✉️ EMAILJS: ฟังก์ชันส่ง OTP สำหรับกู้คืนรหัสผ่าน ---
         function processRequestEmailOTP(event) {
             event.preventDefault();
             const emailInput = document.getElementById('forgot-email').value.trim();
@@ -488,8 +484,13 @@
 
             resultBox.classList.add('hidden');
 
-            // ตรวจสอบความถูกต้องของอีเมลในระบบ LocalStorage
-            let registeredEmails = JSON.stringify(localStorage.getItem('mg_registered_emails'));
+            let registeredEmails = [];
+            try {
+                registeredEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+            } catch(e) {
+                registeredEmails = [];
+            }
+
             if (!registeredEmails.includes(emailInput)) {
                 resultBox.innerText = "❌ ไม่พบอีเมลนี้ในระบบลงทะเบียนของเราค่ะ";
                 resultBox.classList.remove('hidden');
@@ -503,16 +504,14 @@
             textSubmit.innerText = "กำลังจัดส่งรหัส...";
 
             const templateParams = {
-                email: recoveryTargetEmail,    // ตรงกับ To Email ในเว็บ EmailJS {{email}}
-                passcode: generatedOTP,        // ตรงกับ Content {{passcode}}
-                time: "15 นาที"                // ตรงกับ Content {{time}}
+                email: recoveryTargetEmail,    
+                passcode: generatedOTP,        
+                time: "15 นาที"                
             };
 
             emailjs.send('service_7etoscl', 'gwsnbje', templateParams)
                 .then(() => {
                     showToast('จัดส่งรหัส OTP เรียบร้อยแล้วค่ะ', 'success');
-                    
-                    // สลับไปยังหน้ากรอก OTP (Step 2)
                     document.getElementById('forgot-step-1').classList.add('hidden');
                     document.getElementById('forgot-step-2').classList.remove('hidden');
                     document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
@@ -528,7 +527,6 @@
                 });
         }
 
-        // --- ⏰ OTP COUNTDOWN TIMER ---
         function startOtpTimer() {
             clearInterval(countdownTimer);
             otpTimeLeft = 60;
@@ -546,7 +544,6 @@
             }, 1000);
         }
 
-        // --- 🔍 VERIFY OTP & SAVE NEW PASSWORD ---
         function processVerifyOTP(event) {
             event.preventDefault();
             const codeInput = document.getElementById('otp-code').value.trim();
@@ -581,17 +578,26 @@
             document.getElementById('forgot-step-1').classList.remove('hidden');
         }
 
-        // --- 👤 ACCOUNT MANAGEMENT: REGISTER & LOGIN ---
         function processRegister(event) {
             event.preventDefault();
             const name = document.getElementById('reg-name').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             
-            let currentDb = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
-            if (!currentDb.includes(email)) {
-                currentDb.push(email);
-                localStorage.setItem('mg_registered_emails', JSON.stringify(currentDb));
+            let currentDb = [];
+            try {
+                currentDb = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+            } catch(e) {
+                currentDb = [];
             }
+            
+            // 🚨 ตรวจสอบไม่ให้อีเมลซ้ำซ้อนในฐานข้อมูลระบบ
+            if (currentDb.includes(email)) {
+                showToast('❌ อีเมลนี้เคยถูกใช้งานในระบบแล้วค่ะ กรุณาใช้เมลอื่น', 'error');
+                return;
+            }
+            
+            currentDb.push(email);
+            localStorage.setItem('mg_registered_emails', JSON.stringify(currentDb));
 
             localStorage.setItem('mg_profile_name', name);
             document.getElementById('client-name').innerText = name;
@@ -605,8 +611,14 @@
             event.preventDefault();
             const email = document.getElementById('login-email').value.trim();
             
-            let registeredEmails = localStorage.getItem('mg_registered_emails');
-            if (registeredEmails && registeredEmails.includes(email)) {
+            let registeredEmails = [];
+            try {
+                registeredEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+            } catch(e) {
+                registeredEmails = [];
+            }
+
+            if (registeredEmails.includes(email)) {
                 localStorage.setItem('mg_user_session', 'active');
                 if(!localStorage.getItem('mg_profile_name')) {
                     localStorage.setItem('mg_profile_name', 'คุณลูกค้า MG Ubon');
@@ -619,7 +631,6 @@
             }
         }
 
-        // --- 📝 PROFILE UPDATE ---
         function saveNewName(event) {
             event.preventDefault();
             const newName = document.getElementById('new-profile-name').value.trim();
@@ -631,7 +642,6 @@
             }
         }
 
-        // --- 🔒 MODALS HANDLERS (เปิด/ปิด หน้าต่าง) ---
         function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
         function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
         
@@ -667,7 +677,6 @@
             changeView('login');
         }
 
-        // --- 🖲️ UTILS: TOGGLE PASSWORD EYE ICON ---
         function togglePasswordVisibility(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -682,7 +691,6 @@
             }
         }
 
-        // --- 🔔 CUSTOM TOAST NOTIFICATION ---
         function showToast(message, type = 'success') {
             const toast = document.getElementById('customToast');
             const iconBox = document.getElementById('toastIcon');
@@ -699,10 +707,9 @@
             }
 
             toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 350);
+            setTimeout(() => toast.classList.add('hidden'), 3500); 
         }
 
-        // --- 📲 PWA BANNER HANDLERS ---
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             installTrigger = e;
