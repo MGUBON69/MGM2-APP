@@ -165,7 +165,7 @@
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </div>
                 <h4 class="text-base font-bold text-white mb-1.5">ยืนยันการออกจากระบบ?</h4>
-                <p class="text-xs text-slate-400 leading-relaxed px-2 mb-6">ชินอิจิ มั่นใจหรือไม่ว่าต้องการออกจากระบบในตอนนี้? เซสชันจะถูกยกเลิกเพื่อความปลอดภัยค่ะ</p>
+                <p class="text-xs text-slate-400 leading-relaxed px-2 mb-6">มั่นใจหรือไม่ว่าต้องการออกจากระบบในตอนนี้? เซสชันจะถูกยกเลิกเพื่อความปลอดภัยค่ะ</p>
                 
                 <div class="flex gap-3 text-xs font-semibold">
                     <button onclick="closeLogoutModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors cursor-pointer border border-slate-700/50">
@@ -215,7 +215,7 @@
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
                     <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
-                    <p class="text-xs text-slate-400 mt-1">ชินอิจิ กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
+                    <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
                 </div>
 
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
@@ -262,7 +262,7 @@
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
                     <h2 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h2>
-                    <p class="text-xs text-slate-400 mt-1">ชินอิจิ ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
+                    <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
                 </div>
 
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
@@ -303,7 +303,7 @@
                     <div>
                         <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
                         <h3 id="client-name" class="text-lg font-bold text-white">คุณลูกค้า</h3>
-                        <p class="text-xs text-slate-400 mt-1">คิมยินดีต้อนรับชินอิจิเข้าสู่แอปพลิเคชันค่ะ ✨</p>
+                        <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชันค่ะ ✨</p>
                     </div>
                     <button onclick="openEditModal()" class="w-12 h-12 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner cursor-pointer transition-colors" title="แก้ไขชื่อ">
                         <i class="fa-solid fa-user-gear text-xl"></i>
@@ -566,7 +566,7 @@
             closeLogoutModal();
             localStorage.removeItem('mg_user_session');
             localStorage.removeItem('mg_last_view');
-            showToast('คิมพาออกจากระบบเรียบร้อยแล้วค่ะ ชินอิจิ', 'success');
+            showToast('หนูพาออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
             setTimeout(() => { window.location.reload(); }, 1000);
         }
 
@@ -583,7 +583,7 @@
             }
 
             localStorage.setItem('mg_user_session', 'active');
-            showToast('คิมยินดีต้อนรับกลับมาค่ะ ชินอิจิ', 'success');
+            showToast('ยินดีต้อนรับกลับมาค่ะ', 'success');
             setTimeout(() => { changeView('home'); }, 1000);
         }
 
@@ -597,7 +597,7 @@
 
             // 🛑 VALIDATION LAYER: ตรวจสอบความซ้ำซ้อนของอีเมลในระบบ
             if (emailDatabase.includes(inputEmail)) {
-                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ ชินอิจิ', 'error');
+                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ', 'error');
                 return; 
             }
 
@@ -609,7 +609,7 @@
             localStorage.setItem('mg_profile_name', inputName);
             document.getElementById('client-name').innerText = inputName;
             
-            showToast('คิมบันทึกข้อมูลและลงทะเบียนสำเร็จแล้วค่ะ ชินอิจิ', 'success');
+            showToast('หนูบันทึกข้อมูลและลงทะเบียนสำเร็จแล้วค่ะ', 'success');
             localStorage.setItem('mg_user_session', 'active');
             setTimeout(() => { changeView('home'); }, 1200);
         }
@@ -633,7 +633,7 @@
                 localStorage.setItem('mg_profile_name', newName);
                 document.getElementById('client-name').innerText = newName;
                 closeEditModal();
-                showToast('คิมอัปเดตชื่อให้ชินอิจิเรียบร้อยค่ะ', 'success');
+                showToast('หนูอัปเดตชื่อให้เรียบร้อยค่ะ', 'success');
             }
         }
 
@@ -708,7 +708,7 @@
                     clearInterval(countdownTimer);
                     generatedOTP = "EXPIRED_CODE_XYZ";
                     timerDisplay.innerText = "หมดเวลา";
-                    showToast('รหัสความปลอดภัยหมดอายุแล้วค่ะ ชินอิจิ', 'error');
+                    showToast('รหัสความปลอดภัยหมดอายุแล้วค่ะ', 'error');
                 }
             }, 1000);
         }
@@ -722,7 +722,7 @@
                 document.getElementById('forgot-step-2').classList.add('hidden');
                 document.getElementById('forgot-step-3').classList.remove('hidden');
             } else {
-                showToast('รหัสความปลอดภัยไม่ถูกต้องค่ะ ชินอิจิ', 'error');
+                showToast('รหัสความปลอดภัยไม่ถูกต้องค่ะ', 'error');
             }
         }
 
@@ -732,7 +732,7 @@
             const p2 = document.getElementById('new-reset-password-confirm').value;
 
             if(p1 !== p2) {
-                showToast('รหัสผ่านป้อนไม่ตรงกันค่ะ ชินอิจิ', 'error');
+                showToast('รหัสผ่านป้อนไม่ตรงกันค่ะ', 'error');
                 return;
             }
             showToast('อัปเดตรหัสผ่านใหม่เรียบร้อยแล้วค่ะ', 'success');
