@@ -499,15 +499,22 @@
             recoveryTargetEmail = emailInput;
             
             // 🔔 แจ้งเตือน: อย่าลืมแก้ไขค่า 2 บรรทัดนี้ให้ตรงกับ Dashboard ของคุณชินอิจินะคะ
-            const serviceID = "service_7etoscl"; 
-            const templateID = "gwsnbje"; 
-            
-            emailjs.send(serviceID, templateID, {
-                email: recoveryTargetEmail,
-                passcode: generatedOTP
-            })
-            .then(() => {
-                showToast("📧 จัดส่งรหัสยืนยันไปยังอีเมลของคุณสำเร็จแล้วค่ะ", "success");
+// บรรทัด 501-503 เดิมของคุณชินอิจิ
+    const serviceID = "service_7etoscl";
+    const templateID = "gwsnbje";
+
+    // จัดกลุ่มข้อมูลที่จะส่งให้ EmailJS ให้เรียบร้อยก่อน
+    const templateParams = {
+        email: recoveryTargetEmail,
+        passcode: generatedOTP,
+        time: expireTime
+    };
+
+    // เรียกใช้ฟังก์ชันส่งข้อมูลที่ถูกต้องตามหลัก Syntax
+    emailjs.send(serviceID, templateID, templateParams)
+        .then(() => {
+            showToast("📨 จัดส่งรหัสยืนยันไปยังอีเมลของท่านสำเร็จแล้วค่ะ", "success");
+            // โค้ดสลับหน้าต่างและเปิด Timer บรรทัดถัดไปของคุณชินอิจิ...
                 
                 document.getElementById('forgot-step-1').classList.add('hidden');
                 document.getElementById('forgot-step-2').classList.remove('hidden');
