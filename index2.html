@@ -474,67 +474,69 @@
         // 🔑 ระบบกู้คืนรหัสผ่าน และเชื่อมต่อ EMAILJS
         // ==========================================
 
+      // 📨 ฟังก์ชันส่งรหัส OTP เข้าอีเมล (ฉบับปรับปรุงไวยากรณ์)
         function processRequestEmailOTP(event) {
-    event.preventDefault();
-    
-    const emailInput = document.getElementById('forgot-email').value.trim();
-    const resultBox = document.getElementById('forgot-result-box');
-    const btnSubmit = document.getElementById('btn-submit-forgot');
-    const textSubmit = document.getElementById('text-submit-forgot');
-    
-    resultBox.classList.add('hidden');
-    
-    const registeredEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
-    
-    if (!registeredEmails.includes(emailInput)) {
-        resultBox.innerText = "❌ ไม่พบอีเมลนี้ในระบบลงทะเบียนค่ะ";
-        resultBox.classList.remove('hidden');
-        return;
-    }
-    
-    btnSubmit.disabled = true;
-    textSubmit.innerText = "กำลังส่งรหัส OTP...";
-    
-    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-    recoveryTargetEmail = emailInput;
-    
-    // 🔥 [แก้ไขเพิ่มเติม] ประกาศและคำนวณเวลาหมดอายุ (+15 นาทีตามหน้า Template)
-    const expireTime = new Date(Date.now() + 15 * 60000).toLocaleTimeString('th-TH', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    });
-
-    const serviceID = "service_7etoscl";
-    const templateID = "gwsnbje";
-
-    const templateParams = {
-        email: recoveryTargetEmail,
-        passcode: generatedOTP,
-        time: expireTime // 👈 คราวนี้ใช้งานได้ฉลุยแล้วค่ะ
-    };
-
-    // เรียกใช้ฟังก์ชันส่งข้อมูล
-    emailjs.send(serviceID, templateID, templateParams)
-        .then(() => {
-            showToast("📨 จัดส่งรหัสยืนยันไปยังอีเมลของท่านสำเร็จแล้วค่ะ", "success");
+            event.preventDefault();
             
-            document.getElementById('forgot-step-1').classList.add('hidden');
-            document.getElementById('forgot-step-2').classList.remove('hidden');
-            document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
+            const emailInput = document.getElementById('forgot-email').value.trim();
+            const resultBox = document.getElementById('forgot-result-box');
+            const btnSubmit = document.getElementById('btn-submit-forgot');
+            const textSubmit = document.getElementById('text-submit-forgot');
             
-            startOTPTimer();
-        })
-        .catch((error) => {
-            console.error("EmailJS Error:", error);
-            resultBox.innerText = "⚠️ เกิดข้อผิดพลาดในการส่งอีเมล กรุณาลองใหม่อีกครั้งค่ะ";
-            resultBox.classList.remove('hidden');
-        })
-        .finally(() => {
-            btnSubmit.disabled = false;
-            textSubmit.innerText = "ส่งรหัสเข้าเมลฟรี";
-        });
-}
+            resultBox.classList.add('hidden');
+            
+            const registeredEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+            
+            // ตรวจสอบว่าอีเมลนี้เคยลงทะเบียนไว้ในระบบหรือไม่
+            if (!registeredEmails.includes(emailInput)) {
+                resultBox.innerText = "❌ ไม่พบอีเมลนี้ในระบบลงทะเบียนค่ะ";
+                resultBox.classList.remove('hidden');
+                return;
+            }
+            
+            btnSubmit.disabled = true;
+            textSubmit.innerText = "กำลังส่งรหัส OTP...";
+            
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            recoveryTargetEmail = emailInput;
+            
+            // ⏰ ประกาศและคำนวณเวลาหมดอายุสำหรับส่งเข้า EmailJS Template (+15 นาที)
+            const expireTime = new Date(Date.now() + 15 * 60000).toLocaleTimeString('th-TH', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
 
+            const serviceID = "service_7etoscl";
+            const templateID = "gwsnbje";
+
+            const templateParams = {
+                email: recoveryTargetEmail,
+                passcode: generatedOTP,
+                time: expireTime
+            };
+
+            // เรียกส่งข้อมูลไปยัง EmailJS ด้วยโครงสร้างปีกกาและวงเล็บที่ถูกต้อง
+            emailjs.send(serviceID, templateID, templateParams)
+                .then(() => {
+                    // เรียกใช้ฟังก์ชันแสดงกล่องแจ้งเตือนความสำเร็จ (Toast)
+                    showToast("📨 จัดส่งรหัสยืนยันไปยังอีเมลของท่านสำเร็จแล้วค่ะ", "success");
+                    
+                    document.getElementById('forgot-step-1').classList.add('hidden');
+                    document.getElementById('forgot-step-2').classList.remove('hidden');
+                    document.getElementById('target-email-display').innerText = `ส่งรหัสไปยัง: ${recoveryTargetEmail}`;
+                    
+                    startOTPTimer();
+                })
+                .catch((error) => {
+                    console.error("EmailJS Error:", error);
+                    resultBox.innerText = "⚠️ เกิดข้อผิดพลาดในการส่งอีเมล กรุณาลองใหม่อีกครั้งค่ะ";
+                    resultBox.classList.remove('hidden');
+                })
+                .finally(() => {
+                    btnSubmit.disabled = false;
+                    textSubmit.innerText = "ส่งรหัสเข้าเมลฟรี";
+                });
+        }
 function processVerifyOTP(event) {
     event.preventDefault();
     const inputOTP = document.getElementById('otp-code').value.trim();
