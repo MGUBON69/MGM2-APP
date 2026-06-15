@@ -499,12 +499,12 @@
             recoveryTargetEmail = emailInput;
             
             // 🔔 แจ้งเตือน: อย่าลืมแก้ไขค่า 2 บรรทัดนี้ให้ตรงกับ Dashboard ของคุณชินอิจินะคะ
-            const serviceID = "YOUR_SERVICE_ID"; 
-            const templateID = "YOUR_TEMPLATE_ID"; 
+            const serviceID = "service_7etoscl"; 
+            const templateID = "gwsnbje"; 
             
             emailjs.send(serviceID, templateID, {
-                to_email: recoveryTargetEmail,
-                otp_code: generatedOTP
+                email: recoveryTargetEmail,
+                passcode: generatedOTP
             })
             .then(() => {
                 showToast("📧 จัดส่งรหัสยืนยันไปยังอีเมลของคุณสำเร็จแล้วค่ะ", "success");
