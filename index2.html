@@ -443,35 +443,40 @@
                     <p class="text-xs text-slate-400 mt-1">กรอกรายละเอียดรถยนต์เพื่อผูกข้อมูลบริการค่ะ</p>
                 </div>
 
-                <form id="car-registration-form" class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processCarRegistration(event)">
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">เลขตัวถังรถ</label>
-                        <input type="text" id="car-vin" required placeholder="กรอกเลขตัวถังรถ 17 หลัก"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">รุ่นรถ</label>
-                        <input type="text" id="car-model" required placeholder="เช่น MG4, MG S5, MG ZS"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">สีรถ</label>
-                        <input type="text" id="car-color" required placeholder="เช่น แดง, ดำ, ขาวมุก"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">ชื่อเจ้าของรถ</label>
-                        <input type="text" id="owner-name" required placeholder="ชื่อ - นามสกุล ผู้จดทะเบียน"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
+               <form id="car-registration-form" onsubmit="processCarRegistration(event)" class="space-y-4 flex-1 flex flex-col justify-center">
+    <div class="space-y-1">
+        <label class="text-xs text-slate-400 font-medium">เลขตัวถัง</label>
+        <input type="text" id="car-vin" required placeholder="กรอกเลขตัวถัง 17 หลัก" 
+               class="w-full bg-[#0b0f12] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+    </div>
 
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
-                        <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกข้อมูลรถยนต์
-                    </button>
-                </form>
+    <div class="space-y-1">
+        <label class="text-xs text-slate-400 font-medium">รุ่นรถ</label>
+        <input type="text" id="car-model" required placeholder="เช่น MG4, MG ZS" 
+               class="w-full bg-[#0b0f12] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+    </div>
+
+    <div class="space-y-1">
+        <label class="text-xs text-slate-400 font-medium">สีรถ</label>
+        <input type="text" id="car-color" required placeholder="เช่น แดง, ดำ, ขาวมุก" 
+               class="w-full bg-[#0b0f12] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+    </div>
+
+    <div class="space-y-1">
+        <label class="text-xs text-slate-400 font-medium">ชื่อเจ้าของรถ</label>
+        <input type="text" id="owner-name" required placeholder="ชื่อ - นามสกุล ผู้จัดทะเบียน" 
+               class="w-full bg-[#0b0f12] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+    </div>
+
+    <div class="pt-2 flex gap-2">
+        <button type="submit" id="btn-submit-car" class="flex-1 bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i> <span id="text-submit-car">บันทึกข้อมูลรถยนต์</span>
+        </button>
+        <button type="button" id="btn-edit-car" onclick="enableCarEdit()" class="hidden flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-pen-to-square"></i> <span>แก้ไขข้อมูล</span>
+        </button>
+    </div>
+</form>
             </div>
        </main>
 
@@ -622,37 +627,92 @@
 
         // 📥 วางต่อท้ายฟังก์ชัน changeView ได้เลยค่ะคุณชินอิจิ
 
+// 📥 วางทับแทนฟังก์ชัน processCarRegistration เดิมได้เลยค่ะคุณชินอิจิ
+
+// ฟังก์ชันบันทึกข้อมูลและล็อกฟอร์ม
 function processCarRegistration(event) {
-    // ป้องกันไม่ให้หน้าเว็บโหลดใหม่เมื่อกดปุ่ม Submit
     event.preventDefault(); 
 
-    // ดึงค่าข้อมูลจาก ID ของ Input แต่ละตัวในฟอร์มที่คุณชินอิจิสร้างไว้
-    const vin = document.getElementById('car-vin') ? document.getElementById('car-vin').value : '';
-    const model = document.getElementById('car-model') ? document.getElementById('car-model').value : '';
-    const color = document.getElementById('car-color') ? document.getElementById('car-color').value : '';
-    const owner = document.getElementById('owner-name') ? document.getElementById('owner-name').value : '';
+    const vin = document.getElementById('car-vin').value;
+    const model = document.getElementById('car-model').value;
+    const color = document.getElementById('car-color').value;
+    const owner = document.getElementById('owner-name').value;
 
-    // รวมร่างข้อมูลเป็น Object เพื่อเตรียมนำไปใช้งานต่อ (เช่น ส่งเข้าฐานข้อมูลหรือสเปรดชีต)
     const carRegistrationData = {
         vinCode: vin,
         carModel: model,
         carColor: color,
         ownerName: owner,
-        registeredAt: new Date().toLocaleString('th-TH') // บันทึกวันเวลาที่กดสมัครแบบไทย
+        registeredAt: new Date().toLocaleString('th-TH')
     };
 
-    // แสดงผลข้อมูลที่บันทึกได้ใน Console เพื่อให้คุณชินอิจิเช็กหลังบ้านได้ง่ายๆ
-    console.log("📌 บันทึกข้อมูลรถยนต์สมาชิกสำเร็จ:", carRegistrationData);
+    // เซฟข้อมูลลงเครื่องถาวร (LocalStorage)
+    localStorage.setItem('mg_car_data', JSON.stringify(carRegistrationData));
 
-    // แสดงกล่องแจ้งเตือนความสำเร็จให้ผู้ใช้เห็น
+    console.log("📌 บันทึกและค้างข้อมูลสำเร็จ:", carRegistrationData);
     alert('ระบบทำการบันทึกข้อมูลรถยนต์สมาชิกเรียบร้อยแล้วค่ะ!');
 
-    // ล้างข้อมูลในฟอร์มให้กลับเป็นค่าว่าง พร้อมรับคันต่อไป
-    const registrationForm = event.target;
-    if (registrationForm) {
-        registrationForm.reset();
+    // สั่งล็อกฟอร์มทันทีหลังบันทึก
+    lockCarForm();
+}
+
+// ฟังก์ชันสั่งล็อกกล่องข้อความ และสลับปุ่มเป็น "แก้ไข"
+function lockCarForm() {
+    const inputs = ['car-vin', 'car-model', 'car-color', 'owner-name'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.readOnly = true;
+            el.classList.add('opacity-70', 'bg-slate-900'); // ปรับสีให้ดูว่าล็อกอยู่
+        }
+    });
+
+    // ซ่อนปุ่มบันทึก แสดงปุ่มแก้ไข
+    const btnSubmit = document.getElementById('btn-submit-car');
+    const btnEdit = document.getElementById('btn-edit-car');
+    if (btnSubmit && btnEdit) {
+        btnSubmit.classList.add('hidden');
+        btnEdit.classList.remove('hidden');
     }
 }
+
+// ฟังก์ชันกดปุ่ม "แก้ไข" เพื่อปลดล็อกให้พิมพ์ได้อีกครั้ง
+function enableCarEdit() {
+    const inputs = ['car-vin', 'car-model', 'car-color', 'owner-name'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.readOnly = false;
+            el.classList.remove('opacity-70', 'bg-slate-900');
+        }
+    });
+
+    // แสดงปุ่มบันทึก ปรับข้อความตัวปุ่ม และซ่อนปุ่มแก้ไข
+    const btnSubmit = document.getElementById('btn-submit-car');
+    const textSubmit = document.getElementById('text-submit-car');
+    const btnEdit = document.getElementById('btn-edit-car');
+    
+    if (btnSubmit && btnEdit) {
+        if (textSubmit) textSubmit.innerText = "บันทึกการแก้ไข";
+        btnSubmit.classList.remove('hidden');
+        btnEdit.classList.add('hidden');
+    }
+}
+
+// โหลดข้อมูลเก่าที่เคยเซฟไว้ขึ้นมาโชว์ทันทีเมื่อเปิดหน้าเว็บ (Auto-Fill)
+document.addEventListener("DOMContentLoaded", function() {
+    const savedData = localStorage.getItem('mg_car_data');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        if(document.getElementById('car-vin')) document.getElementById('car-vin').value = data.vinCode || '';
+        if(document.getElementById('car-model')) document.getElementById('car-model').value = data.carModel || '';
+        if(document.getElementById('car-color')) document.getElementById('car-color').value = data.carColor || '';
+        if(document.getElementById('owner-name')) document.getElementById('owner-name').value = data.ownerName || '';
+        
+        // ล็อกหน้าจอไว้ตั้งแต่เริ่มถ้ามีข้อมูลแล้ว
+        lockCarForm();
+    }
+});
         // ==========================================
         // 🔑 ระบบกู้คืนรหัสผ่าน และเชื่อมต่อ EMAILJS
         // ==========================================
