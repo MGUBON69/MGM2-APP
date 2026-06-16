@@ -718,34 +718,75 @@ function processVerifyOTP(event) {
             changeView('home');
         }
 
-    function processRegister(event) {
-    event.preventDefault();
-    const name = document.getElementById('reg-name').value;
+   // --- ส่วนการสมัครสมาชิก (แก้ไข BUG กรอกมั่วแล้วเด้งเข้าแอป) ---
+function processRegister(event) {
+    event.preventDefault(); // ป้องกันการรีเฟรชหน้าจอตามมาตรฐาน
+    
+    // ดึงค่าและตัดช่องว่าง (Trim) ออกให้หมดเพื่อความปลอดภัย
+    const name = document.getElementById('reg-name').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
     const email = document.getElementById('reg-email').value.trim().toLowerCase();
-    const password = document.getElementById('reg-password').value; // ดึงค่ารหัสผ่านมาเก็บด้วย
-    
-    // ดึงฐานข้อมูลผู้ใช้ (เปลี่ยนรูปแบบการเก็บเป็น Object แต่อ้างอิงคีย์ชื่อเดิมเพื่อไม่ให้กระทบส่วนอื่น)
-    let currentUsers = JSON.parse(localStorage.getItem('mg_registered_users')) || {};
-    let currentEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
-    
-    if (currentEmails.includes(email)) {
-        showToast("❌ อีเมลนี้ถูกลงทะเบียนในระบบแล้วค่ะ กรุณาใช้อีเมลอื่น", "error");
+    const password = document.getElementById('reg-password').value;
+
+    // 1. ตรวจสอบความสมบูรณ์ของข้อมูลก่อนบันทึก (Input Validation Guard)
+    if (!name || !phone || !email || !password) {
+        showToast('กรุณากรอกข้อมูลส่วนตัวให้ครบทุกช่องค่ะคุณชินอิจิ', 'error');
         return;
     }
+
+    if (password.length < 6) {
+        showToast('เพื่อความปลอดภัย รหัสผ่านต้องยาว 6 ตัวขึ้นไปค่ะ', 'error');
+        return;
+    }
+
+    // 2. ดึงข้อมูลผู้ใช้ปัจจุบันจาก Database (localStorage)
+    let users = AppState.getUsers();
+
+    // 3. ตรวจสอบว่าอีเมลนี้เคยลงทะเบียนไว้หรือยัง (Data Duplication Check)
+    if (users[email]) {
+        showToast('อีเมลนี้ถูกใช้งานในระบบแล้วค่ะ กรุณาใช้คุณอีเมลอื่นนะคะ', 'error');
+        return;
+    }
+
+    // 4. บันทึกข้อมูลเข้าฐานข้อมูลระบบอย่างปลอดภัย *ห้ามสั่งบันทึก Current User*
+    users[email] = { name, phone, email, password };
+    AppState.setUsers(users);
+
+    // 5. แจ้งสถานะความสำเร็จ และสั่งย้ายหน้ากลับไปที่หน้า Login เสมอ (Isolation Control)
+    showToast('ลงทะเบียนสำเร็จแล้วค่ะ กรุณาเข้าสู่ระบบอีกครั้งเพื่อความปลอดภัยค่ะ', 'success');
     
-    // บันทึกอีเมลลงอาร์เรย์เดิมเพื่อไม่ให้ฟังก์ชันเช็ก OTP พัง
-    currentEmails.push(email);
-    localStorage.setItem('mg_registered_emails', JSON.stringify(currentEmails));
+    event.target.reset(); // ล้างข้อมูลในฟอร์มออกทั้งหมด
+
+    // บังคับเปลี่ยนหน้าไปที่ Login หลังจากผู้ใช้เห็น Toast (ไม่เด้งเข้าหน้าหลักเด็ดขาด)
+    setTimeout(() => {
+        changeView('login');
+    }, 1500);
+}
+
+// --- ส่วนตรวจสอบการเข้าสู่ระบบ (Authentication Controller) ---
+function processLogin(event) {
+    event.preventDefault();
     
-    // บันทึกรหัสผ่านผูกกับอีเมลไว้ในคีย์ใหม่
-    currentUsers[email] = password;
-    localStorage.setItem('mg_registered_users', JSON.stringify(currentUsers));
-    
-    localStorage.setItem('mg_profile_name', name);
-    document.getElementById('client-name').innerText = name;
-    localStorage.setItem('mg_user_session', 'active');
-    changeView('home');
-    showToast("✅ ลงทะเบียนสำเร็จ ยินดีต้อนรับค่ะ", "success");
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const password = document.getElementById('login-password').value;
+
+    const users = AppState.getUsers();
+    const user = users[email];
+
+    // ตรวจสอบอย่างละเอียด: ต้องมีบัญชีนั้นอยู่จริง และรหัสต้องตรงกัน 100%
+    if (user && user.password === password) {
+        // เมื่อข้อมูลถูกต้องแท้จริงเท่านั้น ถึงจะให้สิทธิ์จดจำเซสชันการเข้าสู่ระบบ
+        AppState.setCurrentUser(user);
+        showToast(`ยินดีต้อนรับกลับสู่ระบบค่ะคุณ ${user.name}`, 'success');
+        
+        event.target.reset();
+        setTimeout(() => {
+            changeView('home'); // อนุญาตให้สิทธิ์เข้าหน้าหลัก
+        }, 1000);
+    } else {
+        // ถ้ารหัสผิดหรือข้อมูลมั่ว จะถูกบล็อกไว้ที่หน้านี้พร้อมแสดง Error เสมอ
+        showToast('อีเมลผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งค่ะคุณชินอิจิ', 'error');
+    }
 }
         function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
         function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
