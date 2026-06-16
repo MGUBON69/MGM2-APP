@@ -496,188 +496,40 @@
             }
         });
 
-     <script>
-// --- การจัดการเปลี่ยนหน้าแสดงผล (View Management) ---
-function changeView(viewName) {
-    // ซ่อนทุกหน้าหลักก่อน
-    const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
-    pages.forEach(pageId => {
-        const page = document.getElementById(pageId);
-        if (page) page.classList.add('hidden');
-    });
+        function changeView(viewName) {
+            const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
+            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+            
+            const header = document.getElementById('appHeader');
+            const nav = document.getElementById('bottomNav');
 
-    // แสดงหน้าที่เลือก
-    const activePage = document.getElementById(`page-${viewName}`);
-    if (activePage) {
-        activePage.classList.remove('hidden');
-    }
-
-    // จัดการการแสดงผล Header และ Bottom Navigation ตามสถานะล็อกอิน
-    const header = document.getElementById('appHeader');
-    const bottomNav = document.getElementById('bottomNav');
-    
-    if (viewName === 'login' || viewName === 'register') {
-        if (header) header.classList.add('hidden');
-        if (bottomNav) bottomNav.classList.add('hidden');
-    } else {
-        if (header) header.classList.remove('hidden');
-        if (bottomNav) bottomNav.classList.remove('hidden');
-    }
-
-    // อัปเดตสถานะปุ่มบน Bottom Navigation
-    updateNavSelection(viewName);
-}
-
-function updateNavSelection(viewName) {
-    const navButtons = ['home', 'membership', 'contact'];
-    navButtons.forEach(btn => {
-        const el = document.getElementById(`btn-nav-${btn}`);
-        if (el) {
-            if (btn === viewName) {
-                el.classList.remove('text-slate-400');
-                el.classList.add('text-red-500', 'font-semibold');
+            // จัดการแสดงผล Header และ Navigation bar
+            if (['register', 'login'].includes(viewName)) {
+                header.classList.add('hidden');
+                nav.classList.add('hidden');
             } else {
-                el.classList.remove('text-red-500', 'font-semibold');
-                el.classList.add('text-slate-400');
+                header.classList.remove('hidden');
+                nav.classList.remove('hidden');
             }
+
+            document.getElementById(`page-${viewName}`).classList.remove('hidden');
+            localStorage.setItem('mg_last_view', viewName);
+
+            // อัปเดตสีปุ่มเมนูด้านล่างให้ Active
+            const navButtons = ['home', 'contact', 'location'];
+            navButtons.forEach(btn => {
+                const el = document.getElementById(`btn-nav-${btn}`);
+                if (el) {
+                    if (btn === viewName) {
+                        el.classList.remove('text-slate-400');
+                        el.classList.add('text-[#e50012]');
+                    } else {
+                        el.classList.remove('text-[#e50012]');
+                        el.classList.add('text-slate-400');
+                    }
+                }
+            });
         }
-    });
-}
-
-// --- ฟังก์ชันดักจับข้อมูลการ "เข้าสู่ระบบ" (Login) ---
-function processLogin(event) {
-    event.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรช
-
-    // ดักจับและดึงข้อมูลจากช่องกรอก (Input)
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-
-    // ตรวจสอบค่าที่ดักจับได้ (คุณชินอิจิสามารถเปลี่ยนตรงนี้เป็นการส่งไปตรวจสอบกับ Database ได้ค่ะ)
-    console.log("=== ดักจับข้อมูลการเข้าสู่ระบบ ===");
-    console.log("อีเมลผู้ใช้:", email);
-    console.log("รหัสผ่าน:", password);
-
-    if (email && password) {
-        // ตัวอย่างจำลอง: แสดงชื่อผู้ใช้เมื่อเข้าสู่ระบบสำเร็จ
-        document.getElementById('client-name').textContent = email.split('@')[0];
-        
-        showToast("🔑 เข้าสู่ระบบสำเร็จ ยินดีต้อนรับค่ะ", "success");
-        
-        // เปลี่ยนหน้าไปยังหน้าแรก (Home)
-        setTimeout(() => {
-            changeView('home');
-        }, 1000);
-    } else {
-        showToast("❌ กรุณากรอกข้อมูลให้ครบถ้วน", "error");
-    }
-}
-
-// --- ฟังก์ชันดักจับข้อมูลการ "ลงทะเบียน" (Register) ---
-function processRegister(event) {
-    event.preventDefault();
-
-    // ดักจับข้อมูลจากฟอร์มสมัครสมาชิก
-    const fullName = document.getElementById('reg-name').value;
-    const phone = document.getElementById('reg-phone').value;
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
-
-    console.log("=== ดักจับข้อมูลการลงทะเบียนใหม่ ===");
-    console.log("ชื่อ-นามสกุล:", fullName);
-    console.log("เบอร์โทรศัพท์:", phone);
-    console.log("อีเมล:", email);
-    console.log("รหัสผ่านที่ตั้ง:", password);
-
-    // ตัวอย่างการส่งข้อมูลไปยัง EmailJS (ถ้าต้องการแจ้งเตือนเข้าเมลระบบ)
-    /*
-    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-        to_name: "Admin MG Ubon",
-        from_name: fullName,
-        user_email: email,
-        user_phone: phone,
-        message: `มีผู้สมัครสมาชิกใหม่: ${fullName} รหัสผ่านคือ: ${password}`
-    }).then(response => {
-        console.log('ส่งข้อมูลสำเร็จ!', response.status);
-    }, error => {
-        console.log('เกิดข้อผิดพลาดในการส่งเมล:', error);
-    });
-    */
-
-    showToast("🎉 สมัครสมาชิกสำเร็จแล้วค่ะ!", "success");
-    
-    // ส่งผู้ใช้กลับไปหน้าล็อกอินหลังจากสมัครเสร็จ
-    setTimeout(() => {
-        changeView('login');
-    }, 1500);
-}
-
-// --- ฟังก์ชันเปิด-ปิดตา เพื่อดูรหัสผ่าน (Toggle Password) ---
-function togglePasswordVisibility(inputId, iconId) {
-    const passwordInput = document.getElementById(inputId);
-    const eyeIcon = document.getElementById(iconId);
-    
-    if (passwordInput && eyeIcon) {
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            eyeIcon.classList.remove('fa-eye-slash');
-            eyeIcon.classList.add('fa-eye');
-        } else {
-            passwordInput.type = "password";
-            eyeIcon.classList.remove('fa-eye');
-            eyeIcon.classList.add('fa-eye-slash');
-        }
-    }
-}
-
-// --- ระบบแสดงผลข้อความแจ้งเตือน (Custom Toast) ---
-function showToast(message, type = "success") {
-    const toast = document.getElementById('customToast');
-    const toastIcon = document.getElementById('toastIcon');
-    const toastMessage = document.getElementById('toastMessage');
-
-    toastMessage.textContent = message;
-
-    if (type === "success") {
-        toastIcon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
-        toastIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-    } else {
-        toastIcon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-500";
-        toastIcon.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
-    }
-
-    toast.classList.remove('hidden');
-    setTimeout(() => {
-        toast.classList.add('hidden');
-    }, 3000);
-}
-
-// --- ฟังก์ชันสำหรับ Modal ต่างๆ ---
-function openForgotPasswordModal() { document.getElementById('forgotPasswordModal').classList.remove('hidden'); }
-function closeForgotPasswordModal() { document.getElementById('forgotPasswordModal').classList.add('hidden'); }
-function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
-function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
-
-function triggerLogout() {
-    const modal = document.getElementById('logoutConfirmModal');
-    modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-    modal.querySelector('.transform').classList.remove('scale-95');
-}
-function closeLogoutModal() {
-    const modal = document.getElementById('logoutConfirmModal');
-    modal.classList.add('opacity-0', 'pointer-events-none');
-    setTimeout(() => modal.classList.add('hidden'), 2500);
-}
-function confirmLogout() {
-    closeLogoutModal();
-    showToast("👋 ออกจากระบบเรียบร้อยแล้วค่ะ", "success");
-    setTimeout(() => changeView('login'), 1000);
-}
-
-// ตั้งค่าเริ่มต้นให้เปิดมาเจอหน้าล็อกอินก่อน
-document.addEventListener("DOMContentLoaded", function() {
-    changeView('login');
-});
-</script>
 
         // ==========================================
         // 🔑 ระบบกู้คืนรหัสผ่าน และเชื่อมต่อ EMAILJS
