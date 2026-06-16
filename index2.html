@@ -194,19 +194,22 @@
                 <div class="bg-[#e50012] text-white font-black px-2 py-0.5 rounded text-xs tracking-wider shadow-sm">MG</div>
                 <span class="text-xs font-semibold tracking-wide text-slate-300">M2 MOTORSPORT</span>
             </div>
-<div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-    <div class="flex items-center gap-2">
-        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-        <span class="text-[11px] text-slate-400 font-medium">ระบบออนไลน์</span>
-    </div>
-    
-    <span class="text-slate-600 text-[10px] hidden sm:inline">|</span>
+<header class="relative"> 
 
-    <div class="text-[11px] text-slate-400 font-medium flex items-center gap-1">
-        <i class="fa-regular fa-clock text-slate-500"></i>
-        <span id="realtime-clock">กำลังโหลดเวลา...</span>
+    <div class="absolute top-2 right-4 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            <span class="text-[11px] text-slate-400 font-medium">ระบบออนไลน์</span>
+        </div>
+        
+        <span class="text-slate-600 text-[10px] hidden sm:inline">|</span>
+
+        <div class="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+            <i class="fa-regular fa-clock text-slate-500"></i>
+            <span id="realtime-clock">กำลังโหลดเวลา...</span>
+        </div>
     </div>
-</div>
+
 </header>
 
 <script>
@@ -234,6 +237,7 @@
     updateClock();
     // สั่งให้ฟังก์ชันทำงานซ้ำทุกๆ 1 วินาที (1000 มิลลิวินาที)
     setInterval(updateClock, 1000);
+</script>
 </script>
 
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
