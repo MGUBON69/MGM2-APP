@@ -420,7 +420,7 @@
     </div>
 </div>
 
-          <div id="page-location" class="hidden p-5 space-y-4 page-active">
+            <div id="page-location" class="hidden p-5 space-y-4 page-active">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัท
                 </h3>
@@ -435,89 +435,37 @@
                         <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
                     </a>
                 </div>
-            </div> <div id="page-membership" class="hidden p-5 space-y-4 page-active">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-id-card text-emerald-400"></i> สรุปการเป็นสมาชิก
-                </h3>
-                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-5 shadow-lg text-white max-w-sm mx-auto mt-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-xs uppercase tracking-widest opacity-80">M2 Member Active</span>
-                        <i class="fa-solid fa-circle-check text-xl text-white animate-pulse"></i>
-                    </div>
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl font-bold">ช</div>
-                        <div>
-                            <h3 class="font-bold text-lg">คุณ ชินอิจิ</h3>
-                            <p class="text-xs text-emerald-100">สถานะ: เข้าสู่ระบบเรียบร้อยแล้ว</p>
-                        </div>
-                    </div>
-                    <div class="border-t border-white/20 pt-3 text-center bg-black/10 rounded-xl py-2">
-                        <span class="text-sm font-semibold tracking-wider">MEMBER ID: #888999</span>
-                    </div>
-                </div>
             </div>
 
-       </main> ```
+       </main>
 
-*(หมายเหตุ: คิมเปลี่ยนไอดีจาก `view-membership` เป็น `page-membership` ให้ล้อไปกับระบบตั้งชื่อไอดีในหน้าอื่นของคุณชินอิจินะคะ จะได้เปิดสลับง่ายๆ ค่ะ)*
+<nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
+    <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-house-chimney text-lg"></i>
+        <span class="text-[10px] tracking-wide">หน้าแรก</span>
+    </button>
+    
+    <a href="https://lin.ee/Ov20t55" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16 text-center">
+        <i class="fa-brands fa-line text-lg"></i>
+        <span class="text-[10px] tracking-wide">จองคิว</span>
+    </a>
 
----
+    <button onclick="changeView('membership')" id="btn-nav-membership" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-id-card text-lg"></i>
+        <span class="text-[10px] tracking-wide">สมาชิก</span>
+    </button>
+    
+    <button onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-phone text-lg"></i>
+        <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
+    </button>
+    
+    <button onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-map-pin text-lg"></i>
+        <span class="text-[10px] tracking-wide">ที่ตั้ง</span>
+    </button>
+</nav>
 
-### จุดที่ 2: เพิ่มฟังก์ชันคำสั่งเปิดหน้าจอ (JavaScript บรรทัดที่ 101)
-ในไฟล์ของคุณชินอิจิ มีบล็อกแท็ก `<script>` ตัวหนึ่งที่ควบคุมเรื่องเวลา (updateClock) อยู่ด้านบนของส่วนเนื้อหา ให้คุณชินอิจินำฟังก์ชัน `changeView` เข้าไปวางต่อท้ายต่อจากปังก์ชันอัปเดตเวลานั้นได้เลยค่ะ
-
-```javascript
-<script>
-    function updateClock() {
-        const now = new Date();
-        const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
-        const dateString = now.toLocaleDateString('th-TH', dateOptions);
-        const timeString = now.toLocaleTimeString('th-TH', { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit',
-            hour12: false 
-        });
-        document.getElementById('realtime-clock').textContent = `${dateString} | ${timeString} น.`;
-    }
-
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // 🎯 จุดที่ต้องวาง: ก๊อปปี้ชุดคำสั่งนี้ไปสอดแทรกไว้ตรงนี้ได้เลยค่ะคุณชินอิจิ
-    function changeView(viewName) {
-        // รายการหน้าทั้งหมด (ล้อตาม ID page-xxx ในระบบของคุณชินอิจิ)
-        const pages = ['register', 'login', 'home', 'contact', 'location', 'membership'];
-        
-        pages.forEach(page => {
-            const pageElement = document.getElementById(`page-${page}`);
-            if (pageElement) {
-                if (page === viewName) {
-                    pageElement.classList.remove('hidden');
-                } else {
-                    pageElement.classList.add('hidden');
-                }
-            }
-        });
-
-        // รายการปุ่ม Nav ทั้งหมดเพื่อคุมการไฮไลต์สีสัน
-        const navs = ['home', 'membership', 'contact', 'location'];
-        navs.forEach(nav => {
-            const btn = document.getElementById(`btn-nav-${nav}`);
-            if (btn) {
-                btn.classList.remove('text-red-500'); // สมมติว่าต้องการให้ปุ่มแอคทีฟเป็นสีแดงของแบรนด์ MG
-                btn.classList.add('text-slate-400');
-            }
-        });
-
-        // เปลี่ยนสีปุ่มที่กดให้เด่นขึ้นมา
-        const activeBtn = document.getElementById(`btn-nav-${viewName}`);
-        if (activeBtn) {
-            activeBtn.classList.remove('text-slate-400');
-            activeBtn.classList.add('text-red-500'); // ไฮไลต์ปุ่มปัจจุบันด้วยสีแดง MG
-        }
-    }
-</script>
 </div>
     <script>
         let installTrigger = null;
