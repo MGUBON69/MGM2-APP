@@ -347,7 +347,13 @@
                             <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">นัดหมายเช็คระยะและซ่อมทั่วไปผ่าน LINE OA</span>
                         </a>
 
-                        <!-- ... (โค้ดปุ่มติดต่อพนักงาน และ ปุ่มที่ตั้งบริษัท ด้านบนเหมือนเดิม) ... -->
+                        <button onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                            <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-phone text-base"></i>
+                            </div>
+                            <span class="text-xs font-bold text-white block">ติดต่อพนักงาน</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
+                        </button>
 
                         <button onclick="changeView('location')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
@@ -357,15 +363,6 @@
                             <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
                         </button>
 
-                        <!--  วางโค้ดชุดใหม่ต่อตรงนี้ได้เลยค่ะคุณชินอิจิ -->
-                        <button onclick="changeView('calendar')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
-                            <div class="w-9 h-9 bg-purple-500/10 text-purple-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-calendar-days text-base"></i>
-                            </div>
-                            <span class="text-xs font-bold text-white block">ปฏิทิน/นัดหมาย</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">ดูตารางกิจกรรมและวันนัดหมายของคุณ</span>
-                        </button>
-
                         <button onclick="triggerLogout()" class="bg-[#181f32] hover:bg-red-950/20 border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-slate-800 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
                                 <i class="fa-solid fa-power-off text-base"></i>
@@ -373,9 +370,7 @@
                             <span class="text-xs font-bold text-slate-300 group-hover:text-red-400 block">ออกจากระบบ</span>
                             <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">ล็อกเอาท์ปิดเซสชันความปลอดภัย</span>
                         </button>
-                        <!--  สิ้นสุดการวาง -->
-
-                    </div> <!-- ปิดแท็ก grid-cols-2 -->
+                    </div>
                 </div>
             </div>
 
