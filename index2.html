@@ -712,42 +712,26 @@ function processVerifyOTP(event) {
             setTimeout(() => toast.classList.add('hidden'), 3500);
         }
 
-        // ฟังก์ชันสำหรับจัดการตรวจสอบการเข้าสู่ระบบ (แก้อาการใส่รหัสอะไรก็เข้าได้)
-function processLogin(event) {
-    event.preventDefault(); // ป้องกันหน้าเว็บรีเฟรชตัวเอง
-
-    // 1. ดึงค่าอีเมลและรหัสผ่านที่ผู้ใช้พิมพ์เข้ามาในช่อง Login
-    const inputEmail = document.getElementById('login-email').value.trim().toLowerCase();
-    const inputPassword = document.getElementById('login-password').value;
-
-    // 2. ดึงข้อมูลสมาชิกทั้งหมดที่เคยสมัครไว้จาก LocalStorage (ถ้าไม่มีให้เป็นอาร์เรย์ว่าง)
-    const registeredUsers = JSON.parse(localStorage.getItem('mg_users')) || [];
-
-    // 3. ทำการตรวจสอบ: ค้นหาผู้ใช้ที่ "อีเมลตรงกัน" และ "รหัสผ่านถูกต้อง"
-    const validUser = registeredUsers.find(user => user.email === inputEmail && user.password === inputPassword);
-
-    if (validUser) {
-        // บันทึกข้อมูลว่าผู้ใช้คนนี้ล็อกอินผ่านแล้ว (Session)
-        localStorage.setItem('mg_current_session', JSON.stringify(validUser));
-        
-        // แสดงชื่อผู้ใช้บนหน้าจอหลัก
-        if (document.getElementById('client-name')) {
-            document.getElementById('client-name').textContent = `คุณ ${validUser.name}`;
+        function processLogin(event) {
+            event.preventDefault();
+            localStorage.setItem('mg_user_session', 'active');
+            changeView('home');
         }
 
-        alert('เข้าสู่ระบบสำเร็จแล้วค่ะคุณชินอิจิ ✨');
-        
-        // พาวิ่งไปที่หน้า Home (เรียกใช้ฟังก์ชันสลับหน้าเดิมของคุณชินอิจิ)
-        if (typeof changeView === 'function') {
-            changeView('home'); 
-        }
-        
-        event.target.reset(); // ล้างข้อมูลในช่องกรอกหลังล็อกอินสำเร็จ
-    } else {
-        // ❌ ถ้ารหัสผ่านไม่ตรง หรือไม่พบอีเมลในระบบ จะล็อกไม่ให้ผ่าน
-        alert('❌ อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งค่ะ!');
+    function processRegister(event) {
+    event.preventDefault();
+    const name = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value.trim().toLowerCase();
+    const password = document.getElementById('reg-password').value; // ดึงค่ารหัสผ่านมาเก็บด้วย
+    
+    // ดึงฐานข้อมูลผู้ใช้ (เปลี่ยนรูปแบบการเก็บเป็น Object แต่อ้างอิงคีย์ชื่อเดิมเพื่อไม่ให้กระทบส่วนอื่น)
+    let currentUsers = JSON.parse(localStorage.getItem('mg_registered_users')) || {};
+    let currentEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+    
+    if (currentEmails.includes(email)) {
+        showToast("❌ อีเมลนี้ถูกลงทะเบียนในระบบแล้วค่ะ กรุณาใช้อีเมลอื่น", "error");
+        return;
     }
-}
     
     // บันทึกอีเมลลงอาร์เรย์เดิมเพื่อไม่ให้ฟังก์ชันเช็ก OTP พัง
     currentEmails.push(email);
