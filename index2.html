@@ -437,29 +437,36 @@
                 </div>
             </div>
 
-        </main>
+       </main>
 
-        <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
-            <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-house-chimney text-lg"></i>
-                <span class="text-[10px] tracking-wide">หน้าแรก</span>
-            </button>
-            <a href="https://lin.ee/Ov20t55" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16 text-center">
-                <i class="fa-brands fa-line text-lg"></i>
-                <span class="text-[10px] tracking-wide">จองคิว</span>
-            </a>
-            <button onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-phone text-lg"></i>
-                <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
-            </button>
-            <button onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-map-pin text-lg"></i>
-                <span class="text-[10px] tracking-wide">ที่ตั้ง</span>
-            </button>
-        </nav>
+<nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
+    <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-house-chimney text-lg"></i>
+        <span class="text-[10px] tracking-wide">หน้าแรก</span>
+    </button>
+    
+    <a href="https://lin.ee/Ov20t55" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16 text-center">
+        <i class="fa-brands fa-line text-lg"></i>
+        <span class="text-[10px] tracking-wide">จองคิว</span>
+    </a>
 
-    </div>
+    <button onclick="changeView('membership')" id="btn-nav-membership" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-id-card text-lg"></i>
+        <span class="text-[10px] tracking-wide">สมาชิก</span>
+    </button>
+    
+    <button onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-phone text-lg"></i>
+        <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
+    </button>
+    
+    <button onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-map-pin text-lg"></i>
+        <span class="text-[10px] tracking-wide">ที่ตั้ง</span>
+    </button>
+</nav>
 
+</div>
     <script>
         let installTrigger = null;
         let generatedOTP = "";          
