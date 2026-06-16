@@ -712,74 +712,94 @@ function processVerifyOTP(event) {
             setTimeout(() => toast.classList.add('hidden'), 3500);
         }
 
-        function processLogin(event) {
-            event.preventDefault();
-            localStorage.setItem('mg_user_session', 'active');
-            changeView('home');
-        }
-
-    function processRegister(event) {
+       // บรรทัด 715: ปรับปรุงฟังก์ชัน Login ให้ดึงค่ามาตรวจสอบความปลอดภัย
+function processLogin(event) {
     event.preventDefault();
-    const name = document.getElementById('reg-name').value;
-    const email = document.getElementById('reg-email').value.trim().toLowerCase();
-    const password = document.getElementById('reg-password').value; // ดึงค่ารหัสผ่านมาเก็บด้วย
     
-    // ดึงฐานข้อมูลผู้ใช้ (เปลี่ยนรูปแบบการเก็บเป็น Object แต่อ้างอิงคีย์ชื่อเดิมเพื่อไม่ให้กระทบส่วนอื่น)
+    // 1. ดึงค่าจากฟอร์ม Login หน้าจอ
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+    
+    if (!emailInput || !passwordInput) return;
+    
+    const userEmail = emailInput.value.trim().toLowerCase();
+    let rawPassword = passwordInput.value;
+    
+    // [🔐 ANTI-INTERCEPTION] ล้างค่ารหัสผ่านออกจากหน้าจอทันทีเพื่อป้องกันสคริปต์ดักจับหน้าฟอร์ม
+    passwordInput.value = '';
+    
+    // 2. ดึงฐานข้อมูลผู้ใช้ที่สมัครไว้จาก LocalStorage (สัมพันธ์กับบรรทัด 728)
     let currentUsers = JSON.parse(localStorage.getItem('mg_registered_users')) || {};
-    let currentEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
     
-    if (currentEmails.includes(email)) {
-        showToast("❌ อีเมลนี้ถูกลงทะเบียนในระบบแล้วค่ะ กรุณาใช้อีเมลอื่น", "error");
+    // 3. ตรวจสอบว่ามีอีเมลนี้ในระบบไหม และรหัสผ่านตรงกันหรือเปล่า
+    if (currentUsers[userEmail] && currentUsers[userEmail].password === rawPassword) {
+        
+        // บันทึกเฉพาะสถานะ Session และข้อมูลพื้นฐาน (ห้ามเก็บรหัสผ่านลง Sessionเด็ดขาด)
+        localStorage.setItem('mg_user_session', 'active');
+        localStorage.setItem('mg_current_user_name', currentUsers[userEmail].name);
+        
+        // อัปเดต UI ชื่อลูกค้าบนหน้าจอหลัก
+        const clientNameEl = document.getElementById('client-name');
+        if (clientNameEl) {
+            clientNameEl.textContent = currentUsers[userEmail].name;
+        }
+        
+        if (typeof showToast === 'function') showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับค่ะ');
+        changeView('home');
+    } else {
+        if (typeof showToast === 'function') showToast('อีเมลหรือรหัสผ่านไม่ถูกต้องค่ะ', 'error');
+    }
+    
+    // ทำลายทิ้งในหน่วยความจำทันที
+    rawPassword = null;
+}
+
+// บรรทัด 721 เป็นต้นไป (โครงสร้างฟังก์ชัน Register เดิมของคุณชินอิจิ แต่คิมเขียนเสริมพาร์ทบันทึกให้ปลอดภัยขึ้น)
+function processRegister(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim().toLowerCase();
+    const passwordEl = document.getElementById('reg-password');
+    let password = passwordEl.value;
+    
+    if (!name || !email || !password) {
+        if (typeof showToast === 'function') showToast('กรุณากรอกข้อมูลให้ครบถ้วนค่ะ', 'error');
         return;
     }
     
-    // บันทึกอีเมลลงอาร์เรย์เดิมเพื่อไม่ให้ฟังก์ชันเช็ก OTP พัง
-    currentEmails.push(email);
+    // ล้างรหัสผ่านหน้าจอทันทีหลังจากดึงค่าเสร็จ
+    passwordEl.value = '';
+    
+    let currentUsers = JSON.parse(localStorage.getItem('mg_registered_users')) || {};
+    let currentEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+    
+    // เช็คว่าอีเมลซ้ำไหม
+    if (currentUsers[email]) {
+        if (typeof showToast === 'function') showToast('อีเมลนี้เคยลงทะเบียนไว้แล้วค่ะ', 'error');
+        return;
+    }
+    
+    // บันทึกข้อมูลลง Object โดยใช้ email เป็น Key
+    currentUsers[email] = {
+        name: name,
+        password: password // ในระบบโปรดักชันจริง จุดนี้ควรเข้ารหัสด้วย bcrypt/SHA-256 ก่อนบันทึกนะคะ
+    };
+    
+    if (!currentEmails.includes(email)) {
+        currentEmails.push(email);
+    }
+    
+    // เซฟกลับลง LocalStorage
+    localStorage.setItem('mg_registered_users', JSON.stringify(currentUsers));
     localStorage.setItem('mg_registered_emails', JSON.stringify(currentEmails));
     
-    // บันทึกรหัสผ่านผูกกับอีเมลไว้ในคีย์ใหม่
-    currentUsers[email] = password;
-    localStorage.setItem('mg_registered_users', JSON.stringify(currentUsers));
+    if (typeof showToast === 'function') showToast('ลงทะเบียนสมาชิกสำเร็จแล้วค่ะ');
     
-    localStorage.setItem('mg_profile_name', name);
-    document.getElementById('client-name').innerText = name;
-    localStorage.setItem('mg_user_session', 'active');
-    changeView('home');
-    showToast("✅ ลงทะเบียนสำเร็จ ยินดีต้อนรับค่ะ", "success");
+    // เปลี่ยนหน้าไปล็อกอิน
+    setTimeout(() => {
+        changeView('login');
+    }, 1500);
+    
+    password = null;
 }
-        function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
-        function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
-        
-        function saveNewName(e) {
-            e.preventDefault();
-            const newName = document.getElementById('new-profile-name').value;
-            localStorage.setItem('mg_profile_name', newName);
-            document.getElementById('client-name').innerText = newName;
-            closeEditModal();
-            showToast("แก้ไขชื่อผู้ใช้สำเร็จแล้วค่ะ");
-        }
-
-        function triggerLogout() {
-            const modal = document.getElementById('logoutConfirmModal');
-            modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-            modal.querySelector('.transform').classList.remove('scale-95');
-        }
-        
-        function closeLogoutModal() {
-            const modal = document.getElementById('logoutConfirmModal');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            modal.querySelector('.transform').classList.add('scale-95');
-            setTimeout(() => modal.classList.add('hidden'), 250);
-        }
-        
-        function confirmLogout() {
-            localStorage.removeItem('mg_user_session');
-            closeLogoutModal();
-            changeView('login');
-        }
-        
-        function closePwaBanner() { document.getElementById('pwaAlertBanner').classList.add('hidden'); }
-        function executePwaInstall() { closePwaBanner(); }
-    </script>
-</body>
-</html>
