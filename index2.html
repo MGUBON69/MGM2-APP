@@ -436,7 +436,43 @@
                     </a>
                 </div>
             </div>
+            <div id="page-membership" class="hidden flex-1 flex flex-col p-6 page-active">
+                <div class="text-center mt-4 mb-6">
+                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide">ข้อมูลรถของสมาชิก</h2>
+                    <p class="text-xs text-slate-400 mt-1">กรอกรายละเอียดรถยนต์เพื่อผูกข้อมูลบริการค่ะ</p>
+                </div>
 
+                <form id="car-registration-form" class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processCarRegistration(event)">
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">เลขตัวถังรถ</label>
+                        <input type="text" id="car-vin" required placeholder="กรอกเลขตัวถังรถ 17 หลัก"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">รุ่นรถ</label>
+                        <input type="text" id="car-model" required placeholder="เช่น MG4, MG S5, MG ZS"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">สีรถ</label>
+                        <input type="text" id="car-color" required placeholder="เช่น แดง, ดำ, ขาวมุก"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-400 font-medium">ชื่อเจ้าของรถ</label>
+                        <input type="text" id="owner-name" required placeholder="ชื่อ - นามสกุล ผู้จดทะเบียน"
+                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกข้อมูลรถยนต์
+                    </button>
+                </form>
+            </div>
        </main>
 
 <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
@@ -496,27 +532,80 @@
             }
         });
 
-        function changeView(viewName) {
-            const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
-            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+       function changeView(viewName) {
+            // 📌 คิมเพิ่ม 'page-membership' เข้าไปในรายการหน้าจอแล้วค่ะ
+            const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location', 'page-membership'];
+            
+            pages.forEach(p => {
+                const el = document.getElementById(p);
+                if (el) el.classList.add('hidden');
+            });
             
             const header = document.getElementById('appHeader');
             const nav = document.getElementById('bottomNav');
 
             // จัดการแสดงผล Header และ Navigation bar
-            if (['register', 'login'].includes(viewName)) {
-                header.classList.add('hidden');
-                nav.classList.add('hidden');
-            } else {
-                header.classList.remove('hidden');
-                nav.classList.remove('hidden');
+            if (header && nav) {
+                if (['register', 'login'].includes(viewName)) {
+                    header.classList.add('hidden');
+                    nav.classList.add('hidden');
+                } else {
+                    header.classList.remove('hidden');
+                    nav.classList.remove('hidden');
+                }
             }
 
-            document.getElementById(`page-${viewName}`).classList.remove('hidden');
+            const targetPage = document.getElementById(`page-${viewName}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
             localStorage.setItem('mg_last_view', viewName);
 
-            // อัปเดตสีปุ่มเมนูด้านล่างให้ Active
-            const navButtons = ['home', 'contact', 'location'];
+            // อัปเดตสีปุ่มเมนูด้านล่างให้ Active (📌 คิมเพิ่ม 'membership' ตรงนี้ให้ปุ่มเปลี่ยนสีด้วยค่ะ)
+            const navButtons = ['home', 'membership', 'contact', 'location'];
+            navButtons.forEach(btn => {
+                const el = document.getElementById(`btn-nav-${btn}`);
+                if (el) {
+                    if (btn === viewName) {
+                        el.classList.remove('text-slate-400');
+                        el.classList.add('text-[#e50012]');
+                    } else {
+                        el.classList.remove('text-[#e50012]');
+                        el.classList.add('text-slate-400');
+                    }
+                }
+            });
+        }function changeView(viewName) {
+            // 📌 คิมเพิ่ม 'page-membership' เข้าไปในรายการหน้าจอแล้วค่ะ
+            const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location', 'page-membership'];
+            
+            pages.forEach(p => {
+                const el = document.getElementById(p);
+                if (el) el.classList.add('hidden');
+            });
+            
+            const header = document.getElementById('appHeader');
+            const nav = document.getElementById('bottomNav');
+
+            // จัดการแสดงผล Header และ Navigation bar
+            if (header && nav) {
+                if (['register', 'login'].includes(viewName)) {
+                    header.classList.add('hidden');
+                    nav.classList.add('hidden');
+                } else {
+                    header.classList.remove('hidden');
+                    nav.classList.remove('hidden');
+                }
+            }
+
+            const targetPage = document.getElementById(`page-${viewName}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+            localStorage.setItem('mg_last_view', viewName);
+
+            // อัปเดตสีปุ่มเมนูด้านล่างให้ Active (📌 คิมเพิ่ม 'membership' ตรงนี้ให้ปุ่มเปลี่ยนสีด้วยค่ะ)
+            const navButtons = ['home', 'membership', 'contact', 'location'];
             navButtons.forEach(btn => {
                 const el = document.getElementById(`btn-nav-${btn}`);
                 if (el) {
@@ -531,6 +620,39 @@
             });
         }
 
+        // 📥 วางต่อท้ายฟังก์ชัน changeView ได้เลยค่ะคุณชินอิจิ
+
+function processCarRegistration(event) {
+    // ป้องกันไม่ให้หน้าเว็บโหลดใหม่เมื่อกดปุ่ม Submit
+    event.preventDefault(); 
+
+    // ดึงค่าข้อมูลจาก ID ของ Input แต่ละตัวในฟอร์มที่คุณชินอิจิสร้างไว้
+    const vin = document.getElementById('car-vin') ? document.getElementById('car-vin').value : '';
+    const model = document.getElementById('car-model') ? document.getElementById('car-model').value : '';
+    const color = document.getElementById('car-color') ? document.getElementById('car-color').value : '';
+    const owner = document.getElementById('owner-name') ? document.getElementById('owner-name').value : '';
+
+    // รวมร่างข้อมูลเป็น Object เพื่อเตรียมนำไปใช้งานต่อ (เช่น ส่งเข้าฐานข้อมูลหรือสเปรดชีต)
+    const carRegistrationData = {
+        vinCode: vin,
+        carModel: model,
+        carColor: color,
+        ownerName: owner,
+        registeredAt: new Date().toLocaleString('th-TH') // บันทึกวันเวลาที่กดสมัครแบบไทย
+    };
+
+    // แสดงผลข้อมูลที่บันทึกได้ใน Console เพื่อให้คุณชินอิจิเช็กหลังบ้านได้ง่ายๆ
+    console.log("📌 บันทึกข้อมูลรถยนต์สมาชิกสำเร็จ:", carRegistrationData);
+
+    // แสดงกล่องแจ้งเตือนความสำเร็จให้ผู้ใช้เห็น
+    alert('ระบบทำการบันทึกข้อมูลรถยนต์สมาชิกเรียบร้อยแล้วค่ะ!');
+
+    // ล้างข้อมูลในฟอร์มให้กลับเป็นค่าว่าง พร้อมรับคันต่อไป
+    const registrationForm = event.target;
+    if (registrationForm) {
+        registrationForm.reset();
+    }
+}
         // ==========================================
         // 🔑 ระบบกู้คืนรหัสผ่าน และเชื่อมต่อ EMAILJS
         // ==========================================
