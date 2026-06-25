@@ -13,4 +13,46 @@ const ASSETS_TO_CACHE = [
   'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js'
 ];
 
-// ... โค้ดส่วนที่เหลือด้านล่างปล่อยไว้เหมือนเดิมได้เลยค่ะ ...
+// 1. Install Event: ล็อกคลังไฟล์ App Shell ลงเครื่องลูกค้า
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('⚡️ SW: บันทึก App Shell ของ MG UBON ลงในแคชเรียบร้อยค่ะ');
+      return cache.addAll(ASSETS_TO_CACHE);
+    }).catch(err => console.error('❌ SW: เกิดข้อผิดพลาดในการเก็บแคช:', err))
+  );
+  self.skipWaiting();
+});
+
+// 2. Activate Event: เคลียร์แคชเวอร์ชันเก่าออกอัตโนมัติเมื่อมีการเปลี่ยนแปลงโครงสร้างโค้ด
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            console.log('🧹 SW: ล้างแคชเวอร์ชันเก่าออกเรียบร้อยค่ะ:', cache);
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+// 3. Fetch Event: ดึงข้อมูลจากแคชส่งให้ผู้ใช้ทันที (Cache First) ถ้าไม่มีอินเทอร์เน็ต
+self.addEventListener('fetch', (event) => {
+  if (!event.request.url.startsWith('http')) return;
+
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request).catch(() => {
+        console.log('🌐 SW: อุปกรณ์อยู่ในสถานะ Offline และไม่พบข้อมูลในระบบแคชค่ะคุณชินอิจิ');
+      });
+    })
+  );
+});
