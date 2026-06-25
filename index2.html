@@ -427,7 +427,20 @@
                 </div>
             </div>
 
-       </main>
+        </main>
+       
+       <div id="page-membership" class="hidden p-5 space-y-4 page-active">
+           <h3 class="text-xl font-bold text-white flex items-center gap-2">
+               <i class="fa-solid fa-id-card text-red-500"></i> ข้อมูลสมาชิกผู้ใช้งาน
+           </h3>
+           <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-6 rounded-2xl shadow-md text-center">
+               <div class="w-20 h-20 bg-red-500/10 text-[#e50012] rounded-full flex items-center justify-center mx-auto mb-4 text-3xl border border-red-500/20">
+                   <i class="fa-solid fa-user-shield"></i>
+               </div>
+               <p class="text-sm font-bold text-slate-200">ระบบสมาชิก MG UBON</p>
+               <p class="text-xs text-slate-400 mt-1">ขอบคุณที่ร่วมเป็นส่วนหนึ่งกับ M2 Motorsport ค่ะ</p>
+           </div>
+       </div>
 
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
@@ -454,29 +467,29 @@
 
 <script>
     // 1. ฟังก์ชันเปิด-ปิด หน้าตาและเมนู (View Router)
-    function changeView(viewName) {
-        const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
-        
-        pages.forEach(pageId => {
-            const page = document.getElementById(pageId);
-            if (page) page.classList.add('hidden');
-        });
+function changeView(viewName) {
+    // โค้ดแก้ไข: เพิ่ม 'page-membership' เข้าไปในกองทัพหน้าเว็บหลัก
+    const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location', 'page-membership'];
+    
+    pages.forEach(pageId => {
+        const page = document.getElementById(pageId);
+        if (page) page.classList.add('hidden');
+    });
 
-        const activePage = document.getElementById(`page-${viewName}`);
-        if (activePage) activePage.classList.remove('hidden');
+    const activePage = document.getElementById(`page-${viewName}`);
+    if (activePage) activePage.classList.remove('hidden');
 
-        const header = document.getElementById('appHeader');
-        const bottomNav = document.getElementById('bottomNav');
-        
-        if (viewName === 'login' || viewName === 'register') {
-            if (header) header.classList.add('hidden');
-            if (bottomNav) bottomNav.classList.add('hidden');
-        } else {
-            if (header) header.classList.remove('hidden');
-            if (bottomNav) bottomNav.classList.remove('hidden');
-        }
+    const header = document.getElementById('appHeader');
+    const bottomNav = document.getElementById('bottomNav');
+    
+    if (viewName === 'login' || viewName === 'register') {
+        if (header) header.classList.add('hidden');
+        if (bottomNav) bottomNav.classList.add('hidden');
+    } else {
+        if (header) header.classList.remove('hidden');
+        if (bottomNav) bottomNav.classList.remove('hidden');
     }
-
+}
     // เปิดเว็บมาหน้าแรก ให้แสดงหน้าเข้าสู่ระบบ (Login)
     window.addEventListener('DOMContentLoaded', () => {
         changeView('login');
