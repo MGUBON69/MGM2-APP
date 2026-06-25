@@ -712,26 +712,25 @@ function processVerifyOTP(event) {
             setTimeout(() => toast.classList.add('hidden'), 3500);
         }
 
-        function processLogin(event) {
-            event.preventDefault();
-            localStorage.setItem('mg_user_session', 'active');
-            changeView('home');
-        }
-
-    function processRegister(event) {
-    event.preventDefault();
-    const name = document.getElementById('reg-name').value;
-    const email = document.getElementById('reg-email').value.trim().toLowerCase();
-    const password = document.getElementById('reg-password').value; // ดึงค่ารหัสผ่านมาเก็บด้วย
+function processLogin(event) {
+    event.preventDefault(); // ป้องกันหน้าเว็บรีเฟรช
     
-    // ดึงฐานข้อมูลผู้ใช้ (เปลี่ยนรูปแบบการเก็บเป็น Object แต่อ้างอิงคีย์ชื่อเดิมเพื่อไม่ให้กระทบส่วนอื่น)
-    let currentUsers = JSON.parse(localStorage.getItem('mg_registered_users')) || {};
-    let currentEmails = JSON.parse(localStorage.getItem('mg_registered_emails')) || [];
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
     
-    if (currentEmails.includes(email)) {
-        showToast("❌ อีเมลนี้ถูกลงทะเบียนในระบบแล้วค่ะ กรุณาใช้อีเมลอื่น", "error");
-        return;
+    // 1. ตัวอย่างกรณีดึงข้อมูลที่ลงทะเบียนไว้จาก localStorage มาเช็ค
+    const storedUser = JSON.parse(localStorage.getItem('userData')); 
+    
+    if (storedUser && storedUser.email === email && storedUser.password === password) {
+        // ถ้ารหัสถูกต้อง
+        document.getElementById('client-name').textContent = storedUser.name; // ดึงชื่อมาแสดง
+        changeView('home'); // ยอมให้เข้าหน้าโฮม
+        showToast("เข้าสู่ระบบสำเร็จแล้วค่ะ", "success");
+    } else {
+        // ถ้ารหัสผิด หรือไม่พบผู้ใช้
+        showToast("อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้งค่ะ", "error");
     }
+}
     
     // บันทึกอีเมลลงอาร์เรย์เดิมเพื่อไม่ให้ฟังก์ชันเช็ก OTP พัง
     currentEmails.push(email);
