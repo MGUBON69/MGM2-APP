@@ -493,26 +493,52 @@
         }
 
         // 4. AUTHENTICATION LOGIC
-        function processRegister(event) {
-            event.preventDefault();
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
-            const email = document.getElementById('reg-email').value.toLowerCase();
-            const password = document.getElementById('reg-password').value;
+   function processRegister(event) {
+    event.preventDefault();
+    
+    // ดึงปุ่มสมัครสมาชิกออกมาเพื่อจัดการสถานะการกด
+    const form = event.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
+    // ดึงค่าและใช้ .trim() ตัดช่องว่างหน้า-หลัง เพื่อป้องกันเอาเมลเดิมมาเติมสเปซแล้วสมัครซ้ำค่ะ
+    const name = document.getElementById('reg-name').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const email = document.getElementById('reg-email').value.trim().toLowerCase();
+    const password = document.getElementById('reg-password').value;
 
-            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-            if (users.some(u => u.email === email)) {
-                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ!', 'error');
-                return;
-            }
+    // 1. ดึงรายชื่อผู้ใช้ทั้งหมดจาก LocalStorage
+    let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+    
+    // 2. เช็คแบบเด็ดขาดว่าอีเมลนี้มีอยู่ในระบบแล้วหรือยัง
+    const isEmailDuplicate = users.some(u => u.email === email);
+    
+    if (isEmailDuplicate) {
+        showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ! ❌', 'error');
+        return; // เด้งออกทันที ไม่บันทึกซ้ำซ้อนค่ะ
+    }
 
-            users.push({ name, phone, email, password });
-            localStorage.setItem('mg_registered_users', JSON.stringify(users));
+    // 3. ป้องกันการกดเบิ้ล (Double Submit) บล็อกปุ่มชั่วคราวระหว่างระบบประมวลผล
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "กำลังบันทึกข้อมูล...";
+    }
 
-            showToast('สมัครสมาชิกสำเร็จแล้วค่ะ 🎉', 'success');
-            event.target.reset();
-            changeView('login');
-        }
+    // 4. บันทึกยูสเซอร์ใหม่ลงในฐานข้อมูลจำลอง
+    users.push({ name, phone, email, password });
+    localStorage.setItem('mg_registered_users', JSON.stringify(users));
+
+    // 5. แจ้งเตือนความสำเร็จและย้ายหน้า
+    showToast('สมัครสมาชิกสำเร็จแล้วค่ะ 🎉', 'success');
+    form.reset();
+    
+    // คืนค่าสถานะปุ่มเผื่อกลับมาหน้าเดิม
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "สร้างบัญชีสมาชิก";
+    }
+    
+    changeView('login');
+}
 
         function processLogin(event) {
             event.preventDefault();
