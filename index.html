@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2=family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
@@ -406,214 +406,369 @@
     </div>
 
     <script>
-        // Realtime Clock Real-time Rendering
-        function updateClock() {
-            const now = new Date();
-            const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
-            const dateString = now.toLocaleDateString('th-TH', dateOptions);
-            const timeString = now.toLocaleTimeString('th-TH', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit',
-                hour12: false 
-            });
-            const clockEl = document.getElementById('realtime-clock');
-            if(clockEl) clockEl.textContent = `${dateString} | ${timeString} น.`;
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
+        // 1. STATE MANAGEMENT
+        let currentUser = JSON.parse(localStorage.getItem('mg_current_user')) || null;
+        let deferredPrompt = null;
+        let otpTimerInterval = null;
+        let generatedOTP = '';
+        let targetResetEmail = '';
 
-        // Global Custom Toast Handler
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('customToast');
-            const icon = document.getElementById('toastIcon');
-            const msg = document.getElementById('toastMessage');
+        // 2. INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            initRealtimeClock();
             
-            msg.textContent = message;
-            if(type === 'success') {
-                icon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
-                icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            if (currentUser) {
+                checkAndShowView('home');
             } else {
-                icon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-400";
-                icon.innerHTML = '<i class="fa-solid fa-circle-excretion fa-circle-xmark"></i>';
+                checkAndShowView('login');
             }
-            
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
+
+            // PWA Setup
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if(currentUser) {
+                    document.getElementById('pwaAlertBanner').classList.remove('hidden');
+                }
+            });
+        });
+
+        function initRealtimeClock() {
+            const clockEl = document.getElementById('realtime-clock');
+            setInterval(() => {
+                const now = new Date();
+                clockEl.innerText = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }, 1000);
         }
 
-        // Router Control with LocalStorage Data Sync
-        function changeView(viewName) {
-            // ป้องกันข้อมูลพังหากเรียกหน้าโดยไม่ล็อกอิน (ยกเว้น login, register)
-            const isLoggedIn = localStorage.getItem('mg_user_logged');
-            if (!isLoggedIn && viewName !== 'register') {
-                viewName = 'login';
-            }
+        // 3. ROUTING & NAVIGATION
+        function changeView(viewId) {
+            const pages = ['register', 'login', 'home', 'contact', 'location'];
+            pages.forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if (el) el.classList.add('hidden');
+            });
 
-            // ซ่อนหน้าดั้งเดิมทั้งหมด
-            const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
-            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+            const targetPage = document.getElementById(`page-${viewId}`);
+            if (targetPage) targetPage.classList.remove('hidden');
 
-            // เผยโฉมหน้าที่เลือก
-            const activePageId = `page-${viewName}`;
-            const targetPage = document.getElementById(activePageId);
-            if(targetPage) targetPage.classList.remove('hidden');
-
-            // บันทึกหน้าปัจจุบันลง LocalStorage "นี่คือพระเอกที่ทำให้ Refresh แล้วไม่เด้งกลับ"
-            localStorage.setItem('mg_last_view', viewName);
-
-            // ปรับแต่ง UI Header / Footer Nav Bar ตามสิทธิ์เข้าถึง
             const header = document.getElementById('appHeader');
             const bottomNav = document.getElementById('bottomNav');
-            
-            if (viewName === 'login' || viewName === 'register') {
-                header.classList.add('hidden');
-                bottomNav.classList.add('hidden');
+
+            if (viewId === 'login' || viewId === 'register') {
+                if (header) header.classList.add('hidden');
+                if (bottomNav) bottomNav.classList.add('hidden');
             } else {
-                header.classList.remove('hidden');
-                bottomNav.classList.remove('hidden');
-                
-                // โหลดชื่อโปรไฟล์ปัจจุบันจาก DB มาแสดง
-                const cachedName = localStorage.getItem('mg_user_name') || 'คุณลูกค้าสมาชิก';
-                document.getElementById('client-name').textContent = cachedName;
-                
-                // อัปเดต Active State ของแถบเมนูด้านล่าง
-                updateBottomNavUI(viewName);
+                if (header) header.classList.remove('hidden');
+                if (bottomNav) bottomNav.classList.remove('hidden');
+                updateNavHighlights(viewId);
             }
         }
 
-        function updateBottomNavUI(viewName) {
-            ['home', 'contact', 'location'].forEach(v => {
-                const btn = document.getElementById(`btn-nav-${v}`);
-                if(btn) {
-                    if(v === viewName) {
-                        btn.className = "flex flex-col items-center gap-1 text-red-500 transition-transform active:scale-90 cursor-pointer w-16";
-                    } else {
-                        btn.className = "flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16";
-                    }
+        function updateNavHighlights(activeView) {
+            const navButtons = {
+                'home': document.getElementById('btn-nav-home'),
+                'contact': document.getElementById('btn-nav-contact'),
+                'location': document.getElementById('btn-nav-location')
+            };
+
+            Object.keys(navButtons).forEach(key => {
+                const btn = navButtons[key];
+                if (!btn) return;
+                if (key === activeView) {
+                    btn.classList.add('text-red-500', 'scale-105');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('text-red-500', 'scale-105');
+                    btn.classList.add('text-slate-400');
                 }
             });
         }
 
-        // Authentication & Form Management (จำลอง Database บนเครื่องลูกค้า)
+        function checkAndShowView(defaultView) {
+            changeView(defaultView);
+            if (currentUser) {
+                document.getElementById('client-name').innerText = currentUser.name;
+            }
+        }
+
+        // 4. AUTHENTICATION LOGIC
         function processRegister(event) {
             event.preventDefault();
             const name = document.getElementById('reg-name').value;
             const phone = document.getElementById('reg-phone').value;
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-password').value;
+            const email = document.getElementById('reg-email').value.toLowerCase();
+            const password = document.getElementById('reg-password').value;
 
-            localStorage.setItem('mg_user_name', name);
-            localStorage.setItem('mg_user_email', email);
-            localStorage.setItem('mg_user_pass', pass);
-            localStorage.setItem('mg_user_logged', 'true');
+            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+            if (users.some(u => u.email === email)) {
+                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ!', 'error');
+                return;
+            }
 
-            showToast('ลงทะเบียนบัญชี MG สำเร็จแล้วค่ะ');
-            changeView('home');
+            users.push({ name, phone, email, password });
+            localStorage.setItem('mg_registered_users', JSON.stringify(users));
+
+            showToast('สมัครสมาชิกสำเร็จแล้วค่ะ 🎉', 'success');
+            event.target.reset();
+            changeView('login');
         }
 
         function processLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
+            const email = document.getElementById('login-email').value.toLowerCase();
+            const password = document.getElementById('login-password').value;
 
-            const storedEmail = localStorage.getItem('mg_user_email') || 'mgubn@gmail.com';
-            const storedPass = localStorage.getItem('mg_user_pass') || '123456';
+            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+            const userFound = users.find(u => u.email === email && u.password === password);
 
-            if(email === storedEmail && pass === storedPass) {
-                localStorage.setItem('mg_user_logged', 'true');
-                showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับค่ะ');
+            if (userFound) {
+                currentUser = userFound;
+                localStorage.setItem('mg_current_user', JSON.stringify(currentUser));
+                document.getElementById('client-name').innerText = currentUser.name;
+                showToast(`สวัสดีค่ะ คุณ ${currentUser.name} ✨`, 'success');
+                event.target.reset();
                 changeView('home');
             } else {
-                showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง!', 'error');
+                showToast('อีเมลหรือรหัสผ่านไม่ถูกต้องค่ะ ❌', 'error');
             }
         }
 
-        // Profile Management
-        function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
-        function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
-        function saveNewName(e) {
-            e.preventDefault();
-            const newName = document.getElementById('new-profile-name').value;
-            localStorage.setItem('mg_user_name', newName);
-            document.getElementById('client-name').textContent = newName;
-            closeEditModal();
-            showToast('อัปเดตชื่อผู้ลงทะเบียนเรียบร้อยค่ะ');
+        // 5. PROFILE EDIT
+        function openEditModal() {
+            document.getElementById('editNameModal').classList.remove('hidden');
+            if (currentUser) {
+                document.getElementById('new-profile-name').value = currentUser.name;
+            }
         }
 
-        // Forgot Password Steps
-        function openForgotPasswordModal() { document.getElementById('forgotPasswordModal').classList.remove('hidden'); }
-        function closeForgotPasswordModal() { document.getElementById('forgotPasswordModal').classList.add('hidden'); }
-        function processRequestEmailOTP(e) {
-            e.preventDefault();
+        function closeEditModal() {
+            document.getElementById('editNameModal').classList.add('hidden');
+        }
+
+        fn_saveNewName = function(event) { // เปลี่ยนเป็นตัวแปรแบบ global
+            event.preventDefault();
+            const newName = document.getElementById('new-profile-name').value;
+            if (currentUser) {
+                currentUser.name = newName;
+                localStorage.setItem('mg_current_user', JSON.stringify(currentUser));
+                document.getElementById('client-name').innerText = newName;
+
+                let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+                users = users.map(u => u.email === currentUser.email ? { ...u, name: newName } : u);
+                localStorage.setItem('mg_registered_users', JSON.stringify(users));
+
+                showToast('อัปเดตชื่อผู้ใช้งานเรียบร้อยค่ะ ✔️', 'success');
+                closeEditModal();
+            }
+        }
+        window.saveNewName = fn_saveNewName;
+
+        // 6. PASSWORD RESET (EMAILJS & OTP)
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            backToStep1();
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+            clearInterval(otpTimerInterval);
+        }
+
+        function backToStep1() {
+            document.getElementById('forgot-step-1').classList.remove('hidden');
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-3').classList.add('hidden');
+            document.getElementById('forgot-result-box').classList.add('hidden');
+            clearInterval(otpTimerInterval);
+        }
+
+        function processRequestEmailOTP(event) {
+            event.preventDefault();
+            const email = document.getElementById('forgot-email').value.toLowerCase();
+            const resultBox = document.getElementById('forgot-result-box');
+            const btnSubmit = document.getElementById('btn-submit-forgot');
+
+            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+            const accountExists = users.some(u => u.email === email);
+
+            if (!accountExists) {
+                resultBox.innerText = "ไม่พบอีเมลนี้ในระบบสมาชิกค่ะ กรุณาตรวจสอบอีกครั้ง";
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            resultBox.classList.add('hidden');
+            btnSubmit.disabled = true;
+            document.getElementById('text-submit-forgot').innerText = "กำลังส่งรหัส OTP...";
+
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            targetResetEmail = email;
+
+            const templateParams = {
+                to_email: targetResetEmail,
+                otp_code: generatedOTP
+            };
+
+            console.log(`🔑 [TESTING] OTP สำหรับอีเมล ${targetResetEmail} คือ: ${generatedOTP}`);
+
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                .then(() => {
+                    showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
+                    goToStep2();
+                })
+                .catch((error) => {
+                    console.error('EmailJS Error:', error);
+                    showToast('ระบบส่งรหัสจำลองเข้า Console สำเร็จ (สำหรับการทดสอบ)', 'success');
+                    goToStep2();
+                })
+                .finally(() => {
+                    btnSubmit.disabled = false;
+                    document.getElementById('text-submit-forgot').innerText = "ส่งรหัสเข้าเมลฟรี";
+                });
+        }
+
+        function goToStep2() {
             document.getElementById('forgot-step-1').classList.add('hidden');
             document.getElementById('forgot-step-2').classList.remove('hidden');
-            document.getElementById('target-email-display').textContent = document.getElementById('forgot-email').value;
-        }
-        function processVerifyOTP(e) {
-            e.preventDefault();
-            document.getElementById('forgot-step-2').classList.add('hidden');
-            document.getElementById('forgot-step-3').classList.remove('hidden');
-        }
-        function processSaveNewPassword(e) {
-            e.preventDefault();
-            const p1 = document.getElementById('new-reset-password').value;
-            const p2 = document.getElementById('new-reset-password-confirm').value;
-            if(p1 !== p2) return showToast('รหัสผ่านไม่ตรงกัน!', 'error');
+            document.getElementById('target-email-display').innerText = `รหัสส่งไปที่: ${targetResetEmail}`;
             
-            localStorage.setItem('mg_user_pass', p1);
-            closeForgotPasswordModal();
-            showToast('เปลี่ยนรหัสผ่านความปลอดภัยใหม่สำเร็จค่ะ');
+            let timeLeft = 60;
+            const timerEl = document.getElementById('otp-timer');
+            timerEl.innerText = `${timeLeft}s`;
+            
+            clearInterval(otpTimerInterval);
+            otpTimerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = `${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(otpTimerInterval);
+                    timerEl.innerText = "หมดเวลา";
+                    showToast('รหัส OTP หมดอายุแล้ว กรุณากดส่งใหม่อีกครั้งค่ะ', 'error');
+                    backToStep1();
+                }
+            }, 1000);
         }
 
-        // Logout Flow
-        function triggerLogout() {
-            const modal = document.getElementById('logoutConfirmModal');
-            modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-            modal.querySelector('.transform').classList.remove('scale-95');
+        function processVerifyOTP(event) {
+            event.preventDefault();
+            const inputOTP = document.getElementById('otp-code').value;
+
+            if (inputOTP === generatedOTP) {
+                clearInterval(otpTimerInterval);
+                showToast('ตรวจสอบรหัสถูกต้องเรียบร้อยค่ะ ✔️', 'success');
+                document.getElementById('forgot-step-2').classList.add('hidden');
+                document.getElementById('forgot-step-3').classList.remove('hidden');
+            } else {
+                showToast('รหัส OTP ไม่ถูกต้อง กรุณาลองใหม่อีกครั้งค่ะ', 'error');
+            }
         }
-        function closeLogoutModal() {
-            const modal = document.getElementById('logoutConfirmModal');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            setTimeout(() => modal.classList.add('hidden'), 250);
-        }
-        function confirmLogout() {
-            localStorage.removeItem('mg_user_logged');
-            localStorage.removeItem('mg_last_view');
-            closeLogoutModal();
-            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ');
+
+        function processSaveNewPassword(event) {
+            event.preventDefault();
+            const newPass = document.getElementById('new-reset-password').value;
+            const confirmPass = document.getElementById('new-reset-password-confirm').value;
+
+            if (newPass !== confirmPass) {
+                showToast('รหัสผ่านทั้งสองช่องไม่ตรงกันค่ะ ❌', 'error');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+            users = users.map(u => u.email === targetResetEmail ? { ...u, password: newPass } : u);
+            localStorage.setItem('mg_registered_users', JSON.stringify(users));
+
+            showToast('เปลี่ยนรหัสผ่านใหม่สำเร็จแล้วค่ะ 🔒', 'success');
+            event.target.reset();
+            closeForgotPasswordModal();
             changeView('login');
         }
 
-        // Password Input Visibility Toggler
         function togglePasswordVisibility(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
-            if(input.type === 'password') {
+            if (input.type === 'password') {
                 input.type = 'text';
-                icon.className = "fa-solid fa-eye";
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
             } else {
                 input.type = 'password';
-                icon.className = "fa-solid fa-eye-slash";
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
             }
         }
 
-        // PWA Banners Dummy
-        function closePwaBanner() { document.getElementById('pwaAlertBanner').classList.add('hidden'); }
+        // 7. LOGOUT SYSTEM
+        function triggerLogout() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.querySelector('.transform').classList.remove('scale-95');
+            }, 50);
+        }
 
-        // APP INITIALIZATION: ตรวจเช็คเส้นทางเมื่อเบราว์เซอร์เปิดขึ้นมาใหม่หรือรีเฟรช
-        document.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = localStorage.getItem('mg_user_logged');
-            const savedView = localStorage.getItem('mg_last_view');
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 250);
+        }
 
-            if (isLoggedIn === 'true') {
-                // หากมีการล็อกอินอยู่แล้ว ให้ไปหน้าที่บันทึกไว้ล่าสุด ถ้าไม่มีให้ดีฟอลต์ที่หน้า home
-                changeView(savedView || 'home');
+        function confirmLogout() {
+            currentUser = null;
+            localStorage.removeItem('mg_current_user');
+            closeLogoutModal();
+            showToast('ออกจากระบบเพื่อความปลอดภัยสำเร็จแล้วค่ะ', 'success');
+            changeView('login');
+        }
+
+        // 8. CUSTOM TOAST NOTIFICATION
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('customToast');
+            const iconContainer = document.getElementById('toastIcon');
+            const msgText = document.getElementById('toastMessage');
+
+            msgText.innerText = message;
+            toast.classList.remove('hidden');
+
+            if (type === 'success') {
+                iconContainer.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
+                iconContainer.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
             } else {
-                // หากไม่ได้ล็อกอิน ให้ดีดตัวไปหน้า login เสมอ ป้องกันการเห็นข้อมูลหลังบ้าน
-                changeView('login');
+                iconContainer.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-400";
+                iconContainer.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
             }
-        });
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // 9. PWA INSTALLATION BANNER
+        function closePwaBanner() {
+            document.getElementById('pwaAlertBanner').classList.add('hidden');
+        }
+
+        function executePwaInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                    closePwaBanner();
+                });
+            } else {
+                showToast('ระบบพร้อมติดตั้งบนอุปกรณ์ของคุณแล้วค่ะ!', 'success');
+                closePwaBanner();
+            }
+        }
+
+        // 10. REGISTER SERVICE WORKER
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('🚀 Service Worker ลงทะเบียนสำเร็จ!', reg.scope))
+                    .catch(err => console.error('❌ Service Worker ล้มเหลว:', err));
+            });
+        }
     </script>
 </body>
 </html>
