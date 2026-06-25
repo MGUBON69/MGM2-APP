@@ -1,7 +1,7 @@
 const CACHE_NAME = 'mg-ubon-v1';
 const ASSETS = [
   '/',
-  '/index.html',
+  '/index2.html',
   '/manifest.json'
 ];
 
