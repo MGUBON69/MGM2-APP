@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2=family=Prompt:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
@@ -50,7 +50,7 @@
 
     <div class="w-full max-w-[450px] bg-[#111625] min-h-screen md:min-h-[840px] md:rounded-3xl shadow-2xl border border-slate-800/60 flex flex-col overflow-hidden relative">
         
-       <div id="customToast" style="position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; right: auto !important; bottom: auto !important;" class="hidden z-50 w-11/12 max-w-[380px] bg-[#181f32] border border-slate-700/50 px-4 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 page-active">
+        <div id="customToast" style="position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; right: auto !important; bottom: auto !important;" class="hidden z-50 w-11/12 max-w-[380px] bg-[#181f32] border border-slate-700/50 px-4 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 page-active">
             <div id="toastIcon" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"></div>
             <div class="flex-1">
                 <p id="toastMessage" class="text-xs font-medium text-white"></p>
@@ -83,7 +83,6 @@
 
         <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 flex justify-center items-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="w-full max-w-[380px] bg-[#181f32] border border-slate-800 p-6 rounded-2xl shadow-2xl page-active relative overflow-hidden">
-                
                 <div class="flex items-center gap-3 mb-4">
                     <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500">
                         <i class="fa-solid fa-key text-lg"></i>
@@ -161,14 +160,9 @@
                 </div>
                 <h4 class="text-base font-bold text-white mb-1.5">ยืนยันการออกจากระบบ?</h4>
                 <p class="text-xs text-slate-400 leading-relaxed px-2 mb-6">มั่นใจหรือไม่ว่าต้องการออกจากระบบในตอนนี้? เซสชันจะถูกยกเลิกเพื่อความปลอดภัยค่ะ</p>
-                
                 <div class="flex gap-3 text-xs font-semibold">
-                    <button onclick="closeLogoutModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors cursor-pointer border border-slate-700/50">
-                        ยกเลิก
-                    </button>
-                    <button onclick="confirmLogout()" class="flex-1 bg-[#e50012] hover:bg-[#c4000f] text-white py-3 rounded-xl transition-colors shadow-md shadow-red-900/20 cursor-pointer">
-                        ออกจากระบบ
-                    </button>
+                    <button onclick="closeLogoutModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors cursor-pointer border border-slate-700/50">ยกเลิก</button>
+                    <button onclick="confirmLogout()" class="flex-1 bg-[#e50012] hover:bg-[#c4000f] text-white py-3 rounded-xl transition-colors shadow-md shadow-red-900/20 cursor-pointer">ออกจากระบบ</button>
                 </div>
             </div>
         </div>
@@ -195,37 +189,17 @@
                 <span class="text-xs font-semibold tracking-wide text-slate-300">M2 MOTORSPORT</span>
             </div>
             <div class="flex flex-col items-end justify-end ml-auto gap-y-1 sm:flex-row sm:items-center sm:gap-x-3">
-                
                 <div class="flex items-center gap-2 justify-end">
                     <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                     <span class="text-[11px] text-slate-400 font-medium">ระบบออนไลน์</span>
                 </div>
-                
                 <span class="text-slate-600 text-[10px] hidden sm:inline">|</span>
-
                 <div class="text-[11px] text-slate-400 font-medium flex items-center gap-1 justify-end text-right">
                     <i class="fa-regular fa-clock text-slate-500"></i>
                     <span id="realtime-clock" class="text-right">กำลังโหลดเวลา...</span>
                 </div>
             </div>
         </header>
-
-        <script>
-            function updateClock() {
-                const now = new Date();
-                const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
-                const dateString = now.toLocaleDateString('th-TH', dateOptions);
-                const timeString = now.toLocaleTimeString('th-TH', { 
-                    hour: '2-digit', 
-                    minute: '2-digit', 
-                    second: '2-digit',
-                    hour12: false 
-                });
-                document.getElementById('realtime-clock').textContent = `${dateString} | ${timeString} น.`;
-            }
-            updateClock();
-            setInterval(updateClock, 1000);
-        </script>
 
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
@@ -235,7 +209,6 @@
                     <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
                     <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
                 </div>
-
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">ชื่อ-นามสกุล</label>
@@ -262,11 +235,7 @@
                             </button>
                         </div>
                     </div>
-
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
-                        สร้างบัญชีสมาชิก
-                    </button>
-                    
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">สร้างบัญชีสมาชิก</button>
                     <div class="text-center mt-4">
                         <p class="text-xs text-slate-400">มีบัญชีผู้ใช้งานแล้วใช่ไหม? 
                             <button type="button" onclick="changeView('login')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
@@ -275,13 +244,12 @@
                 </form>
             </div>
 
-            <div id="page-login" class="hidden flex-1 flex flex-col p-6">
+            <div id="page-login" class="hidden flex-1 flex flex-col p-6 page-active">
                 <div class="text-center mt-4 mb-6">
                     <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
                     <h2 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h2>
                     <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
                 </div>
-
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
                     <div class="space-y-1">
                         <label class="text-xs text-slate-400 font-medium">อีเมลผู้ใช้งาน</label>
@@ -301,11 +269,7 @@
                             </button>
                         </div>
                     </div>
-
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">
-                        เข้าสู่ระบบผู้ใช้งาน
-                    </button>
-                    
+                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">เข้าสู่ระบบผู้ใช้งาน</button>
                     <div class="text-center mt-4">
                         <p class="text-xs text-slate-400">ยังไม่มีบัญชีสมาชิกสมาชิก? 
                             <button type="button" onclick="changeView('register')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
@@ -336,7 +300,6 @@
                             <span class="text-xs font-bold text-white block">จองคิวรับบริการ</span>
                             <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">นัดหมายเช็คระยะและซ่อมทั่วไปผ่าน LINE OA</span>
                         </a>
-
                         <button onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-phone text-base"></i>
@@ -344,7 +307,6 @@
                             <span class="text-xs font-bold text-white block">ติดต่อพนักงาน</span>
                             <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
                         </button>
-
                         <button onclick="changeView('location')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-map-location-dot text-base"></i>
@@ -352,7 +314,6 @@
                             <span class="text-xs font-bold text-white block">ที่ตั้งบริษัท</span>
                             <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
                         </button>
-
                         <button onclick="triggerLogout()" class="bg-[#181f32] hover:bg-red-950/20 border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-slate-800 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
                                 <i class="fa-solid fa-power-off text-base"></i>
@@ -381,7 +342,6 @@
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
                     </a>
-
                     <a href="tel:0930641144" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-red-500/10 text-[#e50012] rounded-full flex items-center justify-center">
@@ -394,7 +354,6 @@
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
                     </a>
-
                     <a href="tel:0996193126" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center">
@@ -421,204 +380,240 @@
                     <span class="text-[10px] text-slate-400 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
                 </div>
                 <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3 shadow-sm">
-                    <a href="https://maps.app.goo.gl/G3gXvRwNDuyKShgq9" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
+                    <a href="https://maps.google.com/?q=MG+M2+Motorsport+Ubon" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
                         <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
                     </a>
                 </div>
             </div>
 
-       </main>
+        </main>
 
         <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
             <button onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-house-chimney text-lg"></i>
+                <i class="fa-solid fa-house-chimney text-base"></i>
                 <span class="text-[10px] tracking-wide">หน้าแรก</span>
             </button>
-            
-            <a href="https://lin.ee/Ov20t55" target="_blank" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16 text-center">
-                <i class="fa-brands fa-line text-lg"></i>
-                <span class="text-[10px] tracking-wide">จองคิว</span>
-            </a>
-
-            <button onclick="changeView('membership')" id="btn-nav-membership" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-id-card text-lg"></i>
-                <span class="text-[10px] tracking-wide">สมาชิก</span>
-            </button>
-            
             <button onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-phone text-lg"></i>
-                <span class="text-[10px] tracking-wide">ติดต่อ</span>
+                <i class="fa-solid fa-phone text-base"></i>
+                <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
+            </button>
+            <button onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-map-location-dot text-base"></i>
+                <span class="text-[10px] tracking-wide">ที่ตั้งศูนย์</span>
             </button>
         </nav>
+
     </div>
 
-<script>
-    // 1. ฟังก์ชันเปิด-ปิด หน้าตาและเมนู (View Router)
-    function changeView(viewName) {
-        const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
-        
-        pages.forEach(pageId => {
-            const page = document.getElementById(pageId);
-            if (page) page.classList.add('hidden');
+    <script>
+        // Realtime Clock Real-time Rendering
+        function updateClock() {
+            const now = new Date();
+            const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
+            const dateString = now.toLocaleDateString('th-TH', dateOptions);
+            const timeString = now.toLocaleTimeString('th-TH', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false 
+            });
+            const clockEl = document.getElementById('realtime-clock');
+            if(clockEl) clockEl.textContent = `${dateString} | ${timeString} น.`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Global Custom Toast Handler
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('customToast');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMessage');
+            
+            msg.textContent = message;
+            if(type === 'success') {
+                icon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
+                icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else {
+                icon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-400";
+                icon.innerHTML = '<i class="fa-solid fa-circle-excretion fa-circle-xmark"></i>';
+            }
+            
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        // Router Control with LocalStorage Data Sync
+        function changeView(viewName) {
+            // ป้องกันข้อมูลพังหากเรียกหน้าโดยไม่ล็อกอิน (ยกเว้น login, register)
+            const isLoggedIn = localStorage.getItem('mg_user_logged');
+            if (!isLoggedIn && viewName !== 'register') {
+                viewName = 'login';
+            }
+
+            // ซ่อนหน้าดั้งเดิมทั้งหมด
+            const pages = ['page-register', 'page-login', 'page-home', 'page-contact', 'page-location'];
+            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+
+            // เผยโฉมหน้าที่เลือก
+            const activePageId = `page-${viewName}`;
+            const targetPage = document.getElementById(activePageId);
+            if(targetPage) targetPage.classList.remove('hidden');
+
+            // บันทึกหน้าปัจจุบันลง LocalStorage "นี่คือพระเอกที่ทำให้ Refresh แล้วไม่เด้งกลับ"
+            localStorage.setItem('mg_last_view', viewName);
+
+            // ปรับแต่ง UI Header / Footer Nav Bar ตามสิทธิ์เข้าถึง
+            const header = document.getElementById('appHeader');
+            const bottomNav = document.getElementById('bottomNav');
+            
+            if (viewName === 'login' || viewName === 'register') {
+                header.classList.add('hidden');
+                bottomNav.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+                bottomNav.classList.remove('hidden');
+                
+                // โหลดชื่อโปรไฟล์ปัจจุบันจาก DB มาแสดง
+                const cachedName = localStorage.getItem('mg_user_name') || 'คุณลูกค้าสมาชิก';
+                document.getElementById('client-name').textContent = cachedName;
+                
+                // อัปเดต Active State ของแถบเมนูด้านล่าง
+                updateBottomNavUI(viewName);
+            }
+        }
+
+        function updateBottomNavUI(viewName) {
+            ['home', 'contact', 'location'].forEach(v => {
+                const btn = document.getElementById(`btn-nav-${v}`);
+                if(btn) {
+                    if(v === viewName) {
+                        btn.className = "flex flex-col items-center gap-1 text-red-500 transition-transform active:scale-90 cursor-pointer w-16";
+                    } else {
+                        btn.className = "flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16";
+                    }
+                }
+            });
+        }
+
+        // Authentication & Form Management (จำลอง Database บนเครื่องลูกค้า)
+        function processRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-password').value;
+
+            localStorage.setItem('mg_user_name', name);
+            localStorage.setItem('mg_user_email', email);
+            localStorage.setItem('mg_user_pass', pass);
+            localStorage.setItem('mg_user_logged', 'true');
+
+            showToast('ลงทะเบียนบัญชี MG สำเร็จแล้วค่ะ');
+            changeView('home');
+        }
+
+        function processLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+
+            const storedEmail = localStorage.getItem('mg_user_email') || 'mgubn@gmail.com';
+            const storedPass = localStorage.getItem('mg_user_pass') || '123456';
+
+            if(email === storedEmail && pass === storedPass) {
+                localStorage.setItem('mg_user_logged', 'true');
+                showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับค่ะ');
+                changeView('home');
+            } else {
+                showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง!', 'error');
+            }
+        }
+
+        // Profile Management
+        function openEditModal() { document.getElementById('editNameModal').classList.remove('hidden'); }
+        function closeEditModal() { document.getElementById('editNameModal').classList.add('hidden'); }
+        function saveNewName(e) {
+            e.preventDefault();
+            const newName = document.getElementById('new-profile-name').value;
+            localStorage.setItem('mg_user_name', newName);
+            document.getElementById('client-name').textContent = newName;
+            closeEditModal();
+            showToast('อัปเดตชื่อผู้ลงทะเบียนเรียบร้อยค่ะ');
+        }
+
+        // Forgot Password Steps
+        function openForgotPasswordModal() { document.getElementById('forgotPasswordModal').classList.remove('hidden'); }
+        function closeForgotPasswordModal() { document.getElementById('forgotPasswordModal').classList.add('hidden'); }
+        function processRequestEmailOTP(e) {
+            e.preventDefault();
+            document.getElementById('forgot-step-1').classList.add('hidden');
+            document.getElementById('forgot-step-2').classList.remove('hidden');
+            document.getElementById('target-email-display').textContent = document.getElementById('forgot-email').value;
+        }
+        function processVerifyOTP(e) {
+            e.preventDefault();
+            document.getElementById('forgot-step-2').classList.add('hidden');
+            document.getElementById('forgot-step-3').classList.remove('hidden');
+        }
+        function processSaveNewPassword(e) {
+            e.preventDefault();
+            const p1 = document.getElementById('new-reset-password').value;
+            const p2 = document.getElementById('new-reset-password-confirm').value;
+            if(p1 !== p2) return showToast('รหัสผ่านไม่ตรงกัน!', 'error');
+            
+            localStorage.setItem('mg_user_pass', p1);
+            closeForgotPasswordModal();
+            showToast('เปลี่ยนรหัสผ่านความปลอดภัยใหม่สำเร็จค่ะ');
+        }
+
+        // Logout Flow
+        function triggerLogout() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.remove('scale-95');
+        }
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutConfirmModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => modal.classList.add('hidden'), 250);
+        }
+        function confirmLogout() {
+            localStorage.removeItem('mg_user_logged');
+            localStorage.removeItem('mg_last_view');
+            closeLogoutModal();
+            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ');
+            changeView('login');
+        }
+
+        // Password Input Visibility Toggler
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if(input.type === 'password') {
+                input.type = 'text';
+                icon.className = "fa-solid fa-eye";
+            } else {
+                input.type = 'password';
+                icon.className = "fa-solid fa-eye-slash";
+            }
+        }
+
+        // PWA Banners Dummy
+        function closePwaBanner() { document.getElementById('pwaAlertBanner').classList.add('hidden'); }
+
+        // APP INITIALIZATION: ตรวจเช็คเส้นทางเมื่อเบราว์เซอร์เปิดขึ้นมาใหม่หรือรีเฟรช
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('mg_user_logged');
+            const savedView = localStorage.getItem('mg_last_view');
+
+            if (isLoggedIn === 'true') {
+                // หากมีการล็อกอินอยู่แล้ว ให้ไปหน้าที่บันทึกไว้ล่าสุด ถ้าไม่มีให้ดีฟอลต์ที่หน้า home
+                changeView(savedView || 'home');
+            } else {
+                // หากไม่ได้ล็อกอิน ให้ดีดตัวไปหน้า login เสมอ ป้องกันการเห็นข้อมูลหลังบ้าน
+                changeView('login');
+            }
         });
-
-        const activePage = document.getElementById(`page-${viewName}`);
-        if (activePage) activePage.classList.remove('hidden');
-
-        const header = document.getElementById('appHeader');
-        const bottomNav = document.getElementById('bottomNav');
-        
-        if (viewName === 'login' || viewName === 'register') {
-            if (header) header.classList.add('hidden');
-            if (bottomNav) bottomNav.classList.add('hidden');
-        } else {
-            if (header) header.classList.remove('hidden');
-            if (bottomNav) bottomNav.classList.remove('hidden');
-        }
-    }
-
-    // เปิดเว็บมาหน้าแรก ให้แสดงหน้าเข้าสู่ระบบ (Login)
-    window.addEventListener('DOMContentLoaded', () => {
-        changeView('login');
-    });
-
-    // 2. ระบบลงทะเบียน (เวอร์ชันแก้ไข: บล็อกอีเมลซ้ำด้วยระบบ Array ชัวร์ 100%)
-    function processRegister(event) {
-        event.preventDefault();
-        
-        const name = document.getElementById('reg-name').value;
-        const phone = document.getElementById('reg-phone').value;
-        const email = document.getElementById('reg-email').value.trim().toLowerCase(); // ปรับให้เป็นพิมพ์เล็กเพื่อความแม่นยำค่ะ
-        const password = document.getElementById('reg-password').value;
-
-        // ดึงรายชื่อผู้ใช้งานทั้งหมดที่เคยสมัครไว้ (ถ้าไม่มีให้สร้างเป็น Array ว่าง)
-        let allUsers = JSON.parse(localStorage.getItem('all_users_list')) || [];
-
-        // 🔥 ตรวจสอบอย่างละเอียดว่ามีอีเมลนี้อยู่ในระบบแล้วหรือยัง
-        const isEmailDuplicate = allUsers.some(user => user.email === email);
-        
-        if (isEmailDuplicate) {
-            // ❌ ถ้าเจออีเมลซ้ำ ยิงเตือนสีแดงทันที และหยุดทำงานค่ะพี่ชินอิจิ!
-            showToast("อีเมลนี้ถูกใช้ลงทะเบียนไปแล้วค่ะ! กรุณาใช้อีเมลอื่น", "error");
-            return;
-        }
-
-        // หากไม่ซ้ำ -> ทำการเพิ่มข้อมูลใหม่เข้าไปใน Array
-        const newUser = { name, phone, email, password };
-        allUsers.push(newUser);
-
-        // บันทึกกลับลง LocalStorage ทั้งเซ็ต และอัปเดตเซสชันเผื่อไว้ด้วยค่ะ
-        localStorage.setItem('all_users_list', JSON.stringify(allUsers));
-        localStorage.setItem(`user_${email}`, JSON.stringify(newUser)); // คงคีย์เดิมไว้เพื่อซัพพอร์ตระบบกู้รหัสผ่านเก่า
-
-        showToast("สร้างบัญชีสมาชิกสำเร็จแล้วค่ะ!", "success");
-        
-        event.target.reset();
-        setTimeout(() => changeView('login'), 1500);
-    }
-
-    // 3. ระบบเข้าสู่ระบบและตรวจสอบสิทธิ์ (Login Validation)
-    function processLogin(event) {
-        event.preventDefault();
-
-        const email = document.getElementById('login-email').value.trim().toLowerCase();
-        const password = document.getElementById('login-password').value;
-        
-        // ดึงฐานข้อมูล Array รวมมาเช็ก
-        const allUsers = JSON.parse(localStorage.getItem('all_users_list')) || [];
-        
-        // ค้นหาผู้ใช้งานจากอีเมล
-        const user = allUsers.find(u => u.email === email);
-
-        if (!user) {
-            showToast("ไม่พบอีเมลนี้ในระบบ กรุณาลงทะเบียนก่อนค่ะ", "error");
-            return;
-        }
-
-        if (user.password === password) {
-            document.getElementById('client-name').textContent = user.name;
-            showToast("ยินดีต้อนรับเข้าสู่ระบบค่ะ", "success");
-            setTimeout(() => changeView('home'), 1000);
-        } else {
-            showToast("รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้งค่ะ", "error");
-        }
-    }
-
-    // 4. ระบบแจ้งเตือน (Custom Toast Notification)
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('customToast');
-        const toastIcon = document.getElementById('toastIcon');
-        const toastMessage = document.getElementById('toastMessage');
-
-        toastMessage.textContent = message;
-        
-        if (type === 'success') {
-            toastIcon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
-            toastIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-        } else {
-            toastIcon.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-400";
-            toastIcon.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
-        }
-
-        toast.classList.remove('hidden');
-        setTimeout(() => { toast.classList.add('hidden'); }, 3000);
-    }
-
-    // 5. ระบบเปิด-ปิดซ่อนแสดงรหัสผ่าน
-    function togglePasswordVisibility(inputId, iconId) {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById(iconId);
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.className = 'fa-solid fa-eye';
-        } else {
-            input.type = 'password';
-            icon.className = 'fa-solid fa-eye-slash';
-        }
-    }
-
-    // 6. ระบบควบคุม หน้าต่าง Logout Modal
-    function triggerLogout() {
-        const modal = document.getElementById('logoutConfirmModal');
-        modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-        modal.querySelector('.transform').classList.remove('scale-95');
-    }
-
-    // 7. ระบบควบคุม หน้าต่างเปิด-ปิด แก้ไขชื่อโปรไฟล์
-    function openEditModal() {
-        document.getElementById('editNameModal').classList.remove('hidden');
-    }
-
-    function closeEditModal() {
-        document.getElementById('editNameModal').classList.add('hidden');
-    }
-
-    function saveNewName(event) {
-        event.preventDefault();
-        const newName = document.getElementById('new-profile-name').value;
-        document.getElementById('client-name').textContent = newName;
-        closeEditModal();
-        showToast("อัปเดตชื่อเรียบร้อยแล้วค่ะ", "success");
-        event.target.reset();
-    }
-
-    function closeLogoutModal() {
-        const modal = document.getElementById('logoutConfirmModal');
-        modal.classList.add('hidden', 'opacity-0', 'pointer-events-none');
-    }
-
-    function confirmLogout() {
-        closeLogoutModal();
-        showToast("ออกจากระบบเรียบร้อยแล้วค่ะ", "success");
-        setTimeout(() => changeView('login'), 1000);
-    }
-
-    // 8. ระบบกู้คืนรหัสผ่าน (เปิด-ปิดหน้าต่าง)
-    function openForgotPasswordModal() {
-        document.getElementById('forgotPasswordModal').classList.remove('hidden');
-    }
-    function closeForgotPasswordModal() {
-        document.getElementById('forgotPasswordModal').classList.add('hidden');
-    }
-</script>
+    </script>
+</body>
+</html>
