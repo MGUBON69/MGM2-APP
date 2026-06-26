@@ -634,11 +634,12 @@
             const templateParams = {
                 to_email: targetResetEmail,
                 otp_code: generatedOTP
+                time: expireTime
             };
 
             console.log(`🔑 [TESTING] OTP สำหรับอีเมล ${targetResetEmail} คือ: ${generatedOTP}`);
 
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+            emailjs.send('service_7etoscl', 'gwsnbje', templateParams)
                 .then(() => {
                     showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
                     goToStep2();
