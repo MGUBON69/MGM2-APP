@@ -609,51 +609,59 @@
             clearInterval(otpTimerInterval);
         }
 
-        function processRequestEmailOTP(event) {
-            event.preventDefault();
-            const email = document.getElementById('forgot-email').value.toLowerCase();
-            const resultBox = document.getElementById('forgot-result-box');
-            const btnSubmit = document.getElementById('btn-submit-forgot');
+       function processRequestEmailOTP(event) {
+    event.preventDefault();
+    const email = document.getElementById('forgot-email').value.toLowerCase();
+    const resultBox = document.getElementById('forgot-result-box');
+    const btnSubmit = document.getElementById('btn-submit-forgot');
 
-            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-            const accountExists = users.some(u => u.email === email);
+    let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+    const accountExists = users.some(u => u.email === email);
 
-            if (!accountExists) {
-                resultBox.innerText = "ไม่พบอีเมลนี้ในระบบสมาชิกค่ะ กรุณาตรวจสอบอีกครั้ง";
-                resultBox.classList.remove('hidden');
-                return;
-            }
+    if (!accountExists) {
+        resultBox.innerText = "ไม่พบอีเมลนี้ในระบบสมาชิกค่ะ กรุณาตรวจสอบอีกครั้ง";
+        resultBox.classList.remove('hidden');
+        return;
+    }
 
-            resultBox.classList.add('hidden');
-            btnSubmit.disabled = true;
-            document.getElementById('text-submit-forgot').innerText = "กำลังส่งรหัส OTP...";
+    resultBox.classList.add('hidden');
+    btnSubmit.disabled = true;
+    document.getElementById('text-submit-forgot').innerText = "กำลังส่งรหัส OTP...";
 
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            targetResetEmail = email;
+    generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    targetResetEmail = email;
 
-            const templateParams = {
-                to_email: targetResetEmail,
-                otp_code: generatedOTP
-                time: expireTime
-            };
+    // ✨ คิมเพิ่มการคำนวณเวลาให้อัตโนมัติ (เวลาปัจจุบัน + 15 นาทีสำหรับการแสดงผลบนเมล)
+    const expireTime = new Date(Date.now() + 15 * 60 * 1000).toLocaleTimeString('th-TH', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
 
-            console.log(`🔑 [TESTING] OTP สำหรับอีเมล ${targetResetEmail} คือ: ${generatedOTP}`);
+    const templateParams = {
+        to_email: targetResetEmail,
+        otp_code: generatedOTP,
+        time: expireTime // 🔒 มีตัวแปรนี้แล้ว ไม่พังแน่นอนค่ะ!
+    };
 
-            emailjs.send('service_7etoscl', 'gwsnbje', templateParams)
-                .then(() => {
-                    showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
-                    goToStep2();
-                })
-                .catch((error) => {
-                    console.error('EmailJS Error:', error);
-                    showToast('ระบบส่งรหัสจำลองเข้า Console สำเร็จ (สำหรับการทดสอบ)', 'success');
-                    goToStep2();
-                })
-                .finally(() => {
-                    btnSubmit.disabled = false;
-                    document.getElementById('text-submit-forgot').innerText = "ส่งรหัสเข้าเมลฟรี";
-                });
-        }
+    console.log(`🔑 [TESTING] OTP สำหรับอีเมล ${targetResetEmail} คือ: ${generatedOTP}`);
+
+    // ส่งข้อมูลไปยัง EmailJS ของคุณชินอิจิ
+    emailjs.send('service_7etoscl', 'gwsnbje', templateParams)
+        .then(() => {
+            showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
+            goToStep2();
+        })
+        .catch((error) => {
+            console.error('EmailJS Error:', error);
+            // ถ้าหากตั้งค่า Public Key ใน <head> ยังไม่ครบ จะหลุดมาตรงนี้แต่ก็ยังเข้ากระบวนการทดสอบได้ค่ะ
+            showToast('ระบบส่งรหัสจำลองเข้า Console สำเร็จ (สำหรับการทดสอบ)', 'success');
+            goToStep2();
+        })
+        .finally(() => {
+            btnSubmit.disabled = false;
+            document.getElementById('text-submit-forgot').innerText = "ส่งรหัสเข้าเมลฟรี";
+        });
+}
 
         function goToStep2() {
             document.getElementById('forgot-step-1').classList.add('hidden');
