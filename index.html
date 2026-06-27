@@ -523,15 +523,15 @@
         submitBtn.innerText = "กำลังบันทึกข้อมูล...";
     }
 
-// 4. บันทึกยูสเซอร์ใหม่ลงในฐานข้อมูลจำลอง (โค้ดเดิมของคุณชินอิจิ)
+// 4. บันทึกยูสเซอร์ใหม่ลงในฐานข้อมูลจำลอง (โค้ดเดิมของคุณ)
         users.push({ name, phone, email, password });
         localStorage.setItem('mg_registered_users', JSON.stringify(users));
 
-       // [เพิ่มใหม่] ส่งข้อมูลไปยัง Google Sheets ผ่าน Apps Script Web App
+        // [เพิ่มใหม่] ส่งข้อมูลไปยัง Google Sheets ผ่าน Apps Script Web App ของคุณ
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSP_z58y-AXmYK6oiHzf_yQ6roCEyXZpCeiD6eldj5PFBBp7Al2MnfNcY1803Pg10kXg/exec";
         const urlWithParams = `${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
         
-        // ใช้ fetch ส่งแบบเบื้องหลัง
+        // ใช้ fetch ส่งข้อมูลแบบเบื้องหลัง
         fetch(urlWithParams, { method: "POST" })
         .then(response => response.json())
         .then(data => {
@@ -539,6 +539,19 @@
         })
         .catch(error => {
             console.error("Google Sheets Error:", error);
+        });
+
+        // 5. แจ้งเตือนความสำเร็จและย้ายหน้า (โค้ดเดิมของคุณ)
+        showToast('สมัครสมาชิกสำเร็จแล้วค่ะ 🚀', 'success');
+        form.reset();
+
+        // คืนค่าสถานะปุ่มเผื่อกลับมาหน้าเดิม
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "สร้างบัญชีสมาชิก";
+        }
+
+        changeView('login');
         });
 
         // 5. แจ้งเตือนความสำเร็จและย้ายหน้า (โค้ดเดิม)
