@@ -3,14 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG M2 Motorsport</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0b0f19">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MG UBON">
-
+    <title>MG M2 Motorsport Service</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -359,16 +352,27 @@
                     <span class="text-[10px] text-slate-400 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
                 </div>
                 <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3 shadow-sm">
-                    <a href="https://maps.google.com/?q=MG+M2+Motorsport+Ubon" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
+                    <a href="https://maps.app.goo.gl/wJm8yZbeX66Y6fM98" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
                         <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
                     </a>
                 </div>
             </div>
 
-<button type="button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScn5V8MFyz1yTx08ttPrbQgvrbH3u2AjTH8tqVFbceRV8722w/viewform?usp=publish-editor', '_blank')" id="btn-nav-complaint" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-    <i class="fa-solid fa-bullhorn text-base"></i>
-    <span class="text-[10px] tracking-wide">ร้องเรียน</span>
-</button>
+        </main>
+
+        <nav id="bottomNav" class="hidden bg-[#181f32]/95 backdrop-blur-md border-t border-slate-800/80 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-xl">
+            <button type="button" onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-house-chimney text-base"></i>
+                <span class="text-[10px] tracking-wide">หน้าแรก</span>
+            </button>
+            <button type="button" onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-phone text-base"></i>
+                <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
+            </button>
+            <button type="button" onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+                <i class="fa-solid fa-map-location-dot text-base"></i>
+                <span class="text-[10px] tracking-wide">ที่ตั้งศูนย์</span>
+            </button>
         </nav>
 
         <div id="customToast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-900/95 border border-slate-800 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 z-50 min-w-[280px] backdrop-blur-xs">
@@ -386,6 +390,26 @@
         let generatedOTP = '';
         let targetResetEmail = '';
 
+        // 2. INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            initRealtimeClock();
+            
+            if (currentUser) {
+                checkAndShowView('home');
+            } else {
+                checkAndShowView('login');
+            }
+
+            // PWA Setup
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if(currentUser) {
+                    document.getElementById('pwaAlertBanner').classList.remove('hidden');
+                }
+            });
+        });
+
         function initRealtimeClock() {
             const clockEl = document.getElementById('realtime-clock');
             setInterval(() => {
@@ -394,7 +418,7 @@
             }, 1000);
         }
 
-        // 3. ROUTING & NAVIGATION 
+        // 3. ROUTING & NAVIGATION (แก้ไข Logic บังคับการสลับคลาสขจัดปัญหาซ้อนทับกันค่ะ)
         function changeView(viewId) {
             const pages = ['register', 'login', 'home', 'contact', 'location'];
             
@@ -402,13 +426,14 @@
                 const el = document.getElementById(`page-${p}`);
                 if (el) {
                     el.classList.add('hidden');
-                    el.classList.remove('flex'); 
+                    el.classList.remove('flex'); // ป้องกันกรณีหน้าลงทะเบียนค้างสถานะ flex ค้างไว้ค่ะ
                 }
             });
 
             const targetPage = document.getElementById(`page-${viewId}`);
             if (targetPage) {
                 targetPage.classList.remove('hidden');
+                // หากเป็นหน้า login หรือ register ให้แสดงผลแบบ flex เพื่อความสวยงามกึ่งกลางจอค่ะ
                 if (viewId === 'login' || viewId === 'register') {
                     targetPage.classList.add('flex');
                 }
