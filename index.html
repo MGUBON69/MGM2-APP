@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
-            emailjs.init("user_live_mock_key");
+            emailjs.init("KSS0THK1eB1HxrAsn");
         })();
     </script>
     <style>
@@ -669,8 +669,6 @@
                 to_email: targetResetEmail,
                 otp_code: generatedOTP
             };
-
-            console.log(`🔑 [TESTING] OTP คือ: ${generatedOTP}`);
 
             emailjs.send('service_7etoscl', 'gwsnbje', templateParams)
                 .then(() => {
