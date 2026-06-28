@@ -352,7 +352,7 @@
                     <span class="text-[10px] text-slate-400 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
                 </div>
                 <div class="bg-[#181f32] border border-slate-800/80 p-4 rounded-xl space-y-3 shadow-sm">
-                    <a href="https://maps.app.goo.gl/wJm8yZbeX66Y6fM98" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
+                    <a href="https://goo.gl/maps/Bk3R44FyNjPPNwwE8" target="_blank" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-md">
                         <i class="fa-solid fa-route mr-1.5 text-amber-400"></i> เปิดนำทางบน Google Maps
                     </a>
                 </div>
@@ -365,16 +365,11 @@
                 <i class="fa-solid fa-house-chimney text-base"></i>
                 <span class="text-[10px] tracking-wide">หน้าแรก</span>
             </button>
-            <button type="button" onclick="changeView('contact')" id="btn-nav-contact" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-phone text-base"></i>
-                <span class="text-[10px] tracking-wide">ติดต่อเรา</span>
-            </button>
-            <button type="button" onclick="changeView('location')" id="btn-nav-location" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
-                <i class="fa-solid fa-map-location-dot text-base"></i>
-                <span class="text-[10px] tracking-wide">ที่ตั้งศูนย์</span>
-            </button>
-        </nav>
-
+<button type="button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScn5V8MFyz1yTx08ttPrbQgvrbH3u2AjTH8tqVFbceRV8722w/viewform?usp=publish-editor', '_blank')" id="btn-nav-complaint" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+        <i class="fa-solid fa-bullhorn text-base"></i>
+        <span class="text-[10px] tracking-wide">ร้องเรียน</span>
+    </button>
+</nav>
         <div id="customToast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-900/95 border border-slate-800 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 z-50 min-w-[280px] backdrop-blur-xs">
             <div id="toastIcon"></div>
             <p id="toastMessage" class="text-xs font-semibold leading-snug"></p>
