@@ -776,26 +776,31 @@
         }
 
         // 9. CUSTOM TOAST NOTIFICATION
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('customToast');
-            const iconContainer = document.getElementById('toastIcon');
-            const msgText = document.getElementById('toastMessage');
+     function showToast(message, type = 'success') {
+    // 1. สร้างตัวครอบที่บังคับให้อยู่กึ่งกลางหน้าจอเสมอ
+    const toastContainer = document.createElement('div');
+    // ใช้ fixed inset-0 และ flex justify-center items-center เพื่อล็อกให้อยู่กลางจอเป๊ะๆ
+    toastContainer.className = "fixed inset-0 z-[9999] flex justify-center items-center p-4 pointer-events-none";
 
-            msgText.innerText = message;
-            toast.classList.remove('hidden');
+    // 2. กำหนดสีตามประเภท (success หรือ error) ให้เข้ากับธีม M2 Motorsport ของชินอิจิ
+    const bgColor = type === 'success' ? 'bg-slate-800/90 border border-emerald-500/30' : 'bg-red-950/90 border border-red-500/30';
+    const textColor = type === 'success' ? 'text-emerald-400' : 'text-red-400';
 
-            if (type === 'success') {
-                iconContainer.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-400";
-                iconContainer.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-            } else {
-                iconContainer.className = "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-red-500/10 text-red-400";
-                iconContainer.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
-            }
+    // 3. ใส่เนื้อหาข้อความเข้าไปข้างใน
+    toastContainer.innerHTML = `
+        <div class="${bgColor} ${textColor} px-6 py-3 rounded-2xl shadow-2xl font-medium text-base pointer-events-auto backdrop-blur-sm animate-fade-in-up">
+            ${message}
+        </div>
+    `;
 
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
+    // 4. แสดงผลบนหน้าจอ
+    document.body.appendChild(toastContainer);
+
+    // 5. ตั้งเวลาให้หายไปเองหลังจากผ่านไป 2.5 วินาที
+    setTimeout(() => {
+        toastContainer.remove();
+    }, 2500);
+}
 
         // 10. PWA INSTALLATION BANNER
         function closePwaBanner() {
