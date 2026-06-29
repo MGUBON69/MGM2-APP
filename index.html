@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG M2 Motorsport Service</title>
-    
-    <meta name="theme-color" content="#060913">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="./icon-192x192.png">
+    <title>MG M2 Motorsport</title>
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MG UBON">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
-            emailjs.init("user_live_mock_key");
+            emailjs.init("KSS0THK1eB1HxrAsn");
         })();
     </script>
     <style>
@@ -40,206 +48,6 @@
                     <h1 class="text-xs font-black text-white tracking-wider uppercase leading-none">M2 Motorsport</h1>
                     <p class="text-[9px] text-slate-500 font-medium mt-0.5">Ubon Ratchathani</p>
                 </div>
-            </div>
-            <div class="flex items-center gap-2 bg-[#060913] border border-slate-800/60 px-2.5 py-1 rounded-full">
-                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span id="realtime-clock" class="text-[10px] font-mono text-slate-400 font-bold">00:00:00</span>
-            </div>
-        </header>
-
-        <div id="editNameModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-xs rounded-2xl p-5 space-y-4 shadow-xl">
-                <div class="text-center">
-                    <h3 class="text-sm font-bold text-white">แก้ไขข้อมูลโปรไฟล์</h3>
-                    <p class="text-[11px] text-slate-400 mt-1">เปลี่ยนชื่อที่ต้องการให้ระบบเรียกขานค่ะ</p>
-                </div>
-                <form onsubmit="saveNewName(event)" class="space-y-3">
-                    <input type="text" id="new-profile-name" required class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                    <div class="grid grid-cols-2 gap-2 pt-1">
-                        <button type="button" onclick="closeEditModal()" class="bg-slate-800 text-slate-400 font-medium py-2 rounded-xl text-xs cursor-pointer">ยกเลิก</button>
-                        <button type="submit" class="bg-[#e50012] text-white font-bold py-2 rounded-xl text-xs cursor-pointer">บันทึก</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div id="carInfoModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-car text-red-500 mr-1.5"></i> ข้อมูลรถยนต์ของคุณ</h3>
-                    <button type="button" onclick="closeCarModal()" class="text-slate-500 hover:text-slate-300 text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <form onsubmit="saveCarInfo(event)" class="space-y-3.5">
-                    <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400">ชื่อเจ้าของรถ</label>
-                        <input type="text" id="car-owner" required placeholder="เช่น นาย เออเบิล วิ่งไกล" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400">เลขทะเบียนรถ</label>
-                        <input type="text" id="car-plate" required placeholder="เช่น กข 1234 อุบลราชธานี" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400">เลขตัวถังรถ (VIN)</label>
-                        <input type="text" id="car-vin" placeholder="กรอกเลขตัวถัง 17 หลัก (ถ้ามี)" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                    </div>
-                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs transition-transform active:scale-[0.98] mt-2 cursor-pointer">บันทึกข้อมูลรถยนต์</button>
-                </form>
-            </div>
-        </div>
-
-        <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-xl">
-                <div class="flex justify-between items-center border-b border-slate-800/80 pb-2.5 mb-3">
-                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">ระบบกู้คืนรหัสผ่าน</h3>
-                    <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-500 hover:text-slate-300 cursor-pointer text-sm"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                
-                <div id="forgot-step-1" class="space-y-3">
-                    <p class="text-[11px] text-slate-400">กรอกอีเมลที่คุณใช้ลงทะเบียนเพื่อรับรหัส OTP ค่ะ</p>
-                    <form onsubmit="processRequestEmailOTP(event)" class="space-y-3">
-                        <input type="email" id="forgot-email" required placeholder="ระบุอีเมลของคุณ" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                        <div id="forgot-result-box" class="hidden text-[11px] bg-red-500/10 border border-red-500/20 text-red-400 p-2.5 rounded-lg"></div>
-                        <button type="submit" id="btn-submit-forgot" class="w-full bg-[#e50012] text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer"><span id="text-submit-forgot">ส่งรหัสเข้าเมลฟรี</span></button>
-                    </form>
-                </div>
-
-                <div id="forgot-step-2" class="hidden space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span id="target-email-display" class="text-[11px] text-amber-400 font-medium"></span>
-                        <span id="otp-timer" class="text-xs font-mono font-bold text-red-500">60s</span>
-                    </div>
-                    <form onsubmit="processVerifyOTP(event)" class="space-y-3">
-                        <input type="text" id="otp-code" required placeholder="กรอกรหัส OTP 6 หลัก" class="w-full text-center tracking-widest font-mono bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-base focus:outline-none focus:border-red-500">
-                        <button type="submit" class="w-full bg-amber-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs cursor-pointer">ยืนยันรหัส OTP</button>
-                    </form>
-                </div>
-
-                <div id="forgot-step-3" class="hidden space-y-3">
-                    <p class="text-[11px] text-slate-400">กำหนดรหัสผ่านใหม่ที่ต้องการเปลี่ยนค่ะ</p>
-                    <form onsubmit="processSaveNewPassword(event)" class="space-y-3">
-                        <input type="password" id="new-reset-password" required minlength="6" placeholder="รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                        <input type="password" id="new-reset-password-confirm" required placeholder="ยืนยันรหัสผ่านใหม่อีกครั้ง" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                        <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer">บันทึกรหัสผ่านใหม่</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div id="logoutConfirmModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-xs rounded-2xl p-5 space-y-4 shadow-xl">
-                <div class="text-center space-y-2">
-                    <div class="w-10 h-10 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto"><i class="fa-solid fa-power-off text-lg"></i></div>
-                    <h3 class="text-sm font-bold text-white">ต้องการออกจากระบบ?</h3>
-                    <p class="text-[11px] text-slate-400">เซสชันความปลอดภัยของคุณจะถูกปิดลงค่ะ</p>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button type="button" onclick="closeLogoutModal()" class="bg-slate-800 text-slate-400 font-medium py-2 rounded-xl text-xs cursor-pointer">ยกเลิก</button>
-                    <button type="button" onclick="confirmLogout()" class="bg-red-600 text-white font-bold py-2 rounded-xl text-xs cursor-pointer">ออกจากระบบ</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="pwaAlertBanner" class="hidden bg-gradient-to-r from-red-950/40 to-slate-900 border border-red-500/20 p-3.5 mx-4 mt-3 rounded-xl flex items-center justify-between shadow-md z-30">
-            <div class="flex items-center gap-2.5">
-                <i class="fa-solid fa-mobile-screen-button text-red-400 text-base"></i>
-                <div>
-                    <span class="text-[11px] font-bold text-white block">ติดตั้งแอปพลิเคชัน</span>
-                    <span class="text-[9px] text-slate-400 block mt-0.5">เข้าใช้งานผ่านหน้าโฮมได้รวดเร็วทันใจค่ะ</span>
-                </div>
-            </div>
-            <div class="flex items-center gap-1.5">
-                <button type="button" onclick="closePwaBanner()" class="text-[10px] text-slate-500 px-2 py-1 cursor-pointer">ไว้ก่อน</button>
-                <button type="button" onclick="executePwaInstall()" class="bg-[#e50012] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm cursor-pointer">ติดตั้ง</button>
-            </div>
-        </div>
-
-        <main class="flex-1 flex flex-col overflow-y-auto pb-24">
-
-            <div id="page-register" class="hidden flex-1 flex flex-col p-6 page-view">
-                <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
-                    <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
-                    <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
-                </div>
-                <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">ชื่อ-นามสกุล</label>
-                        <input type="text" id="reg-name" required placeholder="เช่น นาย เออเบิล วิ่งไกล"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="reg-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">อีเมล</label>
-                        <input type="email" id="reg-email" required placeholder="เช่น mgubn@gmail.com"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-                        <div class="relative">
-                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
-                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                            <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer p-1">
-                                <i id="reg-eye-icon" class="fa-solid fa-eye-slash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">สร้างบัญชีสมาชิก</button>
-                    <div class="text-center mt-4">
-                        <p class="text-xs text-slate-400">มีบัญชีผู้ใช้งานแล้วใช่ไหม? 
-                            <button type="button" onclick="changeView('login')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
-                        </p>
-                    </div>
-                </form>
-            </div>
-
-            <div id="page-login" class="hidden flex-1 flex flex-col p-6 page-view">
-                <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
-                    <h2 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h2>
-                    <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
-                </div>
-                <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
-                    <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">อีเมลผู้ใช้งาน</label>
-                        <input type="email" id="login-email" required placeholder="เช่น mgubn@gmail.com"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex justify-between items-center">
-                            <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-                            <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-amber-500 hover:text-amber-400 transition-colors font-medium cursor-pointer">ลืมรหัสผ่าน?</button>
-                        </div>
-                        <div class="relative">
-                            <input type="password" id="login-password" required placeholder="••••••••••••"
-                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-                            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer p-1">
-                                <i id="login-eye-icon" class="fa-solid fa-eye-slash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">เข้าสู่ระบบผู้ใช้งาน</button>
-                    <div class="text-center mt-4">
-                        <p class="text-xs text-slate-400">ยังไม่มีบัญชีสมาชิกสมาชิก? 
-                            <button type="button" onclick="changeView('register')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
-                        </p>
-                    </div>
-                </form>
-            </div>
-
-            <div id="page-home" class="hidden p-5 space-y-5 page-view">
-                <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
-                    <div>
-                        <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
-                        <h3 id="client-name" class="text-lg font-bold text-white">คุณลูกค้า</h3>
-                        <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชันค่ะ ✨</p>
-                    </div>
-                    <button type="button" onclick="openEditModal()" class="w-12 h-12 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner cursor-pointer transition-colors" title="แก้ไขชื่อ">
-                        <i class="fa-solid fa-user-gear text-xl"></i>
-                    </b                </div>
             </div>
             <div class="flex items-center gap-2 bg-[#060913] border border-slate-800/60 px-2.5 py-1 rounded-full">
                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
