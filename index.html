@@ -17,6 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
@@ -219,17 +221,13 @@
                             <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
                             <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-amber-500 hover:text-amber-400 transition-colors font-medium cursor-pointer">ลืมรหัสผ่าน?</button>
                         </div>
-<div class="relative w-full" style="display: flex; align-items: center;">
-    <input type="password" id="login-password" required placeholder="••••••••••••"
-        class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-    
-    <!-- คิมใช้ Inline CSS ล็อกตําแหน่งตายตัวไปเลยค่ะคุณชินอิจิ -->
-    <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" 
-            class="text-slate-500 hover:text-slate-300 cursor-pointer"
-            style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); z-index: 10; border: none; background: none; padding: 4px; display: flex; align-items: center; justify-content: center;">
-        <i id="login-eye-icon" class="fa-solid fa-eye-slash text-xs"></i>
-    </button>
-</div>
+                        <div class="relative">
+                            <input type="password" id="login-password" required placeholder="••••••••••••"
+                                class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer p-1">
+                                <i id="login-eye-icon" class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">เข้าสู่ระบบผู้ใช้งาน</button>
                     <div class="text-center mt-4">
@@ -252,31 +250,40 @@
                     </button>
                 </div>
 
-                <div id="car-display-card" class="bg-gradient-to-r from-[#0f172a] to-[#1e1b4b] border border-slate-800/80 p-4.5 rounded-2xl shadow-sm space-y-3 relative overflow-hidden group">
-                    <div class="absolute right-[-10px] bottom-[-10px] text-slate-800/20 text-6xl font-black italic select-none">MG</div>
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 bg-red-500/10 text-red-400 rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-car-rear"></i></div>
-                            <span class="text-xs font-bold text-slate-300 tracking-wide">ข้อมูลรถคันโปรดของคุณ</span>
-                        </div>
-                        <button type="button" onclick="openCarModal()" class="text-[11px] text-red-400 hover:text-red-300 font-bold flex items-center gap-1 cursor-pointer bg-red-500/5 px-2.5 py-1 rounded-lg border border-red-500/10"><i class="fa-solid fa-pen-to-square"></i> แก้ไขข้อมูล</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 pt-1">
-                        <div class="bg-[#060913]/60 p-2.5 rounded-xl border border-slate-900">
-                            <span class="text-[9px] text-slate-500 block uppercase">เจ้าของรถยนต์</span>
-                            <span id="display-car-owner" class="text-xs font-bold text-white block mt-0.5 truncate">ยังไม่ได้ระบุข้อมูล</span>
-                        </div>
-                        <div class="bg-[#060913]/60 p-2.5 rounded-xl border border-slate-900">
-                            <span class="text-[9px] text-slate-500 block uppercase">เลขทะเบียนรถ</span>
-                            <span id="display-car-plate" class="text-xs font-bold text-amber-400 block mt-0.5 truncate">ยังไม่ได้ระบุข้อมูล</span>
-                        </div>
-                    </div>
-<div class="bg-[#060913]/80 p-2.5 rounded-xl text-center border border-slate-900">
-    <span class="text-[10px] text-slate-400 mr-2 uppercase font-medium tracking-wider">เลขตัวถัง VIN:</span>
-    <span id="display-car-vin" class="text-xs font-mono text-emerald-400 font-bold tracking-widest">ยังไม่มีข้อมูลในระบบ</span>
-</div>
-                </div>
+<div id="car-display-card" class="bg-gradient-to-br from-[#141b2d] via-[#101626] to-[#0b0f19] border border-white/[0.06] p-5 rounded-2xl shadow-2xl shadow-black/80 space-y-4 relative overflow-hidden group transition-all duration-300 hover:border-white/[0.12]">
+    
+    <div class="absolute right-[-8px] bottom-[-15px] text-slate-800/15 text-7xl font-black italic select-none tracking-tighter group-hover:text-red-500/[0.03] transition-colors duration-500">MG</div>
+    
+    <div class="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent"></div>
 
+    <div class="flex justify-between items-center relative z-10">
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 bg-gradient-to-br from-red-500/20 to-red-600/5 text-red-400 rounded-xl flex items-center justify-center text-xs shadow-inner border border-red-500/20">
+                <i class="fa-solid fa-car-rear"></i>
+            </div>
+            <span class="text-xs font-bold text-slate-200 tracking-wider uppercase">ข้อมูลรถคันโปรดของคุณ</span>
+        </div>
+        <button type="button" onclick="openCarModal()" class="text-[11px] text-red-400 hover:text-white font-bold flex items-center gap-1.5 cursor-pointer bg-red-500/10 hover:bg-red-500 px-3 py-1.5 rounded-xl border border-red-500/20 transition-all duration-200 active:scale-95 shadow-md">
+            <i class="fa-solid fa-pen-to-square text-[10px]"></i> แก้ไขข้อมูล
+        </button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2.5 pt-1 relative z-10">
+        <div class="bg-slate-950/40 backdrop-blur-md p-3 rounded-xl border border-white/[0.03] hover:border-slate-800 transition-colors duration-200">
+            <span class="text-[9px] text-slate-500 block uppercase font-semibold tracking-wider">เจ้าของรถยนต์</span>
+            <span id="display-car-owner" class="text-xs font-bold text-slate-200 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
+        </div>
+        <div class="bg-slate-950/40 backdrop-blur-md p-3 rounded-xl border border-white/[0.03] hover:border-slate-800 transition-colors duration-200">
+            <span class="text-[9px] text-slate-500 block uppercase font-semibold tracking-wider">เลขทะเบียนรถ</span>
+            <span id="display-car-plate" class="text-xs font-bold text-amber-400 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
+        </div>
+    </div>
+
+    <div class="bg-slate-950/60 backdrop-blur-md p-3 rounded-xl border border-white/[0.03] flex justify-between items-center relative z-10 hover:border-slate-800 transition-colors duration-200">
+        <span class="text-[9px] text-slate-400 uppercase font-semibold tracking-wider">เลขตัวถัง VIN</span>
+        <span id="display-car-vin" class="text-xs font-mono text-emerald-400 font-bold tracking-widest bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">ยังไม่มีข้อมูลในระบบ</span>
+    </div>
+</div>
                 <div class="space-y-2.5">
                     <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">เข้าถึงง่าย แค่ปลายนิ้ว</h4>
                     <div class="grid grid-cols-2 gap-3">
