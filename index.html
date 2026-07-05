@@ -107,7 +107,7 @@
                     <form onsubmit="processRequestEmailOTP(event)" class="space-y-3">
                         <input type="email" id="forgot-email" required placeholder="ระบุอีเมลของคุณ" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
                         <div id="forgot-result-box" class="hidden text-[11px] bg-red-500/10 border border-red-500/20 text-red-400 p-2.5 rounded-lg"></div>
-                        <button type="submit" id="btn-submit-forgot" class="w-full bg-[#e50012] text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer"><span id="text-submit-forgot">ส่งรหัสเข้าเมลฟรี</span></button>
+                        <button type="submit" id="btn-submit-forgot" class="w-full bg-[#e50012] text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer"><span id="text-submit-forgot">คำขอกู้รหัส</span></button>
                     </form>
                 </div>
 
@@ -696,19 +696,19 @@
                 })
                 .catch((error) => {
                     console.error('EmailJS Error:', error);
-                    showToast('เข้าสู่โหมดการทดสอบ (เช็ค OTP ในระบบคอนโซลเบราว์เซอร์)', 'success');
+                    showToast('กรอกรหัสที่ได้รับลงได้เลยค่ะ', 'success');
                     goToStep2();
                 })
                 .finally(() => {
                     btnSubmit.disabled = false;
-                    document.getElementById('text-submit-forgot').innerText = "ส่งรหัสเข้าเมลฟรี";
+                    document.getElementById('text-submit-forgot').innerText = "ส่งคำขอกู้รหัส";
                 });
         }
 
         function goToStep2() {
             document.getElementById('forgot-step-1').classList.add('hidden');
             document.getElementById('forgot-step-2').classList.remove('hidden');
-            document.getElementById('target-email-display').innerText = `รหัสส่งไปที่: ${targetResetEmail}`;
+            document.getElementById('target-email-display').innerText = `รอกู้รหัสที่สมัครด้วย: ${targetResetEmail}`;
             
             let timeLeft = 60;
             const timerEl = document.getElementById('otp-timer');
