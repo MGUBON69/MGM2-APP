@@ -657,7 +657,7 @@
             clearInterval(otpTimerInterval);
         }
 
-        function processRequestEmailOTP(event) {
+      function processRequestEmailOTP(event) {
             event.preventDefault();
             const email = document.getElementById('forgot-email').value.toLowerCase();
             const resultBox = document.getElementById('forgot-result-box');
@@ -678,6 +678,9 @@
 
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
             targetResetEmail = email;
+
+            // คิมเพิ่มคำสั่งนี้ เพื่อแสดงป๊อปอัป OTP ทันทีที่ตรวจสอบอีเมลผ่านค่ะ
+            alert(`[ระบบอัตโนมัติ M2 Motorsport]\nรหัส OTP 6 หลักของคุณคือ: ${generatedOTP}`);
 
             const templateParams = {
                 to_email: targetResetEmail,
@@ -719,7 +722,8 @@
                     clearInterval(otpTimerInterval);
                     timerEl.innerText = "หมดเวลา";
                     showToast('รหัส OTP หมดอายุแล้ว กรุณากดส่งใหม่อีกครั้งค่ะ', 'error');
-                    backToStep1();
+                    // ฟังก์ชันนี้ต้องมีอยู่ในโค้ดของคุณชินอิจินะคะ
+                    if (typeof backToStep1 === "function") backToStep1(); 
                 }
             }, 1000);
         }
@@ -737,6 +741,51 @@
                 showToast('รหัส OTP ไม่ถูกต้อง กรุณาลองใหม่อีกครั้งค่ะ', 'error');
             }
         }
+
+// ฟังก์ชันสำหรับกระบวนการเปลี่ยนรหัสผ่านใหม่ (Step 3)
+function processResetPassword(event) {
+    event.preventDefault();
+    
+    const newPassword = document.getElementById('forgot-new-password').value;
+    const confirmPassword = document.getElementById('forgot-confirm-password').value;
+    const resultBox = document.getElementById('forgot-result-box'); // เผื่อใช้แสดง error
+
+    // 1. ตรวจสอบความถูกต้องเบื้องต้น
+    if (!newPassword || !confirmPassword) {
+        showToast('กรุณากรอกรหัสผ่านให้ครบถ้วนค่ะ', 'error');
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        showToast('รหัสผ่านใหม่ไม่ตรงกันค่ะ กรุณาตรวจสอบอีกครั้ง', 'error');
+        return;
+    }
+
+    // 2. ดึงข้อมูลผู้ใช้จาก localStorage
+    let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
+    
+    // 3. ค้นหา User คนปัจจุบันที่กำลังรีเซ็ต (อ้างอิงจาก targetResetEmail ที่เก็บไว้ใน Step 1)
+    const userIndex = users.findIndex(u => u.email === targetResetEmail);
+
+    if (userIndex !== -1) {
+        // 4. อัปเดตรหัสผ่านใหม่ (แก้ไขตัวแปร .password ให้ตรงกับโครงสร้างข้อมูลของคุณชินอิจินะคะ)
+        users[userIndex].password = newPassword; 
+        
+        // 5. บันทึกกลับลง localStorage
+        localStorage.setItem('mg_registered_users', JSON.stringify(users));
+
+        // 6. แจ้งเตือนความสำเร็จและปิด Modal
+        showToast('รีเซ็ตรหัสผ่านใหม่สำเร็จแล้วค่ะคุณชินอิจิ! 🎉', 'success');
+        
+        // ล้างค่าในฟอร์มของสเต็ป 3 ก่อนปิด
+        document.getElementById('forgot-new-password').value = '';
+        document.getElementById('forgot-confirm-password').value = '';
+        
+        closeForgotPasswordModal();
+    } else {
+        showToast('ไม่พบข้อมูลผู้ใช้ในระบบ เกิดข้อผิดพลาดด้านข้อมูลค่ะ', 'error');
+    }
+}
 
         function processSaveNewPassword(event) {
             event.preventDefault();
