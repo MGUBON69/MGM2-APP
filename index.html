@@ -894,13 +894,16 @@ function processResetPassword(event) {
             document.getElementById('logoutConfirmModal').classList.add('hidden');
         }
 
-        function confirmLogout() {
-            currentUser = null;
-            localStorage.removeItem('mg_current_user');
-            closeLogoutModal();
-            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
-            changeView('login');
-        }
+      function confirmLogout() {
+    currentUser = null;
+    localStorage.removeItem('mg_current_user');
+    localStorage.removeItem('mg_tos_accepted');
+    if (typeof checkTosStatus === 'function') checkTosStatus();
+
+    closeLogoutModal();
+    showToast('ออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
+    changeView('login');
+}
 
         // 9. CUSTOM TOAST NOTIFICATION
      function showToast(message, type = 'success') {
@@ -955,28 +958,33 @@ function processResetPassword(event) {
                     .catch(err => console.error('❌ Service Worker ล้มเหลว:', err));
             });
         }
-// --- ระบบจัดการเงื่อนไขการให้บริการ (Terms of Service) ---
+// --- ระบบจัดการเงื่อนไขการให้บริการ (เวอร์ชันเด้งใหม่เมื่อสลับไอดี/ล็อกเอาต์) ---
 document.addEventListener("DOMContentLoaded", function() {
     const tosModal = document.getElementById("tosModal");
     const acceptTosBtn = document.getElementById("acceptTosBtn");
 
-    // เช็คว่าเคยยอมรับไปแล้วหรือยัง
-    if (!localStorage.getItem("mgAppTosAccepted")) {
-        // ถ้ายังไม่เคยกด ให้แสดงหน้าต่างขึ้นมา
-        tosModal.classList.remove("hidden");
-    }
+    // ฟังก์ชันสำหรับเช็คและแสดง Modal
+    window.checkTosStatus = function() {
+        if (!localStorage.getItem("mg_tos_accepted")) {
+            tosModal.classList.remove("hidden");
+        } else {
+            tosModal.classList.add("hidden");
+        }
+    };
 
-    // เมื่อกดปุ่มยอมรับ
+    // รันตอนโหลดหน้าเว็บครั้งแรก
+    checkTosStatus();
+
+    // เมื่อกดปุ่มยอมรับเงื่อนไข
     acceptTosBtn.addEventListener("click", function() {
-        localStorage.setItem("mgAppTosAccepted", "true"); // บันทึกลงเครื่องว่ารับทราบแล้ว
+        localStorage.setItem("mg_tos_accepted", "true"); // บันทึกความจำ
         
-        // ใส่ Effect เฟดออกสวยๆ 
+        // เอฟเฟกต์เฟดปิดสวยๆ
         tosModal.style.opacity = '0';
         tosModal.style.transition = 'opacity 0.3s ease-out';
-        
         setTimeout(() => {
             tosModal.classList.add("hidden");
-            tosModal.style.opacity = '1'; // คืนค่า เผื่อมีการเรียกใช้ใหม่
+            tosModal.style.opacity = '1';
         }, 300);
     });
 });
