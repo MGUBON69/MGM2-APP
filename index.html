@@ -45,6 +45,21 @@
         .page-view {
             transition: opacity 0.2s ease-in-out;
         }
+/* ตกแต่ง Scrollbar ในหน้าต่างเงื่อนไขให้เข้ากับธีมแอป */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5); 
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(229, 0, 18, 0.5); 
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(229, 0, 18, 0.8); 
+}
     </style>
 </head>
 <body class="bg-[#060913] text-slate-100 min-h-screen flex justify-center items-center p-0 sm:p-4">
@@ -143,6 +158,42 @@
             </div>
         </div>
 
+<!-- Terms of Service Modal (คิมปรับเป็น Tailwind ให้เข้ากับธีมแอปแล้วค่ะ) -->
+<div id="tosModal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex justify-center items-center p-4">
+    <div class="bg-[#101626] border border-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[85vh]">
+        
+        <!-- Header -->
+        <div class="flex items-center gap-2 border-b border-slate-800/80 pb-3 mb-4">
+            <div class="w-8 h-8 bg-[#e50012] rounded-lg flex items-center justify-center text-white font-black text-xs shadow-md">MG</div>
+            <div>
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider">เงื่อนไขการใช้บริการ</h3>
+                <p class="text-[10px] text-slate-400">กรุณาอ่านและยอมรับก่อนเข้าใช้งานค่ะ</p>
+            </div>
+        </div>
+        
+        <!-- Content Area (Scrollable) -->
+        <div class="flex-1 overflow-y-auto pr-2 space-y-3 mb-4 text-xs text-slate-300 leading-relaxed custom-scrollbar">
+            <p>ยินดีต้อนรับสู่แอปพลิเคชัน <strong>MG M2 Motorsport</strong> โปรดอ่านและทำความเข้าใจเงื่อนไขการใช้บริการต่อไปนี้อย่างละเอียด:</p>
+            
+            <div class="bg-[#0b0f19] border border-slate-800/60 p-3 rounded-xl space-y-2">
+                <p><span class="text-[#e50012] font-bold">1.</span> ผู้ใช้บริการต้องให้ข้อมูลที่ถูกต้องและเป็นจริงในการลงทะเบียน</p>
+                <p><span class="text-[#e50012] font-bold">2.</span> ข้อมูลส่วนบุคคลและข้อมูลรถยนต์ของคุณจะได้รับการคุ้มครองตามนโยบายความเป็นส่วนตัวของบริษัท</p>
+                <p><span class="text-[#e50012] font-bold">3.</span> ทางบริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขและโปรโมชันโดยไม่ต้องแจ้งให้ทราบล่วงหน้า</p>
+                <p><span class="text-[#e50012] font-bold">4.</span> ห้ามนำระบบไปใช้ในทางที่ผิดกฎหมายหรือก่อให้เกิดความเสียหายต่อเซิร์ฟเวอร์</p>
+            </div>
+            
+            <p class="text-[11px] text-amber-400/80 text-center pt-2">การกดปุ่ม "ยอมรับเงื่อนไข" แสดงว่าคุณได้อ่านและยอมรับข้อตกลงทั้งหมดนี้แล้ว</p>
+        </div>
+        
+        <!-- Action Button -->
+        <div class="pt-2 border-t border-slate-800/80 mt-auto">
+            <button type="button" id="acceptTosBtn" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3 rounded-xl text-xs transition-all active:scale-[0.98] shadow-lg cursor-pointer">
+                ยอมรับเงื่อนไขและเข้าสู่แอป
+            </button>
+        </div>
+        
+    </div>
+</div>
         <div id="logoutConfirmModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
             <div class="bg-[#101626] border border-slate-800 w-full max-w-xs rounded-2xl p-5 space-y-4 shadow-xl">
                 <div class="text-center space-y-2">
@@ -904,6 +955,31 @@ function processResetPassword(event) {
                     .catch(err => console.error('❌ Service Worker ล้มเหลว:', err));
             });
         }
+// --- ระบบจัดการเงื่อนไขการให้บริการ (Terms of Service) ---
+document.addEventListener("DOMContentLoaded", function() {
+    const tosModal = document.getElementById("tosModal");
+    const acceptTosBtn = document.getElementById("acceptTosBtn");
+
+    // เช็คว่าเคยยอมรับไปแล้วหรือยัง
+    if (!localStorage.getItem("mgAppTosAccepted")) {
+        // ถ้ายังไม่เคยกด ให้แสดงหน้าต่างขึ้นมา
+        tosModal.classList.remove("hidden");
+    }
+
+    // เมื่อกดปุ่มยอมรับ
+    acceptTosBtn.addEventListener("click", function() {
+        localStorage.setItem("mgAppTosAccepted", "true"); // บันทึกลงเครื่องว่ารับทราบแล้ว
+        
+        // ใส่ Effect เฟดออกสวยๆ 
+        tosModal.style.opacity = '0';
+        tosModal.style.transition = 'opacity 0.3s ease-out';
+        
+        setTimeout(() => {
+            tosModal.classList.add("hidden");
+            tosModal.style.opacity = '1'; // คืนค่า เผื่อมีการเรียกใช้ใหม่
+        }, 300);
+    });
+});
     </script>
 </body>
 </html>
