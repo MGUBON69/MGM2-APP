@@ -431,16 +431,104 @@
 
 		<i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
                     </a>
-
-<a href="https://line.me/ti/p/your_admin_link" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/40 transform hover:scale-110 transition-all duration-200 z-50 group">
-    <!-- ไอคอนตรงกลาง -->
-    <i class="fa-solid fa-user-shield text-white text-xl animate-pulse"></i>
-    
-    <!-- Tooltip ข้อความ (จะแสดงเมื่อเอาเมาส์ไปชี้) -->
-    <span class="absolute right-16 bg-slate-900/90 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-slate-800 pointer-events-none shadow-md">
-        ติดต่อผู้ดูแลระบบ
-    </span>
+<!-- ปุ่มติดต่อผู้ดูแล แบบยาวลากได้สไตล์ pill (แสดงข้อความตลอดเวลา) -->
+<a id="draggable-admin-btn" href="https://line.me/ti/p/your_admin_link" class="fixed bottom-6 right-6 h-12 w-auto px-5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-full flex items-center justify-center shadow-lg shadow-red-500/40 z-50 cursor-grab active:cursor-grabbing select-none transition-transform duration-200 hover:scale-105">
+    <i class="fa-solid fa-user-shield text-white text-lg mr-2"></i>
+    <span class="text-white text-sm font-medium">ติดต่อผู้ดูแล</span>
 </a>
+
+<!-- สคริปต์ควบคุมการลากปุ่ม -->
+<script>
+    const btn = document.getElementById('draggable-admin-btn');
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+    let hasMoved = false;
+
+    // เริ่มต้นลาก (รองรับทั้ง Mouse และ Touch)
+    function startDrag(e) {
+        isDragging = true;
+        hasMoved = false;
+        
+        const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+        
+        startX = clientX;
+        startY = clientY;
+        
+        const rect = btn.getBoundingClientRect();
+        initialX = rect.left;
+        initialY = rect.top;
+
+        // ปิด transition ชั่วคราวเพื่อให้ลากได้ลื่นไหลไม่หน่วงมือ
+        btn.style.transition = 'transform 0.2s';
+        
+        if (e.type === 'mousedown') {
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+        } else {
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('touchend', stopDrag);
+        }
+    }
+
+    // ระหว่างลากปุ่ม
+    function drag(e) {
+        if (!isDragging) return;
+        
+        const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+        
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+
+        // ถ้าขยับเกิน 5 พิกเซล ให้ถือว่าเป็นการลาก (ไม่ใช่การคลิก)
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+            hasMoved = true;
+        }
+
+        let newX = initialX + dx;
+        let newY = initialY + dy;
+
+        // ป้องกันปุ่มลากทะลุขอบจอ (เว้นระยะขอบไว้ 12px)
+        const padding = 12;
+        const maxW = window.innerWidth - btn.offsetWidth - padding;
+        const maxH = window.innerHeight - btn.offsetHeight - padding;
+
+        newX = Math.max(padding, Math.min(newX, maxW));
+        newY = Math.max(padding, Math.min(newY, maxH));
+
+        // อัปเดตตำแหน่งปุ่ม
+        btn.style.bottom = 'auto';
+        btn.style.right = 'auto';
+        btn.style.left = `${newX}px`;
+        btn.style.top = `${newY}px`;
+        
+        // ป้องกันหน้าจอมือถือเลื่อนตามขณะลากปุ่ม
+        if (e.cancelable) e.preventDefault();
+    }
+
+    // เมื่อปล่อยมือ/ปล่อยเมาส์
+    function stopDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stopDrag);
+        document.removeEventListener('touchmove', drag);
+        document.removeEventListener('touchend', stopDrag);
+    }
+
+    // ตรวจสอบการคลิก (ถ้าเป็นการลากจะไม่ยอมให้เปิดลิงก์ไลน์)
+    btn.addEventListener('click', function(e) {
+        if (hasMoved) {
+            e.preventDefault();
+        }
+    });
+
+    // เรียกใช้งาน Event Listener
+    btn.addEventListener('mousedown', startDrag);
+    btn.addEventListener('touchstart', startDrag, { passive: true });
+</script>
 
             <div id="page-location" class="hidden p-5 space-y-4 page-view">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
