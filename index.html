@@ -430,102 +430,35 @@
             </div>
 
 
-<a href="https://line.me/ti/p/_4YjsubHfB" class="fixed right-4 top-1/2 -translate-y-1/2 h-14 w-14 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-full flex flex-col items-center justify-center shadow-lg shadow-red-500/40 z-50 select-none transition-transform duration-200 hover:scale-105 text-center p-1">
+<!-- ปุ่มติดต่อผู้ดูแล (ซ่อนไว้เป็นค่าเริ่มต้น) -->
+<a id="admin-contact-btn" href="https://line.me/ti/p/_4YjsubHfB" class="fixed right-4 top-1/2 -translate-y-1/2 h-14 w-14 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-full flex flex-col items-center justify-center shadow-lg shadow-red-500/40 z-50 select-none transition-opacity duration-300 opacity-0 pointer-events-none text-center p-1">
     <i class="fa-solid fa-user-shield text-white text-sm mb-0.5"></i>
     <span class="text-white text-[9px] font-medium leading-tight">ติดต่อ<br>ผู้ดูแล</span>
 </a>
 
-
+<!-- สคริปต์ควบคุมการแสดงผล 2 วินาที -->
 <script>
-    const btn = document.getElementById('draggable-admin-btn');
-    let isDragging = false;
-    let startX, startY, initialX, initialY;
-    let hasMoved = false;
+    const adminBtn = document.getElementById('admin-contact-btn');
+    let hideTimeout;
 
-    // เริ่มต้นลาก (รองรับทั้ง Mouse และ Touch)
-    function startDrag(e) {
-        isDragging = true;
-        hasMoved = false;
-        
-        const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-        const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
-        
-        startX = clientX;
-        startY = clientY;
-        
-        const rect = btn.getBoundingClientRect();
-        initialX = rect.left;
-        initialY = rect.top;
+    function showAdminButton() {
+        // แสดงปุ่มโดยปรับ Opacity และให้กดได้
+        adminBtn.classList.remove('opacity-0', 'pointer-events-none');
+        adminBtn.classList.add('opacity-100', 'pointer-events-auto');
 
-        // ปิด transition ชั่วคราวเพื่อให้ลากได้ลื่นไหลไม่หน่วงมือ
-        btn.style.transition = 'transform 0.2s';
-        
-        if (e.type === 'mousedown') {
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', stopDrag);
-        } else {
-            document.addEventListener('touchmove', drag, { passive: false });
-            document.addEventListener('touchend', stopDrag);
-        }
+        // รีเซ็ตเวลาใหม่ทุกครั้งที่มีการสัมผัสหน้าจอ
+        clearTimeout(hideTimeout);
+
+        // ตั้งเวลาซ่อนปุ่มเมื่อครบ 2 วินาที (2000 มิลลิวินาที)
+        hideTimeout = setTimeout(() => {
+            adminBtn.classList.remove('opacity-100', 'pointer-events-auto');
+            adminBtn.classList.add('opacity-0', 'pointer-events-none');
+        }, 2000);
     }
 
-    // ระหว่างลากปุ่ม
-    function drag(e) {
-        if (!isDragging) return;
-        
-        const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-        const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-        
-        const dx = clientX - startX;
-        const dy = clientY - startY;
-
-        // ถ้าขยับเกิน 5 พิกเซล ให้ถือว่าเป็นการลาก (ไม่ใช่การคลิก)
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-            hasMoved = true;
-        }
-
-        let newX = initialX + dx;
-        let newY = initialY + dy;
-
-        // ป้องกันปุ่มลากทะลุขอบจอ (เว้นระยะขอบไว้ 12px)
-        const padding = 12;
-        const maxW = window.innerWidth - btn.offsetWidth - padding;
-        const maxH = window.innerHeight - btn.offsetHeight - padding;
-
-        newX = Math.max(padding, Math.min(newX, maxW));
-        newY = Math.max(padding, Math.min(newY, maxH));
-
-        // อัปเดตตำแหน่งปุ่ม
-        btn.style.bottom = 'auto';
-        btn.style.right = 'auto';
-        btn.style.left = `${newX}px`;
-        btn.style.top = `${newY}px`;
-        
-        // ป้องกันหน้าจอมือถือเลื่อนตามขณะลากปุ่ม
-        if (e.cancelable) e.preventDefault();
-    }
-
-    // เมื่อปล่อยมือ/ปล่อยเมาส์
-    function stopDrag() {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        document.removeEventListener('mousemove', drag);
-        document.removeEventListener('mouseup', stopDrag);
-        document.removeEventListener('touchmove', drag);
-        document.removeEventListener('touchend', stopDrag);
-    }
-
-    // ตรวจสอบการคลิก (ถ้าเป็นการลากจะไม่ยอมให้เปิดลิงก์ไลน์)
-    btn.addEventListener('click', function(e) {
-        if (hasMoved) {
-            e.preventDefault();
-        }
-    });
-
-    // เรียกใช้งาน Event Listener
-    btn.addEventListener('mousedown', startDrag);
-    btn.addEventListener('touchstart', startDrag, { passive: true });
+    // ดักจับการสัมผัสหน้าจอ (สำหรับมือถือ) และการคลิกเมาส์ (สำหรับคอมพิวเตอร์)
+    document.addEventListener('touchstart', showAdminButton);
+    document.addEventListener('mousedown', showAdminButton);
 </script>
 
             <div id="page-location" class="hidden p-5 space-y-4 page-view">
