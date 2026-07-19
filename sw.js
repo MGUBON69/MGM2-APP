@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mg-ubon-m2-v1'; // เปลี่ยนเวอร์ชันเพื่อเคลียร์แคชเก่า
+const CACHE_NAME = 'mg-ubon-m2-v1.1'; // เปลี่ยนเวอร์ชันเพื่อเคลียร์แคชเก่า
 
 const ASSETS_TO_CACHE = [
   './',
