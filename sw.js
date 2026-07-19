@@ -6,6 +6,7 @@ const ASSETS_TO_CACHE = [
   './index.html',
   './manifest.json',
   './icon2.png' // เช็คให้ชัวร์ว่ามีไฟล์นี้อยู่จริง
+  './MG_profile.png' // เช็คให้ชัวร์ว่ามีไฟล์นี้อยู่จริง
 ];
 
 self.addEventListener('install', (event) => {
