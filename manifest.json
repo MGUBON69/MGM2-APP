@@ -9,7 +9,7 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "MG_profile.png",
+      "src": "MGloca.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
