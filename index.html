@@ -986,14 +986,15 @@ function processResetPassword(event) {
                     .catch(err => console.error('❌ Service Worker ล้มเหลว:', err));
             });
         }
-// --- ระบบจัดการเงื่อนไขการให้บริการ (เวอร์ชันเด้งใหม่เมื่อสลับไอดี/ล็อกเอาต์) ---
+// --- ระบบจัดการเงื่อนไขการให้บริการ (เวอร์ชันเด้งใหม่ทุกครั้งที่เข้าเว็บแอป) ---
 document.addEventListener("DOMContentLoaded", function() {
     const tosModal = document.getElementById("tosModal");
     const acceptTosBtn = document.getElementById("acceptTosBtn");
 
     // ฟังก์ชันสำหรับเช็คและแสดง Modal
     window.checkTosStatus = function() {
-        if (!localStorage.getItem("mg_tos_accepted")) {
+        // เปลี่ยนจาก localStorage เป็น sessionStorage
+        if (!sessionStorage.getItem("mg_tos_accepted")) {
             tosModal.classList.remove("hidden");
         } else {
             tosModal.classList.add("hidden");
@@ -1005,7 +1006,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // เมื่อกดปุ่มยอมรับเงื่อนไข
     acceptTosBtn.addEventListener("click", function() {
-        localStorage.setItem("mg_tos_accepted", "true"); // บันทึกความจำ
+        // เปลี่ยนจาก localStorage เป็น sessionStorage
+        sessionStorage.setItem("mg_tos_accepted", "true"); 
         
         // เอฟเฟกต์เฟดปิดสวยๆ
         tosModal.style.opacity = '0';
