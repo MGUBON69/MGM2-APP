@@ -6,7 +6,6 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './sw.js',
   './icon2.png',          // อัปเดตให้ตรงกับไฟล์จริงบน GitHub แล้วค่ะ
-  './MG_profile.png',    // อัปเดตให้ตรงกับไฟล์จริงบน GitHub แล้วค่ะ
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap',
