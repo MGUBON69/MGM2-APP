@@ -1,18 +1,13 @@
-const CACHE_NAME = 'mg-ubon-m2-v1'; // เปลี่ยนเวอร์ชันเพื่อเคลียร์แคชเก่า
+const CACHE_NAME = 'mg-ubon-m2-v2'; // เปลี่ยนเวอร์ชัน
 
+// 1. แคชเฉพาะไฟล์ในเครื่องเราเท่านั้น (ปลอดภัยชัวร์)
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './sw.js',
-  './icon2.png',          // อัปเดตให้ตรงกับไฟล์จริงบน GitHub แล้วค่ะ
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap',
-  'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js'
+  './icon2.png' // เช็คให้ชัวร์ว่ามีไฟล์นี้อยู่จริง
 ];
 
-// 1. Install Event: ล็อกคลังไฟล์ App Shell ลงเครื่องลูกค้า
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -23,7 +18,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// 2. Activate Event: เคลียร์แคชเวอร์ชันเก่าออกอัตโนมัติเมื่อมีการเปลี่ยนแปลงโครงสร้างโค้ด
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -40,17 +34,27 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. Fetch Event: ดึงข้อมูลจากแคชส่งให้ผู้ใช้ทันที (Cache First) ถ้าไม่มีอินเทอร์เน็ต
+// 3. Fetch Event: แบบ Network First, fallback to Cache สำหรับลิงก์ภายนอก
 self.addEventListener('fetch', (event) => {
   if (!event.request.url.startsWith('http')) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        return cachedResponse;
+        return cachedResponse; // ถ้ามีในแคช ให้ใช้แคช
       }
-      return fetch(event.request).catch(() => {
-        console.log('🌐 SW: อุปกรณ์อยู่ในสถานะ Offline และไม่พบข้อมูลในระบบแคชค่ะคุณชินอิจิ');
+      
+      // ถ้าไม่มีในแคช ให้ดึงจากเน็ต แล้วเอามาเก็บลงแคชด้วย (Runtime Caching)
+      return fetch(event.request).then((networkResponse) => {
+        return caches.open(CACHE_NAME).then((cache) => {
+          // เก็บลงแคชเฉพาะ HTTP Status 200 เพื่อป้องกันแคชไฟล์ที่พัง
+          if (networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+          }
+          return networkResponse;
+        });
+      }).catch(() => {
+        console.log('🌐 SW: อุปกรณ์อยู่ในสถานะ Offline ค่ะคุณชินอิจิ');
       });
     })
   );
