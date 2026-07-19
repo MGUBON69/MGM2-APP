@@ -30,61 +30,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<!-- คิมเพิ่ม Library สำหรับแคปเจอร์รูปภาพค่ะ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         (function() {
             emailjs.init("KSS0THK1eB1HxrAsn");
         })();
-// ฟังก์ชันสำหรับสร้างและดาวน์โหลด E-Pass
-async function generateAppointmentImage() {
-    try {
-        // 1. ดึงข้อมูลจากหน้าหลักมาใส่ใน Ticket
-        const clientName = document.getElementById('client-name').innerText;
-        const carOwner = document.getElementById('display-car-owner').innerText;
-        const carPlate = document.getElementById('display-car-plate').innerText;
-        const carVin = document.getElementById('display-car-vin').innerText;
-
-        document.getElementById('ticket-client-name').innerText = clientName;
-        document.getElementById('ticket-car-owner').innerText = carOwner;
-        document.getElementById('ticket-car-plate').innerText = carPlate;
-        document.getElementById('ticket-car-vin').innerText = carVin;
-        
-        // ใส่เวลาปัจจุบันอ้างอิงการออกตั๋ว
-        const now = new Date();
-        document.getElementById('ticket-timestamp').innerText = 'REF: ' + now.toLocaleString('th-TH');
-
-        // 2. เรียกใช้ html2canvas เพื่อแคปเจอร์ Element
-        const ticketElement = document.getElementById('appointment-ticket-export');
-        
-        // แจ้งเตือนลูกค้าว่ากำลังโหลด
-        const originalBtnText = document.querySelector('button[onclick="generateAppointmentImage()"] span.font-bold').innerText;
-        document.querySelector('button[onclick="generateAppointmentImage()"] span.font-bold').innerText = "กำลังสร้างรูปภาพ...";
-
-        const canvas = await html2canvas(ticketElement, {
-            scale: 2, // เพิ่มความคมชัดเป็น 2 เท่า
-            backgroundColor: '#060913',
-            logging: false
-        });
-
-        // 3. แปลงเป็นไฟล์ภาพและสั่งดาวน์โหลด
-        const image = canvas.toDataURL("image/png");
-        const link = document.createElement('a');
-        link.download = `MG-Appointment-${carPlate.replace(/\s+/g, '-')}.png`;
-        link.href = image;
-        link.click();
-
-        // คืนค่าข้อความปุ่ม
-        document.querySelector('button[onclick="generateAppointmentImage()"] span.font-bold').innerText = originalBtnText;
-
-        // Optional: แจ้งเตือนว่าเซฟสำเร็จ (สามารถใช้ Alert หรือ UI แจ้งเตือนที่มีอยู่ได้)
-        alert("บันทึก E-Pass สำเร็จ! กรุณาส่งรูปนี้ให้แอดมินทาง LINE ได้เลยค่ะ");
-
-    } catch (error) {
-        console.error("Error generating image:", error);
-        alert("เกิดข้อผิดพลาดในการสร้างรูปภาพ กรุณาลองใหม่อีกครั้งค่ะ");
-    }
-}
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
@@ -390,20 +339,7 @@ async function generateAppointmentImage() {
             <span class="text-[9px] text-slate-500 block uppercase font-semibold tracking-wider">เลขทะเบียนรถ</span>
             <span id="display-car-plate" class="text-xs font-bold text-amber-400 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
         </div>
-    </div> 
-<!-- ปุ่มกด Save รูปภาพ (เพิ่มใต้ car-display-card) -->
-<button type="button" onclick="generateAppointmentImage()" class="w-full mt-4 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 hover:border-red-500/50 p-4 rounded-2xl flex items-center justify-between transition-all group shadow-lg cursor-pointer">
-    <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-red-500/10 text-red-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-download text-lg"></i>
-        </div>
-        <div class="text-left">
-            <span class="text-sm font-bold text-white block">บันทึก E-Pass นัดหมาย</span>
-            <span class="text-[10px] text-slate-400 block mt-0.5">เซฟรูปภาพเพื่อส่งให้แอดมินผ่าน LINE</span>
-        </div>
     </div>
-    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-red-400 transition-colors text-sm"></i>
-</button>
 
 <div class="bg-slate-950/60 backdrop-blur-md p-3 rounded-xl border border-white/[0.03] flex items-center justify-center gap-3 relative z-10 hover:border-slate-800 transition-colors duration-200">
     <span class="text-[9px] text-slate-400 uppercase font-semibold tracking-wider">เลขตัวถัง VIN:</span>
@@ -1050,15 +986,14 @@ function processResetPassword(event) {
                     .catch(err => console.error('❌ Service Worker ล้มเหลว:', err));
             });
         }
-// --- ระบบจัดการเงื่อนไขการให้บริการ (เวอร์ชันเด้งใหม่ทุกครั้งที่เข้าเว็บแอป) ---
+// --- ระบบจัดการเงื่อนไขการให้บริการ (เวอร์ชันเด้งใหม่เมื่อสลับไอดี/ล็อกเอาต์) ---
 document.addEventListener("DOMContentLoaded", function() {
     const tosModal = document.getElementById("tosModal");
     const acceptTosBtn = document.getElementById("acceptTosBtn");
 
     // ฟังก์ชันสำหรับเช็คและแสดง Modal
     window.checkTosStatus = function() {
-        // เปลี่ยนจาก localStorage เป็น sessionStorage
-        if (!sessionStorage.getItem("mg_tos_accepted")) {
+        if (!localStorage.getItem("mg_tos_accepted")) {
             tosModal.classList.remove("hidden");
         } else {
             tosModal.classList.add("hidden");
@@ -1070,8 +1005,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // เมื่อกดปุ่มยอมรับเงื่อนไข
     acceptTosBtn.addEventListener("click", function() {
-        // เปลี่ยนจาก localStorage เป็น sessionStorage
-        sessionStorage.setItem("mg_tos_accepted", "true"); 
+        localStorage.setItem("mg_tos_accepted", "true"); // บันทึกความจำ
         
         // เอฟเฟกต์เฟดปิดสวยๆ
         tosModal.style.opacity = '0';
