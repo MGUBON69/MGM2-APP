@@ -85,15 +85,43 @@
             <!-- เส้นไฟ LED ใต้ Header -->
             <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
             
-            <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-gradient-to-br from-[#e50012] to-red-700 rounded-lg flex items-center justify-center text-white font-black text-xs tracking-tighter shadow-[0_0_10px_rgba(229,0,18,0.5)]">MG</div>
-                <div>
-                    <h1 class="text-xs font-black text-white tracking-wider uppercase leading-none flex items-center gap-1.5">
-                        M2 Motorsport <span class="text-[9px] text-cyan-400 font-mono tracking-normal border border-cyan-500/40 px-1 rounded bg-cyan-950/40">EVOLUTION</span>
-                    </h1>
-                    <p class="text-[9px] text-slate-400 font-medium mt-0.5">Ubon Ratchathani</p>
-                </div>
-            </div>
+<!-- โครงสร้างโลโก้และชื่อแบรนด์ (EVOLUTION Full Cyber Cyan Theme - ไม่มีสีแดง) -->
+<div class="flex items-center gap-3 group cursor-pointer">
+    
+    <!-- กล่องโลโก้ MG สไตล์ Cyber Metallic (เปลี่ยนจากกรอบแดงเป็น Cyan Metallic) -->
+    <div class="relative">
+        <!-- แสง Aura นีออนสีฟ้าเรืองแสงซ่อนด้านหลังโลโก้ -->
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-cyan-400 rounded-xl blur-sm opacity-60 group-hover:opacity-100 transition duration-300 animate-pulse"></div>
+        
+        <!-- ตัวกล่องโลโก้หลัก (พื้นหลังดำเมทัลลิก + ขอบไฟนีออนฟ้า) -->
+        <div class="relative w-9 h-9 bg-gradient-to-br from-[#121b2d] via-[#0d1322] to-[#04060a] border border-cyan-500/60 rounded-xl flex items-center justify-center font-black text-xs tracking-tighter shadow-[0_0_15px_rgba(0,229,255,0.4)] group-hover:scale-105 transition-all duration-300">
+            <!-- ตัวอักษร MG สีฟ้านีออนเรืองแสง -->
+            <span class="text-cyan-400 drop-shadow-[0_0_6px_rgba(0,229,255,0.8)] group-hover:text-white transition-colors">MG</span>
+        </div>
+    </div>
+
+    <!-- ข้อความชื่อแบรนด์และ Tag สถานะ -->
+    <div class="flex flex-col">
+        <div class="flex items-center gap-1.5">
+            <!-- ชื่อโชว์รูม -->
+            <h1 class="text-xs font-black text-white tracking-wider uppercase leading-none drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
+                M2 Motorsport
+            </h1>
+            
+            <!-- ป้าย EVOLUTION สไตล์ Cyberpunk Badge -->
+            <span class="text-[8px] font-mono font-bold text-cyan-400 bg-cyan-950/60 border border-cyan-500/40 px-1.5 py-0.5 rounded shadow-[0_0_8px_rgba(0,229,255,0.25)] tracking-normal">
+                EVOLUTION
+            </span>
+        </div>
+
+        <!-- ชื่อสาขาพร้อมจุดไฟสถานะ -->
+        <p class="text-[9px] text-slate-400 font-medium tracking-wide mt-1 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_6px_#00e5ff]"></span>
+            Ubon Ratchathani
+        </p>
+    </div>
+
+</div>
             <div class="flex items-center gap-2 bg-[#04060a] border border-cyan-500/30 px-2.5 py-1 rounded-full shadow-inner">
                 <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_#00e5ff]"></span>
                 <span id="realtime-clock" class="text-[10px] font-mono text-cyan-300 font-bold">00:00:00</span>
