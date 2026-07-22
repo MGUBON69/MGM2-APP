@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG M2 Motorsport</title>
+    <title>MG M2 Motorsport - Evolution Theme</title>
 
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CHFVVKQ9SP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-CHFVVKQ9SP');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CHFVVKQ9SP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CHFVVKQ9SP');
+    </script>
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0b0f19">
+    <meta name="theme-color" content="#070a12">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MG UBON">
@@ -25,355 +24,388 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
             emailjs.init("KSS0THK1eB1HxrAsn");
         })();
     </script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
+        
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #060913;
+            background-color: #04060a;
         }
-        /* คิมเพิ่ม CSS แอนิเมชันตอนสลับหน้าให้ดูพรีเมียมขึ้นค่ะคุณชินอิจิ */
+
+        /* เอฟเฟกต์ไฟนีออนสไตล์อาคาร EVOLUTION จากภาพโชว์รูมของคุณชินอิจิ */
+        .led-border-cyan {
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.25), inset 0 0 8px rgba(0, 229, 255, 0.1);
+        }
+        
+        .led-glow-text {
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.7);
+        }
+
         .page-view {
-            transition: opacity 0.2s ease-in-out;
+            transition: opacity 0.25s ease-in-out;
         }
-/* ตกแต่ง Scrollbar ในหน้าต่างเงื่อนไขให้เข้ากับธีมแอป */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.5); 
-    border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(229, 0, 18, 0.5); 
-    border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(229, 0, 18, 0.8); 
-}
+
+        /* ตกแต่ง Scrollbar ให้เป็นเส้นแสง Cyan นีออน */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(7, 10, 18, 0.8); 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #00e5ff; 
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #66f0ff; 
+            box-shadow: 0 0 15px rgba(0, 229, 255, 1);
+        }
     </style>
 </head>
-<body class="bg-[#060913] text-slate-100 min-h-screen flex justify-center items-center p-0 sm:p-4">
+<body class="bg-[#04060a] text-slate-100 min-h-screen flex justify-center items-center p-0 sm:p-4">
 
-    <div class="w-full max-w-md h-screen sm:h-[840px] bg-[#0b0f19] sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col relative border border-slate-900">
+    <!-- Container หลัก: โทนสีอาคารเมทัลลิกพร้อมเส้นขอบนีออนเรืองแสง -->
+    <div class="w-full max-w-md h-screen sm:h-[840px] bg-[#070a12] sm:rounded-3xl shadow-[0_0_30px_rgba(0,229,255,0.15)] overflow-hidden flex flex-col relative border border-cyan-500/30">
         
-        <header id="appHeader" class="hidden bg-[#101626] border-b border-slate-800/80 px-5 py-3.5 flex justify-between items-center z-40 shadow-sm">
+        <!-- Header สไตล์โชว์รูมสว่างไสว -->
+        <header id="appHeader" class="hidden bg-[#0d1322] border-b border-cyan-500/30 px-5 py-3.5 flex justify-between items-center z-40 shadow-[0_4px_15px_rgba(0,0,0,0.5)] relative">
+            <!-- เส้นไฟ LED ใต้ Header -->
+            <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+            
             <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 bg-[#e50012] rounded-lg flex items-center justify-center text-white font-black text-xs tracking-tighter shadow-sm">MG</div>
+                <div class="w-8 h-8 bg-gradient-to-br from-[#e50012] to-red-700 rounded-lg flex items-center justify-center text-white font-black text-xs tracking-tighter shadow-[0_0_10px_rgba(229,0,18,0.5)]">MG</div>
                 <div>
-                    <h1 class="text-xs font-black text-white tracking-wider uppercase leading-none">M2 Motorsport</h1>
-                    <p class="text-[9px] text-slate-500 font-medium mt-0.5">Ubon Ratchathani</p>
+                    <h1 class="text-xs font-black text-white tracking-wider uppercase leading-none flex items-center gap-1.5">
+                        M2 Motorsport <span class="text-[9px] text-cyan-400 font-mono tracking-normal border border-cyan-500/40 px-1 rounded bg-cyan-950/40">EVOLUTION</span>
+                    </h1>
+                    <p class="text-[9px] text-slate-400 font-medium mt-0.5">Ubon Ratchathani</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 bg-[#060913] border border-slate-800/60 px-2.5 py-1 rounded-full">
-                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span id="realtime-clock" class="text-[10px] font-mono text-slate-400 font-bold">00:00:00</span>
+            <div class="flex items-center gap-2 bg-[#04060a] border border-cyan-500/30 px-2.5 py-1 rounded-full shadow-inner">
+                <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_#00e5ff]"></span>
+                <span id="realtime-clock" class="text-[10px] font-mono text-cyan-300 font-bold">00:00:00</span>
             </div>
         </header>
 
-        <div id="editNameModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-xs rounded-2xl p-5 space-y-4 shadow-xl">
+        <!-- Modal: แก้ไขชื่อโปรไฟล์ -->
+        <div id="editNameModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4">
+            <div class="bg-[#0d1322] border border-cyan-500/40 w-full max-w-xs rounded-2xl p-5 space-y-4 shadow-[0_0_25px_rgba(0,229,255,0.2)]">
                 <div class="text-center">
-                    <h3 class="text-sm font-bold text-white">แก้ไขข้อมูลโปรไฟล์</h3>
+                    <h3 class="text-sm font-bold text-white led-glow-text">แก้ไขข้อมูลโปรไฟล์</h3>
                     <p class="text-[11px] text-slate-400 mt-1">เปลี่ยนชื่อที่ต้องการให้ระบบเรียกขานค่ะ</p>
                 </div>
                 <form onsubmit="saveNewName(event)" class="space-y-3">
-                    <input type="text" id="new-profile-name" required class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
+                    <input type="text" id="new-profile-name" required class="w-full bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none transition-all">
                     <div class="grid grid-cols-2 gap-2 pt-1">
-                        <button type="button" onclick="closeEditModal()" class="bg-slate-800 text-slate-400 font-medium py-2 rounded-xl text-xs cursor-pointer">ยกเลิก</button>
-                        <button type="submit" class="bg-[#e50012] text-white font-bold py-2 rounded-xl text-xs cursor-pointer">บันทึก</button>
+                        <button type="button" onclick="closeEditModal()" class="bg-slate-800 text-slate-400 hover:text-white font-medium py-2 rounded-xl text-xs cursor-pointer transition-colors">ยกเลิก</button>
+                        <button type="submit" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-2 rounded-xl text-xs cursor-pointer shadow-[0_0_10px_rgba(0,229,255,0.4)] transition-all">บันทึก</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div id="carInfoModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+        <!-- Modal: ข้อมูลรถยนต์ -->
+        <div id="carInfoModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4">
+            <div class="bg-[#0d1322] border border-cyan-500/40 w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-[0_0_25px_rgba(0,229,255,0.2)]">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-car text-red-500 mr-1.5"></i> ข้อมูลรถยนต์ของคุณ</h3>
-                    <button type="button" onclick="closeCarModal()" class="text-slate-500 hover:text-slate-300 text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-car text-cyan-400"></i> ข้อมูลรถยนต์ของคุณ
+                    </h3>
+                    <button type="button" onclick="closeCarModal()" class="text-slate-400 hover:text-white text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <form onsubmit="saveCarInfo(event)" class="space-y-3.5">
                     <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400">ชื่อเจ้าของรถ</label>
-                        <input type="text" id="car-owner" required placeholder="เช่น นาย เออเบิล วิ่งไกล" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
+                        <label class="text-[11px] text-slate-300">ชื่อเจ้าของรถ</label>
+                        <input type="text" id="car-owner" required placeholder="เช่น นาย เออเบิล วิ่งไกล" class="w-full bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none transition-all">
                     </div>
                     <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400">เลขทะเบียนรถ</label>
-                        <input type="text" id="car-plate" required placeholder="เช่น กข 1234 อุบลราชธานี" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
+                        <label class="text-[11px] text-slate-300">เลขทะเบียนรถ</label>
+                        <input type="text" id="car-plate" required placeholder="เช่น กข 1234 อุบลราชธานี" class="w-full bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none transition-all">
                     </div>
                     <div class="space-y-1">
-                        <label class="text-[11px] text-slate-400">เลขตัวถังรถ (VIN)</label>
-                        <input type="text" id="car-vin" placeholder="กรอกเลขตัวถัง 17 หลัก (ถ้ามี)" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
+                        <label class="text-[11px] text-slate-300">เลขตัวถังรถ (VIN)</label>
+                        <input type="text" id="car-vin" placeholder="กรอกเลขตัวถัง 17 หลัก (ถ้ามี)" class="w-full bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none transition-all">
                     </div>
-                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs transition-transform active:scale-[0.98] mt-2 cursor-pointer">บันทึกข้อมูลรถยนต์</button>
+                    <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition-all active:scale-[0.98] mt-2 cursor-pointer shadow-[0_0_12px_rgba(0,229,255,0.4)]">บันทึกข้อมูลรถยนต์</button>
                 </form>
             </div>
         </div>
 
-        <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-xl">
-                <div class="flex justify-between items-center border-b border-slate-800/80 pb-2.5 mb-3">
-                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">ระบบกู้คืนรหัสผ่าน</h3>
-                    <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-500 hover:text-slate-300 cursor-pointer text-sm"><i class="fa-solid fa-xmark"></i></button>
+        <!-- Modal: ลืมรหัสผ่าน -->
+        <div id="forgotPasswordModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4">
+            <div class="bg-[#0d1322] border border-cyan-500/40 w-full max-w-sm rounded-2xl p-5 shadow-xl">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2.5 mb-3">
+                    <h3 class="text-xs font-bold text-cyan-400 uppercase tracking-wider">ระบบกู้คืนรหัสผ่าน</h3>
+                    <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white cursor-pointer text-sm"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 
                 <div id="forgot-step-1" class="space-y-3">
-                    <p class="text-[11px] text-slate-400">กรอกอีเมลที่คุณใช้ลงทะเบียนเพื่อรับรหัส OTP ค่ะ</p>
+                    <p class="text-[11px] text-slate-300">กรอกอีเมลที่คุณใช้ลงทะเบียนเพื่อรับรหัส OTP ค่ะ</p>
                     <form onsubmit="processRequestEmailOTP(event)" class="space-y-3">
-                        <input type="email" id="forgot-email" required placeholder="ระบุอีเมลของคุณ" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                        <div id="forgot-result-box" class="hidden text-[11px] bg-red-500/10 border border-red-500/20 text-red-400 p-2.5 rounded-lg"></div>
-                        <button type="submit" id="btn-submit-forgot" class="w-full bg-[#e50012] text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer"><span id="text-submit-forgot">คำขอกู้รหัส</span></button>
+                        <input type="email" id="forgot-email" required placeholder="ระบุอีเมลของคุณ" class="w-full bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none">
+                        <div id="forgot-result-box" class="hidden text-[11px] bg-red-500/10 border border-red-500/30 text-red-400 p-2.5 rounded-lg"></div>
+                        <button type="submit" id="btn-submit-forgot" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs cursor-pointer shadow-[0_0_10px_rgba(0,229,255,0.4)]"><span id="text-submit-forgot">คำขอกู้รหัส</span></button>
                     </form>
                 </div>
 
                 <div id="forgot-step-2" class="hidden space-y-3">
                     <div class="flex justify-between items-center">
-                        <span id="target-email-display" class="text-[11px] text-amber-400 font-medium"></span>
+                        <span id="target-email-display" class="text-[11px] text-cyan-300 font-medium"></span>
                         <span id="otp-timer" class="text-xs font-mono font-bold text-red-500">60s</span>
                     </div>
                     <form onsubmit="processVerifyOTP(event)" class="space-y-3">
-                        <input type="text" id="otp-code" required placeholder="กรอกรหัส OTP 6 หลัก" class="w-full text-center tracking-widest font-mono bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-base focus:outline-none focus:border-red-500">
-                        <button type="submit" class="w-full bg-amber-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs cursor-pointer">ยืนยันรหัส OTP</button>
+                        <input type="text" id="otp-code" required placeholder="กรอกรหัส OTP 6 หลัก" class="w-full text-center tracking-widest font-mono bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-base focus:outline-none">
+                        <button type="submit" class="w-full bg-cyan-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs cursor-pointer">ยืนยันรหัส OTP</button>
                     </form>
                 </div>
 
                 <div id="forgot-step-3" class="hidden space-y-3">
-                    <p class="text-[11px] text-slate-400">กำหนดรหัสผ่านใหม่ที่ต้องการเปลี่ยนค่ะ</p>
+                    <p class="text-[11px] text-slate-300">กำหนดรหัสผ่านใหม่ที่ต้องการเปลี่ยนค่ะ</p>
                     <form onsubmit="processSaveNewPassword(event)" class="space-y-3">
-                        <input type="password" id="new-reset-password" required minlength="6" placeholder="รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                        <input type="password" id="new-reset-password-confirm" required placeholder="ยืนยันรหัสผ่านใหม่อีกครั้ง" class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-red-500">
-                        <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer">บันทึกรหัสผ่านใหม่</button>
+                        <input type="password" id="new-reset-password" required minlength="6" placeholder="รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)" class="w-full bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none">
+                        <input type="password" id="new-reset-password-confirm" required placeholder="ยืนยันรหัสผ่านใหม่อีกครั้ง" class="w-full bg-[#04060a] border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none">
+                        <button type="submit" class="w-full bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs cursor-pointer">บันทึกรหัสผ่านใหม่</button>
                     </form>
                 </div>
             </div>
         </div>
 
-<!-- Terms of Service Modal (คิมปรับเป็น Tailwind ให้เข้ากับธีมแอปแล้วค่ะ) -->
-<div id="tosModal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex justify-center items-center p-4">
-    <div class="bg-[#101626] border border-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[85vh]">
-        
-        <!-- Header -->
-        <div class="flex items-center gap-2 border-b border-slate-800/80 pb-3 mb-4">
-            <div class="w-8 h-8 bg-[#e50012] rounded-lg flex items-center justify-center text-white font-black text-xs shadow-md">MG</div>
-            <div>
-                <h3 class="text-sm font-bold text-white uppercase tracking-wider">เงื่อนไขการใช้บริการ</h3>
-                <p class="text-[10px] text-slate-400">กรุณาอ่านและยอมรับก่อนเข้าใช้งานค่ะ</p>
-            </div>
-        </div>
-<div class="flex-1 overflow-y-auto pr-2 space-y-3 mb-4 text-xs text-slate-300 leading-relaxed custom-scrollbar">
-                    <p>ยินดีต้อนรับสู่แอปพลิเคชัน <strong>MG M2 Motorsport</strong> โปรดอ่านและทำความเข้าใจเงื่อนไขการใช้บริการต่อไปนี้อย่างละเอียด:</p>
-            <div class="bg-[#0b0f19] border border-slate-800/60 p-3 rounded-xl space-y-2">
-                <p><span class="text-[#e50012] font-bold">1.</span> ผู้ใช้บริการต้องกรอกข้อมูลที่ถูกต้องในการติดต่อนัดหมายกับทางเจ้าหน้าที่</p>
-                <p><span class="text-[#e50012] font-bold">2.</span> ห้ามโอนเงินผ่านบัญชีพนักงานให้ทำรายการผ่านบัญชีบริษัทเท่านั้น</p>
-                <p><span class="text-[#e50012] font-bold">3.</span> ทางบริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบล่วงหน้า</p>
-            </div>
-            
-            <p class="text-[11px] text-amber-400/80 text-center pt-2">การกดปุ่ม "ยอมรับเงื่อนไข" แสดงว่าคุณได้อ่านและยอมรับข้อตกลงทั้งหมดนี้แล้ว</p>
-        </div>
-        
-        <!-- Action Button -->
-        <div class="pt-2 border-t border-slate-800/80 mt-auto">
-            <button type="button" id="acceptTosBtn" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3 rounded-xl text-xs transition-all active:scale-[0.98] shadow-lg cursor-pointer">
-                ยอมรับเงื่อนไขและเข้าสู่แอป
-            </button>
-        </div>
-        
-    </div>
-</div>
-        <div id="logoutConfirmModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
-            <div class="bg-[#101626] border border-slate-800 w-full max-w-xs rounded-2xl p-5 space-y-4 shadow-xl">
-                <div class="text-center space-y-2">
-                    <div class="w-10 h-10 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto"><i class="fa-solid fa-power-off text-lg"></i></div>
-                    <h3 class="text-sm font-bold text-white">ต้องการออกจากระบบ?</h3>
-                    <p class="text-[11px] text-slate-400">เซสชันความปลอดภัยของคุณจะถูกปิดลงค่ะ</p>
+        <!-- Modal: เงื่อนไขการใช้บริการ -->
+        <div id="tosModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex justify-center items-center p-4">
+            <div class="bg-[#0d1322] border border-cyan-500/40 w-full max-w-sm rounded-2xl p-5 shadow-[0_0_30px_rgba(0,229,255,0.2)] flex flex-col max-h-[85vh]">
+                <div class="flex items-center gap-2.5 border-b border-slate-800 pb-3 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-[#e50012] to-red-700 rounded-lg flex items-center justify-center text-white font-black text-xs shadow-md">MG</div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wider">เงื่อนไขการใช้บริการ</h3>
+                        <p class="text-[10px] text-cyan-400">กรุณาอ่านและยอมรับก่อนเข้าใช้งานค่ะ</p>
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button type="button" onclick="closeLogoutModal()" class="bg-slate-800 text-slate-400 font-medium py-2 rounded-xl text-xs cursor-pointer">ยกเลิก</button>
-                    <button type="button" onclick="confirmLogout()" class="bg-red-600 text-white font-bold py-2 rounded-xl text-xs cursor-pointer">ออกจากระบบ</button>
+                <div class="flex-1 overflow-y-auto pr-2 space-y-3 mb-4 text-xs text-slate-300 leading-relaxed custom-scrollbar">
+                    <p>ยินดีต้อนรับสู่แอปพลิเคชัน <strong>MG M2 Motorsport</strong> โปรดอ่านและทำความเข้าใจเงื่อนไขการใช้บริการต่อไปนี้อย่างละเอียด:</p>
+                    <div class="bg-[#04060a] border border-cyan-500/20 p-3 rounded-xl space-y-2">
+                        <p><span class="text-cyan-400 font-bold">1.</span> ผู้ใช้บริการต้องกรอกข้อมูลที่ถูกต้องในการติดต่อนัดหมายกับทางเจ้าหน้าที่</p>
+                        <p><span class="text-cyan-400 font-bold">2.</span> ห้ามโอนเงินผ่านบัญชีพนักงาน ให้ทำรายการผ่านบัญชีบริษัทเท่านั้น</p>
+                        <p><span class="text-cyan-400 font-bold">3.</span> ทางบริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบล่วงหน้า</p>
+                    </div>
+                    <p class="text-[11px] text-cyan-300/80 text-center pt-2">การกดปุ่ม "ยอมรับเงื่อนไข" แสดงว่าคุณได้อ่านและยอมรับข้อตกลงทั้งหมดนี้แล้ว</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800 mt-auto">
+                    <button type="button" id="acceptTosBtn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition-all active:scale-[0.98] shadow-[0_0_15px_rgba(0,229,255,0.4)] cursor-pointer">
+                        ยอมรับเงื่อนไขและเข้าสู่แอป
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div id="pwaAlertBanner" class="hidden bg-gradient-to-r from-red-950/40 to-slate-900 border border-red-500/20 p-3.5 mx-4 mt-3 rounded-xl flex items-center justify-between shadow-md z-30">
+        <!-- Modal: ยืนยันออกจากระบบ -->
+        <div id="logoutConfirmModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4">
+            <div class="bg-[#0d1322] border border-cyan-500/40 w-full max-w-xs rounded-2xl p-5 space-y-4 shadow-xl">
+                <div class="text-center space-y-2">
+                    <div class="w-10 h-10 bg-red-500/10 border border-red-500/30 text-red-500 rounded-full flex items-center justify-center mx-auto"><i class="fa-solid fa-power-off text-lg"></i></div>
+                    <h3 class="text-sm font-bold text-white">ต้องการออกจากระบบ?</h3>
+                    <p class="text-[11px] text-slate-400">เซสชันความปลอดภัยของคุณจะถูกปิดลงค่ะ</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="closeLogoutModal()" class="bg-slate-800 text-slate-300 font-medium py-2 rounded-xl text-xs cursor-pointer">ยกเลิก</button>
+                    <button type="button" onclick="confirmLogout()" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-xl text-xs cursor-pointer shadow-md">ออกจากระบบ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PWA Banner -->
+        <div id="pwaAlertBanner" class="hidden bg-gradient-to-r from-slate-900 via-[#0d1322] to-slate-900 border border-cyan-500/30 p-3.5 mx-4 mt-3 rounded-xl flex items-center justify-between shadow-[0_4px_12px_rgba(0,229,255,0.1)] z-30">
             <div class="flex items-center gap-2.5">
-                <i class="fa-solid fa-mobile-screen-button text-red-400 text-base"></i>
+                <i class="fa-solid fa-mobile-screen-button text-cyan-400 text-base"></i>
                 <div>
                     <span class="text-[11px] font-bold text-white block">ติดตั้งแอปพลิเคชัน</span>
                     <span class="text-[9px] text-slate-400 block mt-0.5">เข้าใช้งานผ่านหน้าโฮมได้รวดเร็วทันใจค่ะ</span>
                 </div>
             </div>
             <div class="flex items-center gap-1.5">
-                <button type="button" onclick="closePwaBanner()" class="text-[10px] text-slate-500 px-2 py-1 cursor-pointer">ไว้ก่อน</button>
-                <button type="button" onclick="executePwaInstall()" class="bg-[#e50012] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm cursor-pointer">ติดตั้ง</button>
+                <button type="button" onclick="closePwaBanner()" class="text-[10px] text-slate-400 px-2 py-1 cursor-pointer">ไว้ก่อน</button>
+                <button type="button" onclick="executePwaInstall()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-[0_0_8px_rgba(0,229,255,0.4)] cursor-pointer">ติดตั้ง</button>
             </div>
         </div>
 
+        <!-- Main Content Area -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
+            <!-- หน้าสมัครสมาชิก -->
             <div id="page-register" class="hidden flex-1 flex flex-col p-6 page-view">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
-                    <h2 class="text-2xl font-bold text-white tracking-wide">สร้างบัญชีใหม่</h2>
-                    <p class="text-xs text-slate-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
+                    <div class="inline-block bg-gradient-to-r from-[#e50012] to-red-700 text-white font-black px-3.5 py-1 rounded text-sm tracking-wider mb-3 shadow-[0_0_12px_rgba(229,0,18,0.4)]">MG</div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide led-glow-text">สร้างบัญชีใหม่</h2>
+                    <p class="text-xs text-cyan-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
                 </div>
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
                     <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">ชื่อ-นามสกุล</label>
+                        <label class="text-xs text-slate-300 font-medium">ชื่อ-นามสกุล</label>
                         <input type="text" id="reg-name" required placeholder="เช่น นาย เออเบิล วิ่งไกล"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            class="w-full bg-[#04060a] border border-slate-800 focus:border-cyan-400 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none text-sm transition-all shadow-inner">
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">เบอร์โทรศัพท์</label>
+                        <label class="text-xs text-slate-300 font-medium">เบอร์โทรศัพท์</label>
                         <input type="tel" id="reg-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            class="w-full bg-[#04060a] border border-slate-800 focus:border-cyan-400 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none text-sm transition-all shadow-inner">
                     </div>
                     <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">อีเมล</label>
+                        <label class="text-xs text-slate-300 font-medium">อีเมล</label>
                         <input type="email" id="reg-email" required placeholder="เช่น mgubn@gmail.com"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            class="w-full bg-[#04060a] border border-slate-800 focus:border-cyan-400 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none text-sm transition-all shadow-inner">
                     </div>
-<div class="space-y-1">
-    <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-    <div class="relative">
-        <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
-            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-        
-        <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" 
-            class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-300 cursor-pointer">
-            <i id="reg-eye-icon" class="fa-solid fa-eye-slash p-1"></i>
-        </button>
-    </div>
-</div>
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">สร้างบัญชีสมาชิก</button>
+                    <div class="space-y-1">
+                        <label class="text-xs text-slate-300 font-medium">รหัสผ่าน</label>
+                        <div class="relative">
+                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
+                                class="w-full bg-[#04060a] border border-slate-800 focus:border-cyan-400 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none text-sm transition-all shadow-inner">
+                            <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" 
+                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-cyan-400 cursor-pointer">
+                                <i id="reg-eye-icon" class="fa-solid fa-eye-slash p-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">สร้างบัญชีสมาชิก</button>
                     <div class="text-center mt-4">
                         <p class="text-xs text-slate-400">มีบัญชีผู้ใช้งานแล้วใช่ไหม? 
-                            <button type="button" onclick="changeView('login')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
+                            <button type="button" onclick="changeView('login')" class="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
                         </p>
                     </div>
                 </form>
             </div>
 
+            <!-- หน้าเข้าสู่ระบบ -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6 page-view">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-[#e50012] text-white font-black px-3 py-1 rounded text-sm tracking-wider mb-3 shadow-md">MG</div>
-                    <h2 class="text-2xl font-bold text-white tracking-wide">เข้าสู่ระบบ</h2>
-                    <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
+                    <div class="inline-block bg-gradient-to-r from-[#e50012] to-red-700 text-white font-black px-3.5 py-1 rounded text-sm tracking-wider mb-3 shadow-[0_0_12px_rgba(229,0,18,0.4)]">MG</div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide led-glow-text">เข้าสู่ระบบ</h2>
+                    <p class="text-xs text-cyan-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
                 </div>
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
                     <div class="space-y-1">
-                        <label class="text-xs text-slate-400 font-medium">อีเมลผู้ใช้งาน</label>
+                        <label class="text-xs text-slate-300 font-medium">อีเมลผู้ใช้งาน</label>
                         <input type="email" id="login-email" required placeholder="เช่น mgubn@gmail.com"
-                            class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
+                            class="w-full bg-[#04060a] border border-slate-800 focus:border-cyan-400 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none text-sm transition-all shadow-inner">
                     </div>
                     <div class="space-y-1">
                         <div class="flex justify-between items-center">
-                            <label class="text-xs text-slate-400 font-medium">รหัสผ่าน</label>
-                            <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-amber-500 hover:text-amber-400 transition-colors font-medium cursor-pointer">ลืมรหัสผ่าน?</button>
+                            <label class="text-xs text-slate-300 font-medium">รหัสผ่าน</label>
+                            <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-cyan-400 hover:text-cyan-300 transition-colors font-medium cursor-pointer">ลืมรหัสผ่าน?</button>
                         </div>
-<div class="relative">
-    <input type="password" id="login-password" required placeholder="••••••••••••"
-        class="w-full bg-[#0b0f19] border border-slate-800 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 text-sm transition-all">
-    
-    <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" 
-        class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-slate-300 cursor-pointer">
-        <i id="login-eye-icon" class="fa-solid fa-eye-slash p-1"></i>
-    </button>
-</div>
-</div>
+                        <div class="relative">
+                            <input type="password" id="login-password" required placeholder="••••••••••••"
+                                class="w-full bg-[#04060a] border border-slate-800 focus:border-cyan-400 rounded-xl pl-4 pr-12 py-3 text-white placeholder-slate-600 focus:outline-none text-sm transition-all shadow-inner">
+                            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" 
+                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-cyan-400 cursor-pointer">
+                                <i id="login-eye-icon" class="fa-solid fa-eye-slash p-1"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                    <button type="submit" class="w-full bg-[#e50012] hover:bg-[#c4000f] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">เข้าสู่ระบบผู้ใช้งาน</button>
+                    <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm">เข้าสู่ระบบผู้ใช้งาน</button>
                     <div class="text-center mt-4">
-                        <p class="text-xs text-slate-400">ยังไม่มีบัญชีสมาชิกสมาชิก? 
-                            <button type="button" onclick="changeView('register')" class="text-red-400 hover:text-red-500 font-semibold underline underline-offset-4 ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
+                        <p class="text-xs text-slate-400">ยังไม่มีบัญชีสมาชิก? 
+                            <button type="button" onclick="changeView('register')" class="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-4 ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
                         </p>
                     </div>
                 </form>
             </div>
 
+            <!-- หน้าหลัก (Home) -->
             <div id="page-home" class="hidden p-5 space-y-5 page-view">
-                <div class="bg-gradient-to-br from-[#1e293b] to-[#141d2f] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-md relative">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-[#0d1322] via-[#090e1a] to-[#0d1322] border border-cyan-500/30 p-5 rounded-2xl flex items-center justify-between shadow-[0_0_15px_rgba(0,229,255,0.15)] relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl pointer-events-none"></div>
                     <div>
-                        <span class="text-[11px] text-red-400 font-bold tracking-wider block mb-0.5 uppercase">M2 MOTORSPORT EXPERT</span>
-                        <h3 id="client-name" class="text-lg font-bold text-white">คุณลูกค้า</h3>
+                        <span class="text-[10px] text-cyan-400 font-bold tracking-widest block mb-0.5 uppercase">EVOLUTION MEMBER</span>
+                        <h3 id="client-name" class="text-lg font-bold text-white led-glow-text">คุณลูกค้า</h3>
                         <p class="text-xs text-slate-400 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชันค่ะ ✨</p>
                     </div>
-                    <button type="button" onclick="openEditModal()" class="w-12 h-12 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-2xl flex items-center justify-center text-[#e50012] shadow-inner cursor-pointer transition-colors" title="แก้ไขชื่อ">
+                    <button type="button" onclick="openEditModal()" class="w-12 h-12 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 rounded-2xl flex items-center justify-center text-cyan-400 shadow-inner cursor-pointer transition-colors" title="แก้ไขชื่อ">
                         <i class="fa-solid fa-user-gear text-xl"></i>
                     </button>
                 </div>
 
-<div id="car-display-card" class="bg-gradient-to-br from-[#141b2d] via-[#101626] to-[#0b0f19] border border-white/[0.06] p-5 rounded-2xl shadow-2xl shadow-black/80 space-y-4 relative overflow-hidden group transition-all duration-300 hover:border-white/[0.12]">
-    
-    <div class="absolute right-[-8px] bottom-[-15px] text-slate-800/15 text-7xl font-black italic select-none tracking-tighter group-hover:text-red-500/[0.03] transition-colors duration-500">MG</div>
-    
-    <div class="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent"></div>
+                <!-- การ์ดแสดงข้อมูลรถยนต์ สไตล์ Showroom LED -->
+                <div id="car-display-card" class="bg-gradient-to-b from-[#0d1322] to-[#070a12] border border-cyan-500/40 p-5 rounded-2xl shadow-[0_0_20px_rgba(0,229,255,0.15)] space-y-4 relative overflow-hidden group transition-all duration-300 hover:border-cyan-400/60">
+                    
+                    <!-- Watermark Logo -->
+                    <div class="absolute right-[-8px] bottom-[-15px] text-cyan-500/10 text-7xl font-black italic select-none tracking-tighter group-hover:text-cyan-400/20 transition-colors duration-500">EVO</div>
+                    
+                    <!-- เส้นแสง LED นีออนคาดขอบบน -->
+                    <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_8px_#00e5ff]"></div>
 
-    <div class="flex justify-between items-center relative z-10">
-        <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 bg-gradient-to-br from-red-500/20 to-red-600/5 text-red-400 rounded-xl flex items-center justify-center text-xs shadow-inner border border-red-500/20">
-                <i class="fa-solid fa-car-rear"></i>
-            </div>
-            <span class="text-xs font-bold text-slate-200 tracking-wider uppercase">ข้อมูลรถของคุณ</span>
-        </div>
-        <button type="button" onclick="openCarModal()" class="text-[11px] text-red-400 hover:text-white font-bold flex items-center gap-1.5 cursor-pointer bg-red-500/10 hover:bg-red-500 px-3 py-1.5 rounded-xl border border-red-500/20 transition-all duration-200 active:scale-95 shadow-md">
-            <i class="fa-solid fa-pen-to-square text-[10px]"></i> แก้ไขข้อมูล
-        </button>
-    </div>
+                    <div class="flex justify-between items-center relative z-10">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 bg-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center text-xs shadow-inner border border-cyan-500/30">
+                                <i class="fa-solid fa-car-rear"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-100 tracking-wider uppercase">ข้อมูลรถของคุณ</span>
+                        </div>
+                        <button type="button" onclick="openCarModal()" class="text-[11px] text-cyan-400 hover:text-slate-950 font-bold flex items-center gap-1.5 cursor-pointer bg-cyan-500/10 hover:bg-cyan-400 px-3 py-1.5 rounded-xl border border-cyan-500/30 transition-all duration-200 active:scale-95 shadow-md">
+                            <i class="fa-solid fa-pen-to-square text-[10px]"></i> แก้ไขข้อมูล
+                        </button>
+                    </div>
 
-    <div class="grid grid-cols-2 gap-2.5 pt-1 relative z-10">
-        <div class="bg-slate-950/40 backdrop-blur-md p-3 rounded-xl border border-white/[0.03] hover:border-slate-800 transition-colors duration-200">
-            <span class="text-[9px] text-slate-500 block uppercase font-semibold tracking-wider">เจ้าของรถยนต์</span>
-            <span id="display-car-owner" class="text-xs font-bold text-slate-200 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
-        </div>
-        <div class="bg-slate-950/40 backdrop-blur-md p-3 rounded-xl border border-white/[0.03] hover:border-slate-800 transition-colors duration-200">
-            <span class="text-[9px] text-slate-500 block uppercase font-semibold tracking-wider">เลขทะเบียนรถ</span>
-            <span id="display-car-plate" class="text-xs font-bold text-amber-400 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
-        </div>
-    </div>
+                    <div class="grid grid-cols-2 gap-2.5 pt-1 relative z-10">
+                        <div class="bg-[#04060a]/80 backdrop-blur-md p-3 rounded-xl border border-slate-800 hover:border-cyan-500/30 transition-colors duration-200">
+                            <span class="text-[9px] text-slate-400 block uppercase font-semibold tracking-wider">เจ้าของรถยนต์</span>
+                            <span id="display-car-owner" class="text-xs font-bold text-slate-100 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
+                        </div>
+                        <div class="bg-[#04060a]/80 backdrop-blur-md p-3 rounded-xl border border-slate-800 hover:border-cyan-500/30 transition-colors duration-200">
+                            <span class="text-[9px] text-slate-400 block uppercase font-semibold tracking-wider">เลขทะเบียนรถ</span>
+                            <span id="display-car-plate" class="text-xs font-bold text-cyan-400 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
+                        </div>
+                    </div>
 
-<div class="bg-slate-950/60 backdrop-blur-md p-3 rounded-xl border border-white/[0.03] flex items-center justify-center gap-3 relative z-10 hover:border-slate-800 transition-colors duration-200">
-    <span class="text-[9px] text-slate-400 uppercase font-semibold tracking-wider">เลขตัวถัง VIN:</span>
-    <span id="display-car-vin" class="text-xs font-mono text-emerald-400 font-bold tracking-widest bg-emerald-500/5 px-2.5 py-0.5 rounded border border-emerald-500/10 shadow-inner">
-        ยังไม่มีข้อมูลในระบบ
-    </span>
-</div>
-</div>
+                    <div class="bg-[#04060a]/90 backdrop-blur-md p-3 rounded-xl border border-slate-800 flex items-center justify-center gap-3 relative z-10 hover:border-cyan-500/30 transition-colors duration-200">
+                        <span class="text-[9px] text-slate-400 uppercase font-semibold tracking-wider">เลขตัวถัง VIN:</span>
+                        <span id="display-car-vin" class="text-xs font-mono text-cyan-300 font-bold tracking-widest bg-cyan-500/10 px-2.5 py-0.5 rounded border border-cyan-500/20 shadow-inner">
+                            ยังไม่มีข้อมูลในระบบ
+                        </span>
+                    </div>
+                </div>
 
+                <!-- เมนูลัดบริการ -->
                 <div class="space-y-2.5">
-                    <h4 class="text-xs font-bold text-slate-400 tracking-wider uppercase">เข้าถึงง่าย แค่ปลายนิ้ว</h4>
+                    <h4 class="text-xs font-bold text-cyan-400 tracking-wider uppercase flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span> เข้าถึงง่าย แค่ปลายนิ้ว
+                    </h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <a href="https://lin.ee/Ov20t55" target="_blank" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                        <a href="https://lin.ee/Ov20t55" target="_blank" class="bg-[#0d1322] hover:bg-[#121a2e] border border-cyan-500/20 hover:border-cyan-400/50 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-brands fa-line text-xl"></i>
                             </div>
                             <span class="text-xs font-bold text-white block">จองคิวรับบริการ</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">นัดหมายเช็คระยะและซ่อมทั่วไปผ่าน LINE OA</span>
+                            <span class="text-[10px] text-slate-400 block mt-0.5 leading-tight">นัดหมายเช็คระยะและซ่อมทั่วไปผ่าน LINE OA</span>
                         </a>
-                        <button type="button" onclick="changeView('contact')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
-                            <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <button type="button" onclick="changeView('contact')" class="bg-[#0d1322] hover:bg-[#121a2e] border border-cyan-500/20 hover:border-cyan-400/50 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                            <div class="w-9 h-9 bg-cyan-500/10 text-cyan-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-phone text-base"></i>
                             </div>
                             <span class="text-xs font-bold text-white block">ติดต่อพนักงาน</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
+                            <span class="text-[10px] text-slate-400 block mt-0.5 leading-tight">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
                         </button>
-                        <button type="button" onclick="changeView('location')" class="bg-[#181f32] hover:bg-[#202942] border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                        <button type="button" onclick="changeView('location')" class="bg-[#0d1322] hover:bg-[#121a2e] border border-cyan-500/20 hover:border-cyan-400/50 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-map-location-dot text-base"></i>
                             </div>
                             <span class="text-xs font-bold text-white block">ที่ตั้งบริษัท</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
+                            <span class="text-[10px] text-slate-400 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
                         </button>
-                        <button type="button" onclick="triggerLogout()" class="bg-[#181f32] hover:bg-red-950/20 border border-slate-800/60 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
+                        <button type="button" onclick="triggerLogout()" class="bg-[#0d1322] hover:bg-red-950/30 border border-slate-800 hover:border-red-500/40 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
                             <div class="w-9 h-9 bg-slate-800 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
                                 <i class="fa-solid fa-power-off text-base"></i>
                             </div>
@@ -384,26 +416,27 @@
                 </div>
             </div>
 
+            <!-- หน้าติดต่อเจ้าหน้าที่ -->
             <div id="page-contact" class="hidden p-5 space-y-4 page-view">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-phone text-blue-400"></i> ติดต่อเจ้าหน้าที่
+                <h3 class="text-xl font-bold text-white flex items-center gap-2 led-glow-text">
+                    <i class="fa-solid fa-phone text-cyan-400"></i> ติดต่อเจ้าหน้าที่
                 </h3>
                 <div class="space-y-3">
-                    <a href="tel:1267" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                    <a href="tel:1267" class="block bg-[#0d1322] hover:bg-[#121a2e] border border-cyan-500/20 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center">
                                 <i class="fa-solid fa-building-user"></i>
                             </div>
                             <div>
-                                <span class="text-xs font-bold text-white block">บริการช่วยเหลือฉุกเฉิน24ชั่วโมง</span>
+                                <span class="text-xs font-bold text-white block">บริการช่วยเหลือฉุกเฉิน 24 ชั่วโมง</span>
                                 <span class="text-[10px] text-slate-400">โทร. 1267</span>
                             </div>
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
                     </a>
-                    <a href="tel:0930641144" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                    <a href="tel:0930641144" class="block bg-[#0d1322] hover:bg-[#121a2e] border border-cyan-500/20 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-red-500/10 text-[#e50012] rounded-full flex items-center justify-center">
+                            <div class="w-9 h-9 bg-cyan-500/10 text-cyan-400 rounded-full flex items-center justify-center">
                                 <i class="fa-solid fa-phone-volume"></i>
                             </div>
                             <div>
@@ -413,9 +446,9 @@
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
                     </a>
-                    <a href="tel:0925588055" class="block bg-[#181f32] hover:bg-[#202942] border border-slate-800/50 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                    <a href="tel:0925588055" class="block bg-[#0d1322] hover:bg-[#121a2e] border border-cyan-500/20 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center">
+                            <div class="w-9 h-9 bg-cyan-500/10 text-cyan-400 rounded-full flex items-center justify-center">
                                 <i class="fa-solid fa-headset"></i>
                             </div>
                             <div>
