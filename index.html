@@ -403,15 +403,22 @@
                             <span class="text-xs font-bold text-white block">ที่ตั้งบริษัท</span>
                             <span class="text-[10px] text-slate-400 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
                         </button>
-                        <button type="button" onclick="triggerLogout()" class="bg-[#0d1322] hover:bg-red-950/30 border border-slate-800 hover:border-red-500/40 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
-                            <div class="w-9 h-9 bg-slate-800 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">
-                                <i class="fa-solid fa-power-off text-base"></i>
-                            </div>
-                            <span class="text-xs font-bold text-slate-300 group-hover:text-red-400 block">ออกจากระบบ</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">ล็อกเอาท์ปิดเซสชันความปลอดภัย</span>
-                        </button>
-                    </div>
-                </div>
+<!-- ปุ่มออกจากระบบ (EVOLUTION Cyber-Metallic Theme) -->
+<button type="button" onclick="triggerLogout()" 
+    class="bg-gradient-to-b from-[#0d1322] to-[#070a12] border border-cyan-500/20 hover:border-red-500/60 p-4 rounded-xl text-left transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-[0_0_15px_rgba(239,68,68,0.25)] relative overflow-hidden">
+    
+    <!-- เส้นไฟ LED สีแดงเรืองแสง (แสดงเมื่อ Hover) -->
+    <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_8px_#ef4444]"></div>
+
+    <!-- กล่องไอคอน Power Off -->
+    <div class="w-9 h-9 bg-slate-900/80 border border-slate-700/60 text-slate-400 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500/20 group-hover:border-red-500/40 group-hover:text-red-400 group-hover:shadow-[0_0_10px_rgba(239,68,68,0.4)] transition-all duration-300">
+        <i class="fa-solid fa-power-off text-base"></i>
+    </div>
+
+    <!-- ข้อความระบุฟังก์ชั่น -->
+    <span class="text-xs font-bold text-slate-300 group-hover:text-red-400 block transition-colors duration-200">ออกจากระบบ</span>
+    <span class="text-[10px] text-slate-500 group-hover:text-slate-400 block mt-0.5 leading-tight transition-colors duration-200">ล็อกเอาท์ปิดเซสชันความปลอดภัย</span>
+</button>
             </div>
 
             <!-- หน้าติดต่อเจ้าหน้าที่ -->
@@ -460,35 +467,51 @@
             </div>
 
 
-<!-- ปุ่มติดต่อผู้ดูแล (ซ่อนไว้เป็นค่าเริ่มต้น) -->
-<a id="admin-contact-btn" href="https://lin.ee/89EVmkI" class="fixed right-6 bottom-6 h-14 w-14 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-full flex flex-col items-center justify-center shadow-lg shadow-red-500/40 z-50 select-none transition-opacity duration-300 opacity-0 pointer-events-none text-center p-1">
-    <i class="fa-solid fa-user-shield text-white text-sm mb-0.5"></i>
-    <span class="text-white text-[9px] font-medium leading-tight">ติดต่อ<br>ผู้ดูแล</span>
+<!-- ปุ่มติดต่อผู้ดูแล (EVOLUTION Neon-Cyber Theme) -->
+<a id="admin-contact-btn" href="https://lin.ee/89EVmkI" target="_blank" 
+   class="fixed right-6 bottom-20 sm:bottom-8 h-14 w-14 bg-[#0d1322]/90 backdrop-blur-md border border-cyan-500/50 hover:border-cyan-400 rounded-full flex flex-col items-center justify-center shadow-[0_0_18px_rgba(0,229,255,0.35)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] z-50 select-none transition-all duration-300 opacity-0 pointer-events-none text-center p-1 group hover:scale-105 active:scale-95">
+    
+    <!-- ชั้นแสงไฟเรืองแสงด้านในปุ่ม -->
+    <div class="absolute inset-0 rounded-full bg-cyan-500/10 group-hover:bg-cyan-500/20 transition-colors pointer-events-none"></div>
+
+    <!-- ไอคอนโล่ผู้ดูแลระบบสไตล์ นีออน -->
+    <i class="fa-solid fa-user-shield text-cyan-400 group-hover:text-cyan-300 text-sm mb-0.5 drop-shadow-[0_0_6px_rgba(0,229,255,0.8)] transition-colors"></i>
+    
+    <!-- ข้อความระบุปุ่ม -->
+    <span class="text-cyan-200 group-hover:text-white text-[9px] font-medium leading-tight z-10 transition-colors">
+        ติดต่อ<br>ผู้ดูแล
+    </span>
 </a>
 
-<!-- สคริปต์ควบคุมการแสดงผล 2 วินาที -->
+<!-- สคริปต์ควบคุมการแสดงผลและซ่อนปุ่มอัตโนมัติ 2 วินาที -->
 <script>
-    const adminBtn = document.getElementById('admin-contact-btn');
-    let hideTimeout;
+    (function() {
+        const adminBtn = document.getElementById('admin-contact-btn');
+        if (!adminBtn) return;
 
-    function showAdminButton() {
-        // แสดงปุ่มโดยปรับ Opacity และให้กดได้
-        adminBtn.classList.remove('opacity-0', 'pointer-events-none');
-        adminBtn.classList.add('opacity-100', 'pointer-events-auto');
+        let hideTimeout;
 
-        // รีเซ็ตเวลาใหม่ทุกครั้งที่มีการสัมผัสหน้าจอ
-        clearTimeout(hideTimeout);
+        // ฟังก์ชันแสดงปุ่มและตั้งเวลาซ่อน
+        function showAdminButton() {
+            // แสดงปุ่มด้วยการปรับ Opacity และเปิด Interactive Pointer
+            adminBtn.classList.remove('opacity-0', 'pointer-events-none');
+            adminBtn.classList.add('opacity-100', 'pointer-events-auto');
 
-        // ตั้งเวลาซ่อนปุ่มเมื่อครบ 2 วินาที (2000 มิลลิวินาที)
-        hideTimeout = setTimeout(() => {
-            adminBtn.classList.remove('opacity-100', 'pointer-events-auto');
-            adminBtn.classList.add('opacity-0', 'pointer-events-none');
-        }, 2000);
-    }
+            // ล้างเวลาถอยหลังเดิมทุกครั้งที่มีการสัมผัสหน้าจอใหม่
+            clearTimeout(hideTimeout);
 
-    // ดักจับการสัมผัสหน้าจอ (สำหรับมือถือ) และการคลิกเมาส์ (สำหรับคอมพิวเตอร์)
-    document.addEventListener('touchstart', showAdminButton);
-    document.addEventListener('mousedown', showAdminButton);
+            // ตั้งเวลาซ่อนปุ่มเมื่อไม่มี Interaction ครบ 2 วินาที (2000 ms)
+            hideTimeout = setTimeout(() => {
+                adminBtn.classList.remove('opacity-100', 'pointer-events-auto');
+                adminBtn.classList.add('opacity-0', 'pointer-events-none');
+            }, 2000);
+        }
+
+        // ดักจับการสัมผัสหน้าจอ (มือถือ) และการกดเมาส์ (คอมพิวเตอร์)
+        ['touchstart', 'mousedown'].forEach(eventType => {
+            document.addEventListener(eventType, showAdminButton, { passive: true });
+        });
+    })();
 </script>
 
             <div id="page-location" class="hidden p-5 space-y-4 page-view">
