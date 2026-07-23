@@ -211,11 +211,21 @@
             </div>
         </div>
 
-        <!-- Modal: เงื่อนไขการใช้บริการ -->
+<!-- Modal: เงื่อนไขการใช้บริการ (EVOLUTION Neon-Cyber Theme) -->
         <div id="tosModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex justify-center items-center p-4">
-            <div class="bg-[#0d1322] border border-cyan-500/40 w-full max-w-sm rounded-2xl p-5 shadow-[0_0_30px_rgba(0,229,255,0.2)] flex flex-col max-h-[85vh]">
-                <div class="flex items-center gap-2.5 border-b border-slate-800 pb-3 mb-4">
-                    <div class="w-8 h-8 bg-gradient-to-br from-[#0d1322] to-red-700 rounded-lg flex items-center justify-center text-white font-black text-xs shadow-md">MG</div>
+            <div class="bg-[#0d1322]/95 border border-cyan-500/40 w-full max-w-sm rounded-2xl p-5 shadow-[0_0_30px_rgba(0,229,255,0.25)] flex flex-col max-h-[85vh] relative overflow-hidden">
+                <!-- เส้นไฟ LED นีออนคาดขอบบนสุด -->
+                <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_10px_#00e5ff]"></div>
+
+                <!-- Header: โลโก้แบรนด์ และขอบแบ่งส่วน -->
+                <div class="flex items-center gap-2.5 border-b border-cyan-500/20 pb-3 mb-4">
+                    <!-- ป้าย MG สไตล์ EVOLUTION Cyan (เปลี่ยนจากกรอบแดงเดิม) -->
+                    <div class="relative flex-shrink-0">
+                        <div class="absolute -inset-0.5 bg-cyan-500/50 rounded-lg blur-[3px] opacity-60"></div>
+                        <div class="relative w-8 h-8 bg-gradient-to-br from-[#121b2d] via-[#0d1322] to-[#04060a] border border-cyan-500/60 rounded-lg flex items-center justify-center shadow-[0_0_12px_rgba(0,229,255,0.4)]">
+                            <span class="text-cyan-400 font-black text-xs tracking-tighter drop-shadow-[0_0_6px_rgba(0,229,255,0.8)]">MG</span>
+                        </div>
+                    </div>
                     <div>
                         <h3 class="text-sm font-bold text-white uppercase tracking-wider">เงื่อนไขการใช้บริการ</h3>
                         <p class="text-[10px] text-cyan-400">กรุณาอ่านและยอมรับก่อนเข้าใช้งานค่ะ</p>
@@ -295,10 +305,20 @@
         <!-- Main Content Area -->
         <main class="flex-1 flex flex-col overflow-y-auto pb-24">
 
-            <!-- หน้าสมัครสมาชิก -->
+<!-- หน้าสมัครสมาชิก (EVOLUTION Neon-Cyber Theme) -->
             <div id="page-register" class="hidden flex-1 flex flex-col p-6 page-view">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-gradient-to-r from-[00a7fd] to-red-700 text-white font-black px-3.5 py-1 rounded text-sm tracking-wider mb-3 shadow-[0_0_12px_rgba(229,0,18,0.4)]">MG</div>
+                    <!-- ป้ายโลโก้ MG สไตล์ Cyber Metallic Cyan -->
+                    <div class="inline-block relative group cursor-default mb-3">
+                        <!-- แสง Aura นีออนสีฟ้า Cyan ด้านหลังป้าย -->
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-cyan-400 rounded-lg blur-sm opacity-60 group-hover:opacity-100 transition duration-300 animate-pulse"></div>
+                        
+                        <!-- ตัวป้ายโลโก้หลัก (พื้นหลังเมทัลลิกเข้ม + ขอบไฟนีออนฟ้า) -->
+                        <div class="relative bg-gradient-to-br from-[#121b2d] via-[#0d1322] to-[#04060a] border border-cyan-500/60 text-cyan-400 font-black px-4 py-1.5 rounded-lg text-sm tracking-widest shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-transform duration-300 group-hover:scale-105">
+                            <!-- ตัวอักษร MG เรืองแสง -->
+                            <span class="drop-shadow-[0_0_6px_rgba(0,229,255,0.8)]">MG</span>
+                        </div>
+                    </div>
                     <h2 class="text-2xl font-bold text-white tracking-wide led-glow-text">สร้างบัญชีใหม่</h2>
                     <p class="text-xs text-cyan-400 mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
                 </div>
@@ -338,10 +358,20 @@
                 </form>
             </div>
 
-            <!-- หน้าเข้าสู่ระบบ -->
+<!-- หน้าเข้าสู่ระบบ (EVOLUTION Neon-Cyber Theme) -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6 page-view">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block bg-gradient-to-r from-[00a7fd] to-red-700 text-white font-black px-3.5 py-1 rounded text-sm tracking-wider mb-3 shadow-[0_0_12px_rgba(229,0,18,0.4)]">MG</div>
+                    <!-- ป้ายโลโก้ MG สไตล์ Cyber Metallic Cyan -->
+                    <div class="inline-block relative group cursor-default mb-3">
+                        <!-- แสง Aura นีออนสีฟ้า Cyan ด้านหลังป้าย -->
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-cyan-400 rounded-lg blur-sm opacity-60 group-hover:opacity-100 transition duration-300 animate-pulse"></div>
+                        
+                        <!-- ตัวป้ายโลโก้หลัก (พื้นหลังเมทัลลิกเข้ม + ขอบไฟนีออนฟ้า) -->
+                        <div class="relative bg-gradient-to-br from-[#121b2d] via-[#0d1322] to-[#04060a] border border-cyan-500/60 text-cyan-400 font-black px-4 py-1.5 rounded-lg text-sm tracking-widest shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-transform duration-300 group-hover:scale-105">
+                            <!-- ตัวอักษร MG เรืองแสง -->
+                            <span class="drop-shadow-[0_0_6px_rgba(0,229,255,0.8)]">MG</span>
+                        </div>
+                    </div>
                     <h2 class="text-2xl font-bold text-white tracking-wide led-glow-text">เข้าสู่ระบบ</h2>
                     <p class="text-xs text-cyan-400 mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
                 </div>
