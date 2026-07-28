@@ -1150,6 +1150,27 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 300);
     });
 });
+        document.addEventListener('DOMContentLoaded', () => {
+    const tosModal = document.getElementById('tosModal');
+    const acceptTosBtn = document.getElementById('acceptTosBtn');
+
+    // 1. ตรวจสอบว่าผู้ใช้เคยยอมรับเงื่อนไขไปแล้วหรือยัง
+    const hasAcceptedTOS = localStorage.getItem('hasAcceptedTOS');
+
+    if (!hasAcceptedTOS) {
+        // ถ้ายังไม่เคยยอมรับ ให้เอาคลาส hidden ออกเพื่อแสดง Modal
+        tosModal.classList.remove('hidden');
+    }
+
+    // 2. เมื่อคลิกปุ่ม "ยอมรับเงื่อนไขและเข้าสู่แอป"
+    acceptTosBtn.addEventListener('click', () => {
+        // บันทึกสถานะว่ายอมรับแล้วลงใน browser storage
+        localStorage.setItem('hasAcceptedTOS', 'true');
+
+        // ซ่อน Modal
+        tosModal.classList.add('hidden');
+    });
+});
     </script>
 </body>
 </html>
