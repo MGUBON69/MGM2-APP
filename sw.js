@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mg-ubon-m2-v3'; // เปลี่ยนเวอร์ชัน
+const CACHE_NAME = 'mg-ubon-m2-v3.1'; // เปลี่ยนเวอร์ชัน
 
 // 1. แคชเฉพาะไฟล์ในเครื่องเราเท่านั้น (ปลอดภัยชัวร์)
 const ASSETS_TO_CACHE = [
