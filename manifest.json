@@ -2,7 +2,7 @@
   "name": "MGM2 VER 1.1.1",
   "short_name": "MG UBON",
   "description": "ระบบให้บริการของฝ่ายขาย/ศูนย์บริการ MG M2 Motorsport อุบลราชธานี",
-  "start_url": "./index.html",
+  "start_url": "./index.html", 
   "display": "standalone",
   "background_color": "#0b0f19",
   "theme_color": "#0b0f19",
