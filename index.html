@@ -335,7 +335,7 @@
                 </div>
                 <div class="pt-2 border-t border-slate-800 mt-auto">
                     <button type="button" id="acceptTosBtn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition-all active:scale-[0.98] shadow-[0_0_15px_rgba(0,229,255,0.4)] cursor-pointer">
-                        ยอมรับเงื่อนไขและเข้าสู่แอป
+                        ยอมรับเงื่อนไขและไปหน้าแรก
                     </button>
                 </div>
             </div>
@@ -496,6 +496,43 @@
                         </p>
                     </div>
                 </form>
+            </div>
+
+            <!-- หน้าแรกสำหรับผู้เยี่ยมชม (Guest Landing) -->
+            <div id="page-welcome" class="hidden flex-1 flex flex-col justify-center p-6 page-view">
+                <div class="text-center">
+                    <div class="inline-block relative mb-5">
+                        <div class="absolute -inset-2 bg-cyan-500/20 rounded-3xl blur-xl animate-pulse"></div>
+                        <div class="relative w-24 h-24 mx-auto bg-gradient-to-br from-[#121b2d] via-[#0d1322] to-[#04060a] border border-cyan-500/60 rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(0,229,255,0.35)]">
+                            <span class="text-3xl text-cyan-400 font-black tracking-tighter drop-shadow-[0_0_10px_rgba(0,229,255,0.9)]">MG</span>
+                        </div>
+                    </div>
+
+                    <div class="text-[10px] text-cyan-400 font-black tracking-[.35em] uppercase">EVOLUTION</div>
+                    <h2 class="text-2xl font-black text-white mt-2 led-glow-text">M2 MOTORSPORT</h2>
+                    <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                        ระบบบริการลูกค้าออนไลน์<br>
+                        MG Ubon Ratchathani
+                    </p>
+                </div>
+
+                <div class="space-y-3 mt-10">
+                    <button type="button" onclick="changeView('login')"
+                        class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3.5 rounded-xl shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all active:scale-[0.98] cursor-pointer text-sm">
+                        <i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ
+                    </button>
+
+                    <button type="button" onclick="changeView('register')"
+                        class="w-full bg-[#0d1322] hover:bg-[#121a2e] border border-cyan-500/40 hover:border-cyan-300 text-cyan-300 font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] cursor-pointer text-sm">
+                        <i class="fa-solid fa-user-plus mr-2"></i> สมัครสมาชิก
+                    </button>
+                </div>
+
+                <div class="text-center mt-6">
+                    <p class="text-[10px] text-slate-600">
+                        กรุณาอ่านและยอมรับเงื่อนไขการใช้บริการก่อนเข้าใช้งาน
+                    </p>
+                </div>
             </div>
 
             <!-- หน้าหลัก (Home) -->
@@ -738,7 +775,8 @@
             if (currentUser) {
                 checkAndShowView('home');
             } else {
-                checkAndShowView('login');
+                // ผู้ใช้ใหม่ต้องเริ่มที่หน้าแรก และ TOS จะเด้งขึ้นมาก่อน
+                checkAndShowView('welcome');
             }
 
             // PWA Setup
@@ -764,7 +802,7 @@
         let viewTransitionTimer = null;
 
         function changeView(viewId, options = {}) {
-            const pages = ['register', 'login', 'home', 'contact', 'location'];
+            const pages = ['welcome', 'register', 'login', 'home', 'contact', 'location'];
             const targetPage = document.getElementById(`page-${viewId}`);
             if (!targetPage) return;
             if (activeView === viewId && !options.force) return;
@@ -799,8 +837,9 @@
             const header = document.getElementById('appHeader');
             const bottomNav = document.getElementById('bottomNav');
             const isAuth = viewId === 'login' || viewId === 'register';
-            header?.classList.toggle('hidden', isAuth);
-            bottomNav?.classList.toggle('hidden', isAuth);
+            const isPublicLanding = viewId === 'welcome';
+            header?.classList.toggle('hidden', isAuth || isPublicLanding);
+            bottomNav?.classList.toggle('hidden', isAuth || isPublicLanding);
             if (!isAuth) updateNavHighlights(viewId);
         }
 
@@ -1189,7 +1228,8 @@ function processResetPassword(event) {
     closeLogoutModal();
     await playSecureTransition('กำลังล็อกระบบและปิดเซสชัน', 700);
     showToast('ออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
-    changeView('login');
+    changeView('welcome');
+    if (typeof checkTosStatus === 'function') checkTosStatus();
 }
 
         // 9. CUSTOM TOAST NOTIFICATION
@@ -1245,56 +1285,54 @@ function processResetPassword(event) {
                     .catch(err => console.error('❌ Service Worker ล้มเหลว:', err));
             });
         }
-// --- ระบบจัดการเงื่อนไขการให้บริการ (เวอร์ชันเด้งใหม่เมื่อสลับไอดี/ล็อกเอาต์) ---
-document.addEventListener("DOMContentLoaded", function() {
-    const tosModal = document.getElementById("tosModal");
-    const acceptTosBtn = document.getElementById("acceptTosBtn");
+// --- ระบบจัดการเงื่อนไขการให้บริการ ---
+        document.addEventListener("DOMContentLoaded", function() {
+            const tosModal = document.getElementById("tosModal");
+            const acceptTosBtn = document.getElementById("acceptTosBtn");
 
-    // ฟังก์ชันสำหรับเช็คและแสดง Modal
-    window.checkTosStatus = function() {
-        if (currentUser && !localStorage.getItem("mg_tos_accepted")) {
-            tosModal.classList.remove("hidden");
-        } else {
-            tosModal.classList.add("hidden");
-        }
-    };
+            if (!tosModal || !acceptTosBtn) return;
 
-    // รันตอนโหลดหน้าเว็บครั้งแรก
-    checkTosStatus();
+            window.checkTosStatus = function() {
+                const accepted = localStorage.getItem("mg_tos_accepted") === "true";
 
-    // เมื่อกดปุ่มยอมรับเงื่อนไข
-    acceptTosBtn.addEventListener("click", function() {
-        localStorage.setItem("mg_tos_accepted", "true"); // บันทึกความจำ
-        
-        // เอฟเฟกต์เฟดปิดสวยๆ
-        tosModal.style.opacity = '0';
-        tosModal.style.transition = 'opacity 0.3s ease-out';
-        setTimeout(() => {
-            tosModal.classList.add("hidden");
-            tosModal.style.opacity = '1';
-        }, 300);
-    });
-});
-        document.addEventListener('DOMContentLoaded', () => {
-    const tosModal = document.getElementById('tosModal');
-    const acceptTosBtn = document.getElementById('acceptTosBtn');
+                if (!accepted) {
+                    tosModal.classList.remove("hidden");
+                    tosModal.style.opacity = '1';
+                    tosModal.style.pointerEvents = 'auto';
+                } else {
+                    tosModal.classList.add("hidden");
+                    tosModal.style.opacity = '1';
+                    tosModal.style.pointerEvents = 'none';
+                }
+            };
 
-    // 1. ตรวจสอบว่าผู้ใช้เคยยอมรับเงื่อนไขไปแล้วหรือยัง
-    const hasAcceptedTOS = localStorage.getItem('hasAcceptedTOS');
+            // ผู้ใช้ที่ยังไม่ล็อกอินต้องเริ่มที่หน้าแรกก่อน
+            if (!currentUser && localStorage.getItem("mg_tos_accepted") !== "true") {
+                changeView('welcome', {force:true});
+            }
 
-    if (currentUser && !localStorage.getItem('mg_tos_accepted')) {
-        tosModal.classList.remove('hidden');
-    }
+            checkTosStatus();
 
-    // 2. เมื่อคลิกปุ่ม "ยอมรับเงื่อนไขและเข้าสู่แอป"
-    acceptTosBtn.addEventListener('click', () => {
-        // บันทึกสถานะว่ายอมรับแล้วลงใน browser storage
-        localStorage.setItem('mg_tos_accepted', 'true');
+            acceptTosBtn.addEventListener("click", function() {
+                localStorage.setItem("mg_tos_accepted", "true");
 
-        // ซ่อน Modal
-        tosModal.classList.add('hidden');
-    });
-});
+                tosModal.style.opacity = '0';
+                tosModal.style.transition = 'opacity 0.3s ease-out';
+
+                setTimeout(() => {
+                    tosModal.classList.add("hidden");
+                    tosModal.style.opacity = '1';
+                    tosModal.style.pointerEvents = 'none';
+
+                    // ยอมรับแล้ว: guest ไปหน้าแรก / สมาชิกไปหน้าหลัก
+                    if (currentUser) {
+                        checkAndShowView('home');
+                    } else {
+                        changeView('welcome', {force:true});
+                    }
+                }, 300);
+            });
+        });
     </script>
 </body>
 </html>
