@@ -73,9 +73,102 @@
             background: #66f0ff; 
             box-shadow: 0 0 15px rgba(0, 229, 255, 1);
         }
+
+        /* ===== EVOLUTION UI MOTION SYSTEM ===== */
+        .page-view {
+            opacity: 0;
+            transform: translateY(14px) scale(.985);
+            filter: blur(3px);
+            transition: opacity .32s ease, transform .38s cubic-bezier(.2,.8,.2,1), filter .32s ease;
+            will-change: opacity, transform, filter;
+        }
+        .page-view.page-active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+        .page-view.page-exit {
+            opacity: 0 !important;
+            transform: translateX(-18px) scale(.985) !important;
+            filter: blur(4px) !important;
+        }
+        .auth-shell { position: relative; isolation: isolate; }
+        .auth-shell::before {
+            content: ''; position: absolute; inset: 8% 10%; z-index: -1;
+            background: radial-gradient(circle, rgba(0,229,255,.12), transparent 62%);
+            filter: blur(30px); pointer-events:none;
+        }
+        .auth-scan {
+            position: relative; overflow: hidden;
+        }
+        .auth-scan::after {
+            content:''; position:absolute; left:0; right:0; top:-100%; height:2px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+            box-shadow: 0 0 16px #00e5ff; animation: scanline 3.2s linear infinite;
+            pointer-events:none;
+        }
+        @keyframes scanline { to { top: 110%; } }
+        @keyframes lockIn {
+            0% { opacity:0; transform:scale(.86) rotateX(12deg); filter:blur(8px); }
+            65% { opacity:1; transform:scale(1.02) rotateX(0); filter:blur(0); }
+            100% { transform:scale(1); }
+        }
+        @keyframes unlockFlash {
+            0% { opacity:0; transform:scale(.92); }
+            35% { opacity:1; box-shadow:0 0 80px rgba(0,229,255,.5); }
+            100% { opacity:0; transform:scale(1.04); }
+        }
+        @keyframes shakeX {
+            0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(4px)}
+        }
+        .auth-lock-enter { animation: lockIn .55s cubic-bezier(.2,.9,.2,1) both; }
+        .login-error-shake { animation: shakeX .42s ease; }
+        .secure-overlay {
+            position:fixed; inset:0; z-index:10000; display:flex; align-items:center; justify-content:center;
+            background:rgba(2,5,10,.94); backdrop-filter:blur(14px); pointer-events:none;
+            opacity:0; transition:opacity .25s ease;
+        }
+        .secure-overlay.show { opacity:1; }
+        .secure-overlay .secure-box {
+            width:min(88vw,330px); padding:28px 22px; text-align:center;
+            background:linear-gradient(145deg,#0d1322,#04060a);
+            border:1px solid rgba(0,229,255,.45); border-radius:24px;
+            box-shadow:0 0 45px rgba(0,229,255,.18), inset 0 0 24px rgba(0,229,255,.04);
+        }
+        .secure-ring {
+            width:72px;height:72px;margin:0 auto 16px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+            border:1px solid rgba(0,229,255,.5); color:#00e5ff;
+            box-shadow:0 0 0 7px rgba(0,229,255,.04),0 0 25px rgba(0,229,255,.35);
+            animation:pulse 1.4s infinite;
+        }
+        .secure-progress { height:2px; margin-top:16px; background:#111827; overflow:hidden; border-radius:99px; }
+        .secure-progress span { display:block;height:100%;width:0;background:#00e5ff;box-shadow:0 0 10px #00e5ff; animation:progress 1.05s ease forwards; }
+        @keyframes progress { to { width:100%; } }
+        .nav-active { color:#00e5ff !important; transform:translateY(-2px) scale(1.06); text-shadow:0 0 9px rgba(0,229,255,.75); }
+        .nav-active::after {
+            content:''; display:block; width:18px; height:2px; margin-top:2px; border-radius:99px;
+            background:#00e5ff; box-shadow:0 0 8px #00e5ff;
+        }
+        .modal-animate { animation:lockIn .35s cubic-bezier(.2,.8,.2,1) both; }
+        @media (prefers-reduced-motion: reduce) {
+            .page-view,.secure-overlay { transition:none; }
+            .auth-lock-enter,.login-error-shake,.modal-animate,.auth-scan::after,.secure-ring { animation:none; }
+        }
     </style>
 </head>
 <body class="bg-[#04060a] text-slate-100 min-h-screen flex justify-center items-center p-0 sm:p-4">
+
+    <!-- Secure transition overlay -->
+    <div id="secureOverlay" class="secure-overlay" aria-hidden="true">
+        <div class="secure-box">
+            <div class="secure-ring"><i id="secureIcon" class="fa-solid fa-fingerprint text-2xl"></i></div>
+            <div id="secureTitle" class="text-cyan-400 text-xs font-black tracking-[.22em] uppercase">SECURE ACCESS</div>
+            <div id="secureMessage" class="text-white font-bold text-base mt-2">กำลังตรวจสอบเซสชัน</div>
+            <div class="text-[10px] text-slate-500 mt-1">EVOLUTION • M2 MOTORSPORT</div>
+            <div class="secure-progress"><span></span></div>
+        </div>
+    </div>
+
 
     <!-- Container หลัก: โทนสีอาคารเมทัลลิกพร้อมเส้นขอบนีออนเรืองแสง -->
     <div class="w-full max-w-md h-screen sm:h-[840px] bg-[#070a12] sm:rounded-3xl shadow-[0_0_30px_rgba(0,229,255,0.15)] overflow-hidden flex flex-col relative border border-cyan-500/30">
@@ -666,58 +759,78 @@
             }, 1000);
         }
 
-        // 3. ROUTING & NAVIGATION (แก้ไข Logic บังคับการสลับคลาสขจัดปัญหาซ้อนทับกันค่ะ)
-        function changeView(viewId) {
+        // 3. ROUTING & NAVIGATION — smooth EVOLUTION screen switching
+        let activeView = null;
+        let viewTransitionTimer = null;
+
+        function changeView(viewId, options = {}) {
             const pages = ['register', 'login', 'home', 'contact', 'location'];
-            
+            const targetPage = document.getElementById(`page-${viewId}`);
+            if (!targetPage) return;
+            if (activeView === viewId && !options.force) return;
+
+            const oldPage = activeView ? document.getElementById(`page-${activeView}`) : null;
+            if (viewTransitionTimer) clearTimeout(viewTransitionTimer);
+
+            if (oldPage && oldPage !== targetPage) {
+                oldPage.classList.remove('page-active');
+                oldPage.classList.add('page-exit');
+                setTimeout(() => oldPage.classList.add('hidden'), 180);
+            }
+
             pages.forEach(p => {
                 const el = document.getElementById(`page-${p}`);
-                if (el) {
-                    el.classList.add('hidden');
-                    el.classList.remove('flex'); // ป้องกันกรณีหน้าลงทะเบียนค้างสถานะ flex ค้างไว้ค่ะ
-                }
+                if (!el || el === targetPage || el === oldPage) return;
+                el.classList.add('hidden');
+                el.classList.remove('page-active','page-exit');
             });
 
-            const targetPage = document.getElementById(`page-${viewId}`);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-                // หากเป็นหน้า login หรือ register ให้แสดงผลแบบ flex เพื่อความสวยงามกึ่งกลางจอค่ะ
-                if (viewId === 'login' || viewId === 'register') {
-                    targetPage.classList.add('flex');
-                }
-            }
+            targetPage.classList.remove('hidden','page-exit');
+            if (viewId === 'login' || viewId === 'register') targetPage.classList.add('flex');
+            else targetPage.classList.remove('flex');
 
+            requestAnimationFrame(() => {
+                targetPage.classList.add('page-active');
+                targetPage.classList.add('auth-lock-enter');
+                setTimeout(() => targetPage.classList.remove('auth-lock-enter'), 600);
+            });
+
+            activeView = viewId;
             const header = document.getElementById('appHeader');
             const bottomNav = document.getElementById('bottomNav');
-
-            if (viewId === 'login' || viewId === 'register') {
-                if (header) header.classList.add('hidden');
-                if (bottomNav) bottomNav.classList.add('hidden');
-            } else {
-                if (header) header.classList.remove('hidden');
-                if (bottomNav) bottomNav.classList.remove('hidden');
-                updateNavHighlights(viewId);
-            }
+            const isAuth = viewId === 'login' || viewId === 'register';
+            header?.classList.toggle('hidden', isAuth);
+            bottomNav?.classList.toggle('hidden', isAuth);
+            if (!isAuth) updateNavHighlights(viewId);
         }
 
-        function updateNavHighlights(activeView) {
-            const navButtons = {
-                'home': document.getElementById('btn-nav-home'),
-                'contact': document.getElementById('btn-nav-contact'),
-                'location': document.getElementById('btn-nav-location')
-            };
-
-            Object.keys(navButtons).forEach(key => {
-                const btn = navButtons[key];
-                if (!btn) return;
-                if (key === activeView) {
-                    btn.classList.add('text-red-500', 'scale-105');
-                    btn.classList.remove('text-slate-400');
-                } else {
-                    btn.classList.remove('text-red-500', 'scale-105');
-                    btn.classList.add('text-slate-400');
-                }
+        function updateNavHighlights(active) {
+            const navButtons = { home:'btn-nav-home', contact:'btn-nav-contact', location:'btn-nav-location', promo:'btn-nav-promo', game:'btn-nav-game' };
+            Object.entries(navButtons).forEach(([key,id]) => {
+                const btn=document.getElementById(id); if(!btn) return;
+                btn.classList.toggle('nav-active', key===active);
+                btn.classList.toggle('text-slate-400', key!==active);
             });
+        }
+
+        function playSecureTransition(message='กำลังตรวจสอบเซสชัน', duration=650) {
+            const overlay=document.getElementById('secureOverlay');
+            if(!overlay) return Promise.resolve();
+            const msg=document.getElementById('secureMessage');
+            if(msg) msg.textContent=message;
+            overlay.classList.add('show');
+            overlay.setAttribute('aria-hidden','false');
+            return new Promise(resolve=>setTimeout(()=>{
+                overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); resolve();
+            },duration));
+        }
+
+        function checkAndShowView(defaultView) {
+            changeView(defaultView, {force:true});
+            if (currentUser) {
+                document.getElementById('client-name').innerText = currentUser.name;
+                renderCarData();
+            }
         }
 
         function checkAndShowView(defaultView) {
@@ -765,7 +878,7 @@
             changeView('login');
         }
 
-        function processLogin(event) {
+        async function processLogin(event) {
             event.preventDefault();
             const email = document.getElementById('login-email').value.toLowerCase();
             const password = document.getElementById('login-password').value;
@@ -773,14 +886,21 @@
             let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
             const userFound = users.find(u => u.email === email && u.password === password);
 
+            const loginCard = document.getElementById('page-login');
             if (userFound) {
                 currentUser = userFound;
                 localStorage.setItem('mg_current_user', JSON.stringify(currentUser));
-                document.getElementById('client-name').innerText = currentUser.name;
-                showToast(`สวัสดีค่ะ คุณ ${currentUser.name} ✨`, 'success');
+                event.target.querySelector('button[type="submit"]')?.setAttribute('disabled','true');
+                await playSecureTransition('ยืนยันตัวตนสำเร็จ • กำลังปลดล็อกระบบ', 900);
                 event.target.reset();
+                document.getElementById('client-name').innerText = currentUser.name;
                 checkAndShowView('home');
+                showToast(`สวัสดีค่ะ คุณ ${currentUser.name} ✨`, 'success');
+                event.target.querySelector('button[type="submit"]')?.removeAttribute('disabled');
             } else {
+                loginCard?.classList.remove('login-error-shake');
+                void loginCard?.offsetWidth;
+                loginCard?.classList.add('login-error-shake');
                 showToast('อีเมลหรือรหัสผ่านไม่ถูกต้องค่ะ ❌', 'error');
             }
         }
@@ -788,6 +908,7 @@
         // 5. PROFILE EDIT
         function openEditModal() {
             document.getElementById('editNameModal').classList.remove('hidden');
+            document.getElementById('editNameModal').firstElementChild?.classList.add('modal-animate');
             if (currentUser) {
                 document.getElementById('new-profile-name').value = currentUser.name;
             }
@@ -817,6 +938,7 @@
         // 6. CAR MANAGEMENT LOGIC
         function openCarModal() {
             document.getElementById('carInfoModal').classList.remove('hidden');
+            document.getElementById('carInfoModal').firstElementChild?.classList.add('modal-animate');
             if (currentUser && currentUser.carInfo) {
                 document.getElementById('car-owner').value = currentUser.carInfo.owner || '';
                 document.getElementById('car-plate').value = currentUser.carInfo.plate || '';
@@ -869,6 +991,7 @@
         // 7. PASSWORD RESET (EMAILJS & OTP)
         function openForgotPasswordModal() {
             document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            document.getElementById('forgotPasswordModal').firstElementChild?.classList.add('modal-animate');
             backToStep1();
         }
 
@@ -1050,19 +1173,21 @@ function processResetPassword(event) {
         // 8. LOGOUT SYSTEM
         function triggerLogout() {
             document.getElementById('logoutConfirmModal').classList.remove('hidden');
+            document.getElementById('logoutConfirmModal').firstElementChild?.classList.add('modal-animate');
         }
 
         function closeLogoutModal() {
             document.getElementById('logoutConfirmModal').classList.add('hidden');
         }
 
-      function confirmLogout() {
+      async function confirmLogout() {
     currentUser = null;
     localStorage.removeItem('mg_current_user');
     localStorage.removeItem('mg_tos_accepted');
     if (typeof checkTosStatus === 'function') checkTosStatus();
 
     closeLogoutModal();
+    await playSecureTransition('กำลังล็อกระบบและปิดเซสชัน', 700);
     showToast('ออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
     changeView('login');
 }
@@ -1127,7 +1252,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // ฟังก์ชันสำหรับเช็คและแสดง Modal
     window.checkTosStatus = function() {
-        if (!localStorage.getItem("mg_tos_accepted")) {
+        if (currentUser && !localStorage.getItem("mg_tos_accepted")) {
             tosModal.classList.remove("hidden");
         } else {
             tosModal.classList.add("hidden");
@@ -1157,15 +1282,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // 1. ตรวจสอบว่าผู้ใช้เคยยอมรับเงื่อนไขไปแล้วหรือยัง
     const hasAcceptedTOS = localStorage.getItem('hasAcceptedTOS');
 
-    if (!hasAcceptedTOS) {
-        // ถ้ายังไม่เคยยอมรับ ให้เอาคลาส hidden ออกเพื่อแสดง Modal
+    if (currentUser && !localStorage.getItem('mg_tos_accepted')) {
         tosModal.classList.remove('hidden');
     }
 
     // 2. เมื่อคลิกปุ่ม "ยอมรับเงื่อนไขและเข้าสู่แอป"
     acceptTosBtn.addEventListener('click', () => {
         // บันทึกสถานะว่ายอมรับแล้วลงใน browser storage
-        localStorage.setItem('hasAcceptedTOS', 'true');
+        localStorage.setItem('mg_tos_accepted', 'true');
 
         // ซ่อน Modal
         tosModal.classList.add('hidden');
