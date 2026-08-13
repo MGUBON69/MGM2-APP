@@ -532,6 +532,11 @@
                     <p class="text-[10px] text-slate-600">
                         กรุณาอ่านและยอมรับเงื่อนไขการใช้บริการก่อนเข้าใช้งาน
                     </p>
+                    <button type="button" onclick="openTosModal()"
+                        class="mt-2 inline-flex items-center gap-1.5 text-[10px] text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-4 transition-colors cursor-pointer">
+                        <i class="fa-solid fa-file-contract text-[9px]"></i>
+                        คลิกอ่านเงื่อนไขการใช้บริการ
+                    </button>
                 </div>
             </div>
 
@@ -1291,6 +1296,12 @@ function processResetPassword(event) {
             const acceptTosBtn = document.getElementById("acceptTosBtn");
 
             if (!tosModal || !acceptTosBtn) return;
+
+            window.openTosModal = function() {
+                tosModal.classList.remove("hidden");
+                tosModal.style.opacity = '1';
+                tosModal.style.pointerEvents = 'auto';
+            };
 
             window.checkTosStatus = function() {
                 const accepted = localStorage.getItem("mg_tos_accepted") === "true";
