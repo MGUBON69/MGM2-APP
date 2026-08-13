@@ -87,6 +87,9 @@
             transform: translateY(0) scale(1);
             filter: blur(0);
         }
+        #page-promo { min-height: 0; }
+        #page-promo .min-h-\[620px\] { min-height: calc(100vh - 180px); }
+
         .page-view.page-exit {
             opacity: 0 !important;
             transform: translateX(-18px) scale(.985) !important;
@@ -723,6 +726,35 @@
     })();
 </script>
 
+
+            <!-- หน้าโปรโมชั่น: อยู่ในไฟล์เดียวกับแอปหลัก และสลับด้วย changeView() -->
+            <div id="page-promo" class="hidden flex-1 min-h-0 flex flex-col page-view bg-[#04060a]">
+                <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-cyan-500/20 bg-[#0d1322]/95 sticky top-0 z-10">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                            <i class="fa-solid fa-tags text-sm"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h3 class="text-sm font-bold text-white truncate">โปรโมชั่น MG</h3>
+                            <p class="text-[9px] text-slate-500">แสดงภายในแอป • ไม่เปิดแท็บใหม่</p>
+                        </div>
+                    </div>
+                    <a href="https://mgubon69.github.io/promotion-mg/" target="_blank" rel="noopener noreferrer" class="shrink-0 text-[9px] text-cyan-300 border border-cyan-500/30 bg-cyan-500/5 hover:bg-cyan-500/10 px-2.5 py-1.5 rounded-lg" title="เปิดโปรโมชั่นในหน้าใหม่">
+                        เปิดเต็มหน้า
+                    </a>
+                </div>
+                <div class="flex-1 min-h-0 bg-[#04060a]">
+                    <iframe
+                        id="promoFrame"
+                        src="https://mgubon69.github.io/promotion-mg/"
+                        title="MG โปรโมชั่น"
+                        class="w-full h-full min-h-[620px] border-0 bg-white"
+                        loading="lazy"
+                        referrerpolicy="strict-origin-when-cross-origin">
+                    </iframe>
+                </div>
+            </div>
+
             <div id="page-location" class="hidden p-5 space-y-4 page-view">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-400"></i> ที่ตั้งบริษัท
@@ -746,8 +778,8 @@
             <button type="button" onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-base"></i>
                 <span class="text-[10px] tracking-wide">หน้าแรก</span>
-<!-- ปุ่มโปรโมชั่น -->
-    <button type="button" onclick="window.open('https://mgubon69.github.io/promotion-mg/', '_blank')" id="btn-nav-promo" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+<!-- ปุ่มโปรโมชั่น: สลับหน้าในไฟล์เดียว ไม่เปิดแท็บใหม่ -->
+    <button type="button" onclick="changeView('promo')" id="btn-nav-promo" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16" aria-label="โปรโมชั่น">
         <i class="fa-solid fa-tags text-base"></i>
         <span class="text-[10px] tracking-wide">โปรโมชั่น</span>
     </button>
@@ -807,7 +839,7 @@
         let viewTransitionTimer = null;
 
         function changeView(viewId, options = {}) {
-            const pages = ['welcome', 'register', 'login', 'home', 'contact', 'location'];
+            const pages = ['welcome', 'register', 'login', 'home', 'contact', 'location', 'promo'];
             const targetPage = document.getElementById(`page-${viewId}`);
             if (!targetPage) return;
             if (activeView === viewId && !options.force) return;
@@ -839,6 +871,8 @@
             });
 
             activeView = viewId;
+            const main = document.querySelector('main');
+            if (main) main.scrollTop = 0;
             const header = document.getElementById('appHeader');
             const bottomNav = document.getElementById('bottomNav');
             const isAuth = viewId === 'login' || viewId === 'register';
