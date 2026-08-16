@@ -157,6 +157,293 @@
             .page-view,.secure-overlay { transition:none; }
             .auth-lock-enter,.login-error-shake,.modal-animate,.auth-scan::after,.secure-ring { animation:none; }
         }
+    
+/* =========================================================
+   M2 MOTORSPORT EVOLUTION — WHITE / CLEAN SHOWROOM THEME
+   ปรับเฉพาะหน้าตา ไม่เปลี่ยนฟังก์ชันหรือ JavaScript เดิม
+   ========================================================= */
+
+/* พื้นฐาน: ขาวสะอาด + Cyan เป็นสี Accent ให้เข้ากับโลโก้ */
+body {
+    background-color: #eef2f5 !important;
+    color: #17202a;
+}
+
+body > .w-full.max-w-md {
+    background: #ffffff !important;
+    border-color: rgba(0, 150, 199, 0.22) !important;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Header */
+#appHeader {
+    background: rgba(255,255,255,0.97) !important;
+    border-bottom-color: rgba(0, 150, 199, 0.18) !important;
+    box-shadow: 0 4px 16px rgba(15,23,42,.07) !important;
+}
+
+#appHeader h1 {
+    color: #111827 !important;
+    text-shadow: none !important;
+}
+
+#appHeader p {
+    color: #64748b !important;
+}
+
+#appHeader .bg-gradient-to-br {
+    background: linear-gradient(145deg,#ffffff,#f1f5f9) !important;
+    border-color: rgba(0,150,199,.28) !important;
+    box-shadow: 0 4px 12px rgba(15,23,42,.08) !important;
+}
+
+#appHeader .text-cyan-400 {
+    color: #0877a6 !important;
+    text-shadow: none !important;
+}
+
+#appHeader .bg-\[\#04060a\] {
+    background: #f8fafc !important;
+}
+
+/* หน้าหลัก: Welcome */
+#page-home > div:first-child {
+    background: linear-gradient(135deg,#ffffff,#f7fafc) !important;
+    border-color: rgba(0,150,199,.20) !important;
+    box-shadow: 0 8px 24px rgba(15,23,42,.07) !important;
+}
+
+#page-home > div:first-child h3 {
+    color: #111827 !important;
+    text-shadow: none !important;
+}
+
+#page-home > div:first-child p {
+    color: #64748b !important;
+}
+
+/* =========================
+   การ์ดข้อมูลรถยนต์
+   ========================= */
+#car-display-card {
+    background: linear-gradient(145deg,#ffffff,#f8fafc) !important;
+    border-color: rgba(0,150,199,.24) !important;
+    box-shadow: 0 10px 28px rgba(15,23,42,.08) !important;
+}
+
+#car-display-card > div:first-child {
+    background: linear-gradient(90deg,transparent,rgba(0,174,239,.8),transparent) !important;
+    box-shadow: 0 0 8px rgba(0,174,239,.35) !important;
+}
+
+#car-display-card .text-slate-100,
+#car-display-card .text-white {
+    color: #17202a !important;
+}
+
+#car-display-card .text-slate-400 {
+    color: #64748b !important;
+}
+
+#car-display-card .bg-cyan-500\/20 {
+    background: rgba(0,174,239,.09) !important;
+    border-color: rgba(0,150,199,.20) !important;
+}
+
+#car-display-card .bg-cyan-500\/10 {
+    background: rgba(0,174,239,.07) !important;
+}
+
+#car-display-card .bg-\[\#04060a\]\/80,
+#car-display-card .bg-\[\#04060a\]\/90 {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: inset 0 1px 2px rgba(15,23,42,.03) !important;
+}
+
+#car-display-card .text-cyan-400,
+#car-display-card .text-cyan-300 {
+    color: #0877a6 !important;
+    text-shadow: none !important;
+}
+
+#car-display-card #display-car-vin {
+    background: #e8f7fb !important;
+    border-color: rgba(0,150,199,.18) !important;
+    color: #0877a6 !important;
+}
+
+/* ปุ่มแก้ไขข้อมูลรถ */
+#car-display-card button {
+    background: #e8f7fb !important;
+    border-color: rgba(0,150,199,.25) !important;
+    color: #0877a6 !important;
+    box-shadow: none !important;
+}
+
+#car-display-card button:hover {
+    background: #00a8d8 !important;
+    color: #ffffff !important;
+}
+
+/* =========================
+   Modal ข้อมูลรถยนต์
+   ========================= */
+#carInfoModal > div {
+    background: #ffffff !important;
+    border-color: rgba(0,150,199,.28) !important;
+    box-shadow: 0 20px 55px rgba(15,23,42,.20) !important;
+}
+
+#carInfoModal h3 {
+    color: #111827 !important;
+}
+
+#carInfoModal .border-b {
+    border-color: #e2e8f0 !important;
+}
+
+#carInfoModal label {
+    color: #475569 !important;
+}
+
+#carInfoModal input {
+    background: #f8fafc !important;
+    color: #17202a !important;
+    border-color: #dbe3ea !important;
+    box-shadow: inset 0 1px 2px rgba(15,23,42,.03) !important;
+}
+
+#carInfoModal input::placeholder {
+    color: #94a3b8 !important;
+}
+
+#carInfoModal input:focus {
+    border-color: #00a8d8 !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(0,168,216,.10) !important;
+}
+
+#carInfoModal .text-cyan-400 {
+    color: #0088b8 !important;
+}
+
+/* =========================
+   หน้าติดต่อเจ้าหน้าที่
+   ========================= */
+#page-contact {
+    color: #17202a;
+}
+
+#page-contact h3 {
+    color: #111827 !important;
+    text-shadow: none !important;
+}
+
+#page-contact > h3 .text-cyan-400 {
+    color: #0088b8 !important;
+}
+
+#page-contact .space-y-3 > a {
+    background: linear-gradient(135deg,#ffffff,#f8fafc) !important;
+    border-color: #dce6ec !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,.06) !important;
+}
+
+#page-contact .space-y-3 > a:hover {
+    background: #ffffff !important;
+    border-color: rgba(0,168,216,.40) !important;
+    box-shadow: 0 9px 24px rgba(15,23,42,.09) !important;
+}
+
+#page-contact .space-y-3 > a span.text-white {
+    color: #17202a !important;
+}
+
+#page-contact .space-y-3 > a span.text-slate-400 {
+    color: #64748b !important;
+}
+
+#page-contact .space-y-3 > a .text-slate-600 {
+    color: #94a3b8 !important;
+}
+
+#page-contact .space-y-3 > a .bg-cyan-500\/10 {
+    background: #e8f7fb !important;
+}
+
+#page-contact .space-y-3 > a .text-cyan-400 {
+    color: #0088b8 !important;
+}
+
+#page-contact .space-y-3 > a .bg-emerald-500\/10 {
+    background: #eafaf2 !important;
+}
+
+#page-contact .space-y-3 > a .text-emerald-400 {
+    color: #059669 !important;
+}
+
+/* =========================
+   เมนูลัดบนหน้า Home
+   ========================= */
+#page-home .grid.grid-cols-2 > a,
+#page-home .grid.grid-cols-2 > button {
+    background: linear-gradient(135deg,#ffffff,#f8fafc) !important;
+    border-color: #dce6ec !important;
+    box-shadow: 0 5px 16px rgba(15,23,42,.05) !important;
+}
+
+#page-home .grid.grid-cols-2 > a:hover,
+#page-home .grid.grid-cols-2 > button:hover {
+    background: #ffffff !important;
+    border-color: rgba(0,168,216,.35) !important;
+}
+
+#page-home .grid.grid-cols-2 > a span.text-white,
+#page-home .grid.grid-cols-2 > button span.text-white {
+    color: #17202a !important;
+}
+
+#page-home .grid.grid-cols-2 > a span.text-slate-400,
+#page-home .grid.grid-cols-2 > button span.text-slate-400 {
+    color: #64748b !important;
+}
+
+/* Bottom navigation ให้กลมกลืนกับธีมขาว */
+#bottomNav {
+    background: rgba(255,255,255,.97) !important;
+    border-top-color: #e2e8f0 !important;
+    box-shadow: 0 -6px 20px rgba(15,23,42,.08) !important;
+}
+
+#bottomNav button {
+    color: #64748b;
+}
+
+.nav-active {
+    color: #0088b8 !important;
+    text-shadow: none !important;
+}
+
+.nav-active::after {
+    background: #00a8d8 !important;
+    box-shadow: 0 0 8px rgba(0,168,216,.35) !important;
+}
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9 !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #00a8d8 !important;
+    box-shadow: 0 0 8px rgba(0,168,216,.35) !important;
+}
+
+/* ไม่แตะหน้าล็อกอิน/สมัครสมาชิก/ระบบ OTP/ระบบ transition
+   เพื่อรักษาฟังก์ชันและพฤติกรรมเดิม */
+
     </style>
 </head>
 <body class="bg-[#04060a] text-slate-100 min-h-screen flex justify-center items-center p-0 sm:p-4">
