@@ -27,12 +27,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-        (function() {
-            emailjs.init("KSS0THK1eB1HxrAsn");
-        })();
-    </script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
@@ -42,23 +36,13 @@
             background-color: #f8fafc;
         }
 
-        /* ตกแต่ง Scrollbar สไตล์ Premium Blue บนพื้นหลังสว่าง */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9; 
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #0b79d0; 
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #0284c7; 
-        }
+        /* ตกแต่ง Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #0b79d0; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #0284c7; }
 
-        /* ===== EVOLUTION UI MOTION SYSTEM (White & Neon Cyan Theme) ===== */
+        /* Evolution Motion System */
         .page-view {
             opacity: 0;
             transform: translateY(14px) scale(.985);
@@ -76,7 +60,6 @@
             opacity: 0 !important;
             transform: translateX(-18px) scale(.985) !important;
         }
-        .auth-shell { position: relative; isolation: isolate; }
         
         @keyframes lockIn {
             0% { opacity:0; transform:scale(.86) rotateX(12deg); }
@@ -97,8 +80,7 @@
         .secure-overlay.show { opacity:1; }
         .secure-overlay .secure-box {
             width:min(88vw,330px); padding:28px 22px; text-align:center;
-            background:#ffffff;
-            border:1px solid #e2e8f0; border-radius:24px;
+            background:#ffffff; border:1px solid #e2e8f0; border-radius:24px;
             box-shadow: 0 20px 40px -15px rgba(11,121,208,0.15);
         }
         .secure-ring {
@@ -114,180 +96,35 @@
             background:#0b79d0; margin-x:auto;
         }
         .modal-animate { animation:lockIn .35s cubic-bezier(.2,.8,.2,1) both; }
-        @media (prefers-reduced-motion: reduce) {
-            .page-view,.secure-overlay { transition:none; }
-            .auth-lock-enter,.login-error-shake,.modal-animate,.secure-ring { animation:none; }
-        }
 
-        /* =========================================================
-           THEME SWITCHER — White / Dark
-           ใช้ CSS override เพื่อไม่กระทบฟังก์ชันเดิมของระบบ
-           ========================================================= */
-        body {
-            transition: background-color .35s ease, color .35s ease;
-        }
-
+        /* Dark Theme Styles */
+        body { transition: background-color .35s ease, color .35s ease; }
         #themeToggle {
-            position: absolute;
-            left: 12px;
-            bottom: 76px;
-            z-index: 80;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 8px 11px;
-            border-radius: 999px;
-            border: 1px solid #cbd5e1;
-            background: rgba(255,255,255,.94);
-            color: #334155;
-            box-shadow: 0 8px 24px rgba(15,23,42,.12);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            font-size: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all .3s ease;
+            position: absolute; left: 12px; bottom: 76px; z-index: 80;
+            display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px;
+            border-radius: 999px; border: 1px solid #cbd5e1; background: rgba(255,255,255,.94);
+            color: #334155; box-shadow: 0 8px 24px rgba(15,23,42,.12); backdrop-filter: blur(10px);
+            font-size: 10px; font-weight: 700; cursor: pointer; transition: all .3s ease;
         }
         #themeToggle:hover { transform: translateY(-1px); }
         #themeToggle .theme-toggle-icon { color:#0b79d0; }
 
-        /* Dark palette */
-        body.theme-dark {
-            background-color: #000 !important;
-            color: #f8fafc !important;
-        }
-        body.theme-dark #themeToggle {
-            background: rgba(15,23,42,.96);
-            border-color: #334155;
-            color: #e2e8f0;
-            box-shadow: 0 0 22px rgba(56,189,248,.12);
-        }
+        body.theme-dark { background-color: #000 !important; color: #f8fafc !important; }
+        body.theme-dark #themeToggle { background: rgba(15,23,42,.96); border-color: #334155; color: #e2e8f0; }
         body.theme-dark #themeToggle .theme-toggle-icon { color:#38bdf8; }
-
-        body.theme-dark .bg-white,
-        body.theme-dark .bg-white\/95,
-        body.theme-dark .bg-white\/90 { background-color:#0a0a0a !important; }
-
+        body.theme-dark .bg-white { background-color:#0a0a0a !important; }
         body.theme-dark .bg-slate-50 { background-color:#1e293b !important; }
-        body.theme-dark .bg-slate-100 { background-color:#111827 !important; }
-        body.theme-dark .bg-sky-50 { background-color:rgba(30,64,175,.28) !important; }
-        body.theme-dark .bg-amber-50 { background-color:rgba(120,53,15,.20) !important; }
-        body.theme-dark .bg-red-50 { background-color:rgba(127,29,29,.20) !important; }
-        body.theme-dark .bg-emerald-50 { background-color:rgba(6,78,59,.20) !important; }
-
         body.theme-dark .text-slate-900 { color:#f8fafc !important; }
-        body.theme-dark .text-slate-800 { color:#f1f5f9 !important; }
         body.theme-dark .text-slate-700 { color:#cbd5e1 !important; }
-        body.theme-dark .text-slate-600 { color:#94a3b8 !important; }
         body.theme-dark .text-slate-500 { color:#94a3b8 !important; }
-        body.theme-dark .text-slate-400 { color:#94a3b8 !important; }
-        body.theme-dark .text-slate-300 { color:#cbd5e1 !important; }
-        body.theme-dark .placeholder-slate-400::placeholder { color:#64748b !important; }
-        body.theme-dark .placeholder-slate-500::placeholder { color:#64748b !important; }
-
-        body.theme-dark .border-slate-100 { border-color:#1e293b !important; }
         body.theme-dark .border-slate-200 { border-color:#1e293b !important; }
-        body.theme-dark .border-slate-300 { border-color:#334155 !important; }
-        body.theme-dark .border-slate-900 { border-color:#334155 !important; }
-        body.theme-dark .border-sky-100,
-        body.theme-dark .border-sky-200 { border-color:#1e40af !important; }
-        body.theme-dark .border-red-200 { border-color:#7f1d1d !important; }
-        body.theme-dark .border-emerald-100 { border-color:#065f46 !important; }
-        body.theme-dark .border-amber-100 { border-color:#92400e !important; }
+        body.theme-dark input, body.theme-dark textarea, body.theme-dark select {
+            background-color:#1e293b !important; border-color:#334155 !important; color:#fff !important;
+        }
+        body.theme-dark #appHeader, body.theme-dark #bottomNav { background:#0a0a0a !important; border-color:#1e293b !important; }
+        body.theme-dark .nav-active { color:#38bdf8 !important; }
 
-        body.theme-dark .shadow-blue-900\/10 {
-            --tw-shadow-color: rgba(56,189,248,.10) !important;
-        }
-
-        body.theme-dark .custom-scrollbar::-webkit-scrollbar-track { background:#1e293b; }
-        body.theme-dark .custom-scrollbar::-webkit-scrollbar-thumb { background:#38bdf8; }
-
-        /* Main application shell */
-        body.theme-dark > div.w-full.max-w-md {
-            background:#0a0a0a !important;
-            border-color:#1e293b !important;
-            box-shadow:0 0 40px rgba(56,189,248,.10) !important;
-        }
-        body.theme-dark #appHeader {
-            background:#0a0a0a !important;
-            border-color:#1e293b !important;
-        }
-        body.theme-dark #bottomNav {
-            background:rgba(10,10,10,.96) !important;
-            border-color:#1e293b !important;
-        }
-        body.theme-dark #customToast {
-            background:rgba(15,23,42,.96) !important;
-            border-color:#334155 !important;
-            color:#f8fafc !important;
-        }
-
-        /* Modals / overlays */
-        body.theme-dark #editNameModal,
-        body.theme-dark #carInfoModal,
-        body.theme-dark #forgotPasswordModal,
-        body.theme-dark #tosModal,
-        body.theme-dark #logoutConfirmModal { background:rgba(0,0,0,.82) !important; }
-
-        body.theme-dark #editNameModal > div,
-        body.theme-dark #carInfoModal > div,
-        body.theme-dark #forgotPasswordModal > div,
-        body.theme-dark #tosModal > div,
-        body.theme-dark #logoutConfirmModal > div {
-            background:#0f172a !important;
-            border-color:#334155 !important;
-        }
-
-        body.theme-dark input,
-        body.theme-dark textarea,
-        body.theme-dark select {
-            background-color:#1e293b !important;
-            border-color:#334155 !important;
-            color:#fff !important;
-        }
-        body.theme-dark input:focus,
-        body.theme-dark textarea:focus,
-        body.theme-dark select:focus {
-            border-color:#38bdf8 !important;
-        }
-
-        body.theme-dark .secure-overlay { background:rgba(0,0,0,.92) !important; }
-        body.theme-dark .secure-overlay .secure-box {
-            background:#0f172a !important;
-            border-color:#1e293b !important;
-            box-shadow:0 20px 40px -15px rgba(56,189,248,.2) !important;
-        }
-        body.theme-dark .secure-ring {
-            border-color:#38bdf8 !important;
-            color:#38bdf8 !important;
-            background:#020617 !important;
-            box-shadow:0 0 20px rgba(56,189,248,.3) !important;
-        }
-        body.theme-dark .secure-progress { background:#1e293b !important; }
-        body.theme-dark .secure-progress span { background:#38bdf8 !important; }
-
-        body.theme-dark .nav-active {
-            color:#38bdf8 !important;
-            text-shadow:0 0 10px rgba(56,189,248,.4);
-        }
-        body.theme-dark .nav-active::after {
-            background:#38bdf8 !important;
-            box-shadow:0 0 5px rgba(56,189,248,.8);
-        }
-
-        /* Common cards used by the white version */
-        body.theme-dark .bg-gradient-to-br {
-            filter:saturate(.85) brightness(.8);
-        }
-
-        @media (max-width: 640px) {
-            #themeToggle {
-                left: 10px;
-                bottom: 78px;
-                padding: 8px 10px;
-            }
-        }
-
+        @media (max-width: 640px) { #themeToggle { left: 10px; bottom: 78px; padding: 8px 10px; } }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-900 min-h-screen flex justify-center items-center p-0 sm:p-4">
@@ -303,45 +140,33 @@
         </div>
     </div>
 
-    <!-- Container หลัก: โทนสีขาวสว่าง พรีเมียม ปรับเส้นขอบดำ/ฟ้า -->
+    <!-- Theme Switcher -->
+    <button type="button" id="themeToggle" onclick="toggleTheme()" aria-label="เปลี่ยนธีม">
+        <i id="themeToggleIcon" class="fa-solid fa-moon theme-toggle-icon"></i>
+        <span id="themeToggleText">โหมดดำ</span>
+    </button>
 
-        <!-- Theme Switcher -->
-        <button type="button" id="themeToggle" onclick="toggleTheme()" aria-label="เปลี่ยนธีม">
-            <i id="themeToggleIcon" class="fa-solid fa-moon theme-toggle-icon"></i>
-            <span id="themeToggleText">โหมดดำ</span>
-        </button>
-
+    <!-- Main Container -->
     <div class="w-full max-w-md h-screen sm:h-[840px] bg-white sm:rounded-3xl shadow-2xl shadow-blue-900/10 overflow-hidden flex flex-col relative border border-slate-200">
         
-        <!-- Header สไตล์ Corporate Clean -->
+        <!-- Header -->
         <header id="appHeader" class="hidden bg-white border-b border-slate-200 px-5 py-3.5 flex justify-between items-center z-40 relative">
-            
             <div class="flex items-center gap-3 group cursor-pointer">
-                <!-- โลโก้ MG แบบสีดำคลาสสิกบนพื้นขาว -->
                 <div class="relative">
-                    <div class="relative w-9 h-9 bg-black border border-slate-900 rounded-xl flex items-center justify-center font-black text-xs tracking-tighter shadow-md group-hover:scale-105 transition-transform duration-300">
+                    <div class="relative w-9 h-9 bg-black border border-slate-900 rounded-xl flex items-center justify-center font-black text-xs tracking-tighter shadow-md">
                         <span class="text-white">MG</span>
                     </div>
                 </div>
-
-                <!-- ข้อความชื่อแบรนด์ -->
                 <div class="flex flex-col">
                     <div class="flex items-center gap-1.5">
-                        <h1 class="text-xs font-black text-slate-900 tracking-wider uppercase leading-none">
-                            M2 Motorsport
-                        </h1>
-                        <span class="text-[8px] font-mono font-bold text-[#0b79d0] bg-sky-50 border border-sky-200 px-1.5 py-0.5 rounded tracking-normal">
-                            EVOLUTION
-                        </span>
+                        <h1 class="text-xs font-black text-slate-900 tracking-wider uppercase leading-none">M2 Motorsport</h1>
+                        <span class="text-[8px] font-mono font-bold text-[#0b79d0] bg-sky-50 border border-sky-200 px-1.5 py-0.5 rounded">EVOLUTION</span>
                     </div>
-
                     <p class="text-[9px] text-slate-500 font-medium tracking-wide mt-1 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 bg-[#0b79d0] rounded-full shadow-sm"></span>
-                        Ubon Ratchathani
+                        <span class="w-1.5 h-1.5 bg-[#0b79d0] rounded-full"></span> Ubon Ratchathani
                     </p>
                 </div>
             </div>
-
             <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-full shadow-inner">
                 <span class="w-1.5 h-1.5 bg-[#0b79d0] rounded-full animate-pulse"></span>
                 <span id="realtime-clock" class="text-[10px] font-mono text-slate-700 font-bold">00:00:00</span>
@@ -356,10 +181,10 @@
                     <p class="text-[11px] text-slate-500 mt-1">เปลี่ยนชื่อที่ต้องการให้ระบบเรียกขานค่ะ</p>
                 </div>
                 <form onsubmit="saveNewName(event)" class="space-y-3">
-                    <input type="text" id="new-profile-name" required class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none transition-all">
+                    <input type="text" id="new-profile-name" required class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
                     <div class="grid grid-cols-2 gap-2 pt-1">
-                        <button type="button" onclick="closeEditModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium py-2 rounded-xl text-xs cursor-pointer transition-colors">ยกเลิก</button>
-                        <button type="submit" class="bg-[#0b79d0] hover:bg-[#0284c7] text-white font-bold py-2 rounded-xl text-xs cursor-pointer transition-all shadow-md shadow-blue-500/20">บันทึก</button>
+                        <button type="button" onclick="closeEditModal()" class="bg-slate-100 text-slate-600 font-medium py-2 rounded-xl text-xs cursor-pointer">ยกเลิก</button>
+                        <button type="submit" class="bg-[#0b79d0] text-white font-bold py-2 rounded-xl text-xs cursor-pointer shadow-md">บันทึก</button>
                     </div>
                 </form>
             </div>
@@ -377,17 +202,17 @@
                 <form onsubmit="saveCarInfo(event)" class="space-y-3.5">
                     <div class="space-y-1">
                         <label class="text-[11px] text-slate-700 font-medium">ชื่อเจ้าของรถ</label>
-                        <input type="text" id="car-owner" required placeholder="เช่น นาย เออเบิล วิ่งไกล" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none transition-all">
+                        <input type="text" id="car-owner" required placeholder="เช่น นาย เออเบิล วิ่งไกล" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[11px] text-slate-700 font-medium">เลขทะเบียนรถ</label>
-                        <input type="text" id="car-plate" required placeholder="เช่น กข 1234 อุบลราชธานี" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none transition-all">
+                        <input type="text" id="car-plate" required placeholder="เช่น กข 1234 อุบลราชธานี" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-[11px] text-slate-700 font-medium">เลขตัวถังรถ (VIN)</label>
-                        <input type="text" id="car-vin" placeholder="กรอกเลขตัวถัง 17 หลัก (ถ้ามี)" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none transition-all">
+                        <input type="text" id="car-vin" placeholder="กรอกเลขตัวถัง 17 หลัก (ถ้ามี)" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
                     </div>
-                    <button type="submit" class="w-full bg-[#0b79d0] hover:bg-[#0284c7] text-white font-bold py-2.5 rounded-xl text-xs transition-all active:scale-[0.98] mt-2 cursor-pointer shadow-md shadow-blue-500/20">บันทึกข้อมูลรถยนต์</button>
+                    <button type="submit" class="w-full bg-[#0b79d0] text-white font-bold py-2.5 rounded-xl text-xs transition-all mt-2 cursor-pointer shadow-md">บันทึกข้อมูลลง Cloud</button>
                 </form>
             </div>
         </div>
@@ -399,64 +224,34 @@
                     <h3 class="text-xs font-bold text-[#0b79d0] uppercase tracking-wider">ระบบกู้คืนรหัสผ่าน</h3>
                     <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-slate-700 cursor-pointer text-sm"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                
-                <div id="forgot-step-1" class="space-y-3">
-                    <p class="text-[11px] text-slate-600">กรอกอีเมลที่คุณใช้ลงทะเบียนเพื่อรับรหัส OTP ค่ะ</p>
-                    <form onsubmit="processRequestEmailOTP(event)" class="space-y-3">
-                        <input type="email" id="forgot-email" required placeholder="ระบุอีเมลของคุณ" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
-                        <div id="forgot-result-box" class="hidden text-[11px] bg-red-50 border border-red-200 text-red-600 p-2.5 rounded-lg"></div>
-                        <button type="submit" id="btn-submit-forgot" class="w-full bg-[#0b79d0] hover:bg-[#0284c7] text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer shadow-md shadow-blue-500/20"><span id="text-submit-forgot">คำขอกู้รหัส</span></button>
-                    </form>
-                </div>
-
-                <div id="forgot-step-2" class="hidden space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span id="target-email-display" class="text-[11px] text-slate-600 font-medium"></span>
-                        <span id="otp-timer" class="text-xs font-mono font-bold text-red-500">60s</span>
-                    </div>
-                    <form onsubmit="processVerifyOTP(event)" class="space-y-3">
-                        <input type="text" id="otp-code" required placeholder="กรอกรหัส OTP 6 หลัก" class="w-full text-center tracking-widest font-mono bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-base focus:outline-none">
-                        <button type="submit" class="w-full bg-[#0b79d0] text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer shadow-md shadow-blue-500/20">ยืนยันรหัส OTP</button>
-                    </form>
-                </div>
-
-                <div id="forgot-step-3" class="hidden space-y-3">
-                    <p class="text-[11px] text-slate-600">กำหนดรหัสผ่านใหม่ที่ต้องการเปลี่ยนค่ะ</p>
-                    <form onsubmit="processSaveNewPassword(event)" class="space-y-3">
-                        <input type="password" id="new-reset-password" required minlength="6" placeholder="รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
-                        <input type="password" id="new-reset-password-confirm" required placeholder="ยืนยันรหัสผ่านใหม่อีกครั้ง" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
-                        <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer shadow-md shadow-emerald-500/20">บันทึกรหัสผ่านใหม่</button>
-                    </form>
-                </div>
+                <p class="text-[11px] text-slate-600">กรอกอีเมลที่ลงทะเบียนเพื่อรับลิงก์รีเซ็ตรหัสผ่านค่ะ</p>
+                <form onsubmit="processRequestPasswordReset(event)" class="space-y-3">
+                    <input type="email" id="forgot-email" required placeholder="ระบุอีเมลของคุณ" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-3 py-2.5 text-slate-900 text-xs focus:outline-none">
+                    <button type="submit" class="w-full bg-[#0b79d0] text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer shadow-md">ส่งลิงก์รีเซ็ตรหัสผ่าน</button>
+                </form>
             </div>
         </div>
 
         <!-- Modal: เงื่อนไขการใช้บริการ -->
         <div id="tosModal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-md flex justify-center items-center p-4">
             <div class="bg-white border border-slate-200 w-full max-w-sm rounded-2xl p-5 flex flex-col max-h-[85vh] relative overflow-hidden shadow-2xl">
-
                 <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3 mb-4">
-                    <div class="relative flex-shrink-0">
-                        <div class="relative w-8 h-8 bg-black border border-slate-900 rounded-lg flex items-center justify-center shadow">
-                            <span class="text-white font-black text-xs tracking-tighter">MG</span>
-                        </div>
-                    </div>
+                    <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-black text-xs">MG</div>
                     <div>
-                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">เงื่อนไขการใช้บริการ</h3>
+                        <h3 class="text-sm font-bold text-slate-900 uppercase">เงื่อนไขการใช้บริการ</h3>
                         <p class="text-[10px] text-[#0b79d0]">กรุณาอ่านและยอมรับก่อนเข้าใช้งานค่ะ</p>
                     </div>
                 </div>
                 <div class="flex-1 overflow-y-auto pr-2 space-y-3 mb-4 text-xs text-slate-700 leading-relaxed custom-scrollbar">
-                    <p>ยินดีต้อนรับสู่แอปพลิเคชัน <strong>MG M2 Motorsport</strong> โปรดอ่านและทำความเข้าใจเงื่อนไขการใช้บริการต่อไปนี้อย่างละเอียด:</p>
-                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-2 relative overflow-hidden">
-                        <p><span class="text-[#0b79d0] font-bold">1.</span> ผู้ใช้บริการต้องกรอกข้อมูลที่ถูกต้องในการติดต่อนัดหมายกับทางเจ้าหน้าที่</p>
+                    <p>ยินดีต้อนรับสู่แอปพลิเคชัน <strong>MG M2 Motorsport</strong> โปรดอ่านเงื่อนไขการใช้บริการ:</p>
+                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-2">
+                        <p><span class="text-[#0b79d0] font-bold">1.</span> ผู้ใช้บริการต้องกรอกข้อมูลที่ถูกต้องในการติดต่อนัดหมาย</p>
                         <p><span class="text-[#0b79d0] font-bold">2.</span> ห้ามโอนเงินผ่านบัญชีพนักงาน ให้ทำรายการผ่านบัญชีบริษัทเท่านั้น</p>
-                        <p><span class="text-[#0b79d0] font-bold">3.</span> ทางบริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบล่วงหน้า</p>
+                        <p><span class="text-[#0b79d0] font-bold">3.</span> บริษัทอาจมีการเปลี่ยนแปลงเงื่อนไขโดยไม่แจ้งให้ทราบล่วงหน้า</p>                        
                     </div>
-                    <p class="text-[11px] text-slate-500 text-center pt-2">การกดปุ่ม "ยอมรับเงื่อนไข" แสดงว่าคุณได้อ่านและยอมรับข้อตกลงทั้งหมดนี้แล้ว</p>
                 </div>
-                <div class="pt-2 border-t border-slate-100 mt-auto">
-                    <button type="button" id="acceptTosBtn" class="w-full bg-[#0b79d0] hover:bg-[#0284c7] text-white font-bold py-3 rounded-xl text-xs transition-all active:scale-[0.98] cursor-pointer shadow-md shadow-blue-500/20">
+                <div class="pt-2 border-t border-slate-100">
+                    <button type="button" id="acceptTosBtn" class="w-full bg-[#0b79d0] text-white font-bold py-3 rounded-xl text-xs cursor-pointer shadow-md">
                         ยอมรับเงื่อนไขและไปหน้าแรก
                     </button>
                 </div>
@@ -464,29 +259,18 @@
         </div>
 
         <!-- Modal: ยืนยันออกจากระบบ -->
-        <div id="logoutConfirmModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex justify-center items-center p-4 transition-all duration-300">
-            <div class="bg-white border border-slate-200 hover:border-red-400 w-full max-w-xs rounded-2xl p-6 space-y-5 relative overflow-hidden shadow-2xl transition-colors duration-300">
-                <div class="text-center space-y-3">
-                    <div class="w-12 h-12 bg-red-50 border border-red-200 text-red-500 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
-                        <i class="fa-solid fa-power-off text-xl"></i>
-                    </div>
-                    <div class="space-y-1">
-                        <h3 class="text-base font-bold text-slate-900 tracking-wide">ต้องการออกจากระบบ?</h3>
-                        <p class="text-[11px] text-slate-500 font-normal leading-relaxed">
-                            เซสชันความปลอดภัยของคุณจะถูกปิดลงค่ะ
-                        </p>
-                    </div>
+        <div id="logoutConfirmModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex justify-center items-center p-4">
+            <div class="bg-white border border-slate-200 w-full max-w-xs rounded-2xl p-6 space-y-5 shadow-2xl text-center">
+                <div class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto">
+                    <i class="fa-solid fa-power-off text-xl"></i>
                 </div>
-
-                <div class="grid grid-cols-2 gap-3 pt-1">
-                    <button type="button" onclick="closeLogoutModal()" 
-                        class="bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 font-medium py-2.5 rounded-xl text-xs cursor-pointer transition-all duration-200 active:scale-95">
-                        ยกเลิก
-                    </button>
-                    <button type="button" onclick="confirmLogout()" 
-                        class="bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer transition-all duration-200 active:scale-95 shadow-md shadow-red-500/20">
-                        ออกจากระบบ
-                    </button>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">ต้องการออกจากระบบ?</h3>
+                    <p class="text-[11px] text-slate-500 mt-1">เซสชันความปลอดภัยของคุณจะถูกปิดลงค่ะ</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" onclick="closeLogoutModal()" class="bg-slate-100 text-slate-700 py-2.5 rounded-xl text-xs cursor-pointer">ยกเลิก</button>
+                    <button type="button" onclick="confirmLogout()" class="bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer shadow-md">ออกจากระบบ</button>
                 </div>
             </div>
         </div>
@@ -502,7 +286,7 @@
             </div>
             <div class="flex items-center gap-1.5">
                 <button type="button" onclick="closePwaBanner()" class="text-[10px] text-slate-500 px-2 py-1 cursor-pointer">ไว้ก่อน</button>
-                <button type="button" onclick="executePwaInstall()" class="bg-[#0b79d0] hover:bg-[#0284c7] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer shadow-sm">ติดตั้ง</button>
+                <button type="button" onclick="executePwaInstall()" class="bg-[#0b79d0] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg cursor-pointer">ติดตั้ง</button>
             </div>
         </div>
 
@@ -512,45 +296,36 @@
             <!-- หน้าสมัครสมาชิก -->
             <div id="page-register" class="hidden flex-1 flex flex-col p-6 page-view">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block relative group cursor-default mb-3">
-                        <div class="relative bg-black border border-slate-900 text-white font-black px-4 py-1.5 rounded-lg text-sm tracking-widest transition-transform duration-300 group-hover:scale-105 shadow-md">
-                            MG
-                        </div>
-                    </div>
-                    <h2 class="text-2xl font-black text-slate-900 tracking-wide">สร้างบัญชีใหม่</h2>
-                    <p class="text-xs text-[#0b79d0] font-semibold mt-1">กรอกข้อมูลเพื่อใช้งานระบบบริการค่ะ</p>
+                    <div class="inline-block bg-black text-white font-black px-4 py-1.5 rounded-lg text-sm tracking-widest shadow-md mb-3">MG</div>
+                    <h2 class="text-2xl font-black text-slate-900">สร้างบัญชีใหม่</h2>
+                    <p class="text-xs text-[#0b79d0] font-semibold mt-1">กรอกข้อมูลเพื่อใช้งานระบบ Cloud ค่ะ</p>
                 </div>
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processRegister(event)">
                     <div class="space-y-1">
                         <label class="text-xs text-slate-700 font-medium">ชื่อ-นามสกุล</label>
-                        <input type="text" id="reg-name" required placeholder="เช่น นาย เออเบิล วิ่งไกล"
-                            class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none text-sm transition-all shadow-inner">
+                        <input type="text" id="reg-name" required placeholder="เช่น นาย เออเบิล วิ่งไกล" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-xs text-slate-700 font-medium">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="reg-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678"
-                            class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none text-sm transition-all shadow-inner">
+                        <input type="tel" id="reg-phone" required pattern="[0-9]{10}" placeholder="เช่น 0912345678" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-xs text-slate-700 font-medium">อีเมล</label>
-                        <input type="email" id="reg-email" required placeholder="เช่น mgubn@gmail.com"
-                            class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none text-sm transition-all shadow-inner">
+                        <input type="email" id="reg-email" required placeholder="เช่น mgubn@gmail.com" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-xs text-slate-700 font-medium">รหัสผ่าน</label>
                         <div class="relative">
-                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••"
-                                class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl pl-4 pr-12 py-3 text-slate-900 placeholder-slate-400 focus:outline-none text-sm transition-all shadow-inner">
-                            <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" 
-                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-[#0b79d0] cursor-pointer">
-                                <i id="reg-eye-icon" class="fa-solid fa-eye-slash p-1"></i>
+                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••••••" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl pl-4 pr-12 py-3 text-slate-900 text-sm focus:outline-none">
+                            <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon')" class="absolute inset-y-0 right-0 pr-4 text-slate-400 hover:text-[#0b79d0] cursor-pointer">
+                                <i id="reg-eye-icon" class="fa-solid fa-eye-slash"></i>
                             </button>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-[#0b79d0] hover:bg-[#0284c7] text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm shadow-lg shadow-blue-500/20">สร้างบัญชีสมาชิก</button>
+                    <button type="submit" id="btn-register-submit" class="w-full bg-[#0b79d0] text-white font-bold py-3.5 rounded-xl transition-all mt-4 cursor-pointer text-sm shadow-lg">สร้างบัญชีสมาชิก</button>
                     <div class="text-center mt-4">
-                        <p class="text-xs text-slate-500">มีบัญชีผู้ใช้งานแล้วใช่ไหม? 
-                            <button type="button" onclick="changeView('login')" class="text-[#0b79d0] hover:text-[#0284c7] font-bold underline underline-offset-4 ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
+                        <p class="text-xs text-slate-500">มีบัญชีผู้ใช้งานแล้ว? 
+                            <button type="button" onclick="changeView('login')" class="text-[#0b79d0] font-bold underline ml-1 cursor-pointer">เข้าสู่ระบบที่นี่</button>
                         </p>
                     </div>
                 </form>
@@ -559,81 +334,57 @@
             <!-- หน้าเข้าสู่ระบบ -->
             <div id="page-login" class="hidden flex-1 flex flex-col p-6 page-view">
                 <div class="text-center mt-4 mb-6">
-                    <div class="inline-block relative group cursor-default mb-3">
-                        <div class="relative bg-black border border-slate-900 text-white font-black px-4 py-1.5 rounded-lg text-sm tracking-widest transition-transform duration-300 group-hover:scale-105 shadow-md">
-                            MG
-                        </div>
-                    </div>
-                    <h2 class="text-2xl font-black text-slate-900 tracking-wide">เข้าสู่ระบบ</h2>
+                    <div class="inline-block bg-black text-white font-black px-4 py-1.5 rounded-lg text-sm tracking-widest shadow-md mb-3">MG</div>
+                    <h2 class="text-2xl font-black text-slate-900">เข้าสู่ระบบ</h2>
                     <p class="text-xs text-[#0b79d0] font-semibold mt-1">ยินดีต้อนรับกลับเข้าสู่ระบบค่ะ</p>
                 </div>
                 <form class="space-y-4 flex-1 flex flex-col justify-center" onsubmit="processLogin(event)">
                     <div class="space-y-1">
                         <label class="text-xs text-slate-700 font-medium">อีเมลผู้ใช้งาน</label>
-                        <input type="email" id="login-email" required placeholder="เช่น mgubn@gmail.com"
-                            class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none text-sm transition-all shadow-inner">
+                        <input type="email" id="login-email" required placeholder="เช่น mgubn@gmail.com" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <div class="flex justify-between items-center">
                             <label class="text-xs text-slate-700 font-medium">รหัสผ่าน</label>
-                            <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-[#0b79d0] hover:text-[#0284c7] transition-colors font-semibold cursor-pointer">ลืมรหัสผ่าน?</button>
+                            <button type="button" onclick="openForgotPasswordModal()" class="text-xs text-[#0b79d0] font-semibold cursor-pointer">ลืมรหัสผ่าน?</button>
                         </div>
                         <div class="relative">
-                            <input type="password" id="login-password" required placeholder="••••••••••••"
-                                class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl pl-4 pr-12 py-3 text-slate-900 placeholder-slate-400 focus:outline-none text-sm transition-all shadow-inner">
-                            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" 
-                                class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-[#0b79d0] cursor-pointer">
-                                <i id="login-eye-icon" class="fa-solid fa-eye-slash p-1"></i>
+                            <input type="password" id="login-password" required placeholder="••••••••••••" class="w-full bg-slate-50 border border-slate-300 focus:border-[#0b79d0] rounded-xl pl-4 pr-12 py-3 text-slate-900 text-sm focus:outline-none">
+                            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')" class="absolute inset-y-0 right-0 pr-4 text-slate-400 hover:text-[#0b79d0] cursor-pointer">
+                                <i id="login-eye-icon" class="fa-solid fa-eye-slash"></i>
                             </button>
                         </div>
                     </div>
-
-                    <button type="submit" class="w-full bg-[#0b79d0] hover:bg-[#0284c7] text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] mt-4 cursor-pointer text-sm shadow-lg shadow-blue-500/20">เข้าสู่ระบบผู้ใช้งาน</button>
+                    <button type="submit" id="btn-login-submit" class="w-full bg-[#0b79d0] text-white font-bold py-3.5 rounded-xl transition-all mt-4 cursor-pointer text-sm shadow-lg">เข้าสู่ระบบผู้ใช้งาน</button>
                     <div class="text-center mt-4">
                         <p class="text-xs text-slate-500">ยังไม่มีบัญชีสมาชิก? 
-                            <button type="button" onclick="changeView('register')" class="text-[#0b79d0] hover:text-[#0284c7] font-bold underline underline-offset-4 ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
+                            <button type="button" onclick="changeView('register')" class="text-[#0b79d0] font-bold underline ml-1 cursor-pointer">ลงทะเบียนใหม่ที่นี่</button>
                         </p>
                     </div>
                 </form>
             </div>
 
-            <!-- หน้าแรกสำหรับผู้เยี่ยมชม (Guest Landing) -->
+            <!-- หน้าแรกสำหรับผู้เยี่ยมชม -->
             <div id="page-welcome" class="hidden flex-1 flex flex-col justify-center p-6 page-view">
                 <div class="text-center">
-                    <div class="inline-block relative mb-5">
-                        <div class="relative w-24 h-24 mx-auto bg-black border-2 border-slate-900 rounded-3xl flex items-center justify-center shadow-xl">
-                            <span class="text-3xl text-white font-black tracking-tighter">MG</span>
-                        </div>
+                    <div class="w-24 h-24 mx-auto bg-black border-2 border-slate-900 rounded-3xl flex items-center justify-center shadow-xl mb-5">
+                        <span class="text-3xl text-white font-black">MG</span>
                     </div>
-
                     <div class="text-[10px] text-[#0b79d0] font-black tracking-[.35em] uppercase">EVOLUTION</div>
                     <h2 class="text-2xl font-black text-slate-900 mt-2">M2 MOTORSPORT</h2>
-                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                        ระบบบริการลูกค้าออนไลน์<br>
-                        MG Ubon Ratchathani
-                    </p>
+                    <p class="text-xs text-slate-600 mt-2">ระบบบริการลูกค้าออนไลน์<br>MG Ubon Ratchathani</p>
                 </div>
-
                 <div class="space-y-3 mt-10">
-                    <button type="button" onclick="changeView('login')"
-                        class="w-full bg-[#0b79d0] hover:bg-[#0284c7] text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] cursor-pointer text-sm shadow-lg shadow-blue-500/20">
+                    <button type="button" onclick="changeView('login')" class="w-full bg-[#0b79d0] text-white font-bold py-3.5 rounded-xl text-sm shadow-lg cursor-pointer">
                         <i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ
                     </button>
-
-                    <button type="button" onclick="changeView('register')"
-                        class="w-full bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800 font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] cursor-pointer text-sm">
+                    <button type="button" onclick="changeView('register')" class="w-full bg-slate-100 border border-slate-300 text-slate-800 font-bold py-3.5 rounded-xl text-sm cursor-pointer">
                         <i class="fa-solid fa-user-plus mr-2 text-[#0b79d0]"></i> สมัครสมาชิก
                     </button>
                 </div>
-
                 <div class="text-center mt-6">
-                    <p class="text-[10px] text-slate-500">
-                        กรุณาอ่านและยอมรับเงื่อนไขการใช้บริการก่อนเข้าใช้งาน
-                    </p>
-                    <button type="button" onclick="openTosModal()"
-                        class="mt-2 inline-flex items-center gap-1.5 text-[10px] text-[#0b79d0] hover:text-[#0284c7] font-semibold underline underline-offset-4 transition-colors cursor-pointer">
-                        <i class="fa-solid fa-file-contract text-[9px]"></i>
-                        คลิกอ่านเงื่อนไขการใช้บริการ
+                    <button type="button" onclick="openTosModal()" class="text-[10px] text-[#0b79d0] font-semibold underline cursor-pointer">
+                        <i class="fa-solid fa-file-contract mr-1"></i> อ่านเงื่อนไขการใช้บริการ
                     </button>
                 </div>
             </div>
@@ -641,46 +392,45 @@
             <!-- หน้าหลัก (Home) -->
             <div id="page-home" class="hidden p-5 space-y-5 page-view">
                 <!-- Welcome Banner -->
-                <div class="bg-gradient-to-br from-slate-50 to-sky-50/50 border border-slate-200 p-5 rounded-2xl flex items-center justify-between shadow-sm relative overflow-hidden">
+                <div class="bg-gradient-to-br from-slate-50 to-sky-50/50 border border-slate-200 p-5 rounded-2xl flex items-center justify-between shadow-sm">
                     <div>
                         <span class="text-[10px] text-[#0b79d0] font-black tracking-widest block mb-0.5 uppercase">EVOLUTION MEMBER</span>
                         <h3 id="client-name" class="text-lg font-bold text-slate-900">คุณลูกค้า</h3>
                         <p class="text-xs text-slate-500 mt-1">ยินดีต้อนรับเข้าสู่แอปพลิเคชันค่ะ ✨</p>
                     </div>
-                    <button type="button" onclick="openEditModal()" class="w-12 h-12 bg-white border border-slate-200 hover:border-blue-400 hover:bg-sky-50/50 rounded-2xl flex items-center justify-center text-slate-600 hover:text-[#0b79d0] shadow-sm cursor-pointer transition-colors" title="แก้ไขชื่อ">
+                    <button type="button" onclick="openEditModal()" class="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-600 shadow-sm cursor-pointer">
                         <i class="fa-solid fa-user-gear text-xl"></i>
                     </button>
                 </div>
 
                 <!-- การ์ดแสดงข้อมูลรถยนต์ -->
-                <div id="car-display-card" class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4 relative overflow-hidden group transition-all duration-300 hover:border-blue-300">
-                    
-                    <div class="flex justify-between items-center relative z-10">
+                <div id="car-display-card" class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 bg-sky-50 border border-sky-100 text-[#0b79d0] rounded-xl flex items-center justify-center text-xs shadow-sm">
+                            <div class="w-8 h-8 bg-sky-50 border border-sky-100 text-[#0b79d0] rounded-xl flex items-center justify-center text-xs">
                                 <i class="fa-solid fa-car-rear"></i>
                             </div>
-                            <span class="text-xs font-bold text-slate-900 tracking-wider uppercase">ข้อมูลรถของคุณ</span>
+                            <span class="text-xs font-bold text-slate-900 uppercase">ข้อมูลรถของคุณ</span>
                         </div>
-                        <button type="button" onclick="openCarModal()" class="text-[11px] text-white font-bold flex items-center gap-1.5 cursor-pointer bg-[#0b79d0] hover:bg-[#0284c7] px-3 py-1.5 rounded-xl border border-sky-600 transition-all duration-200 active:scale-95 shadow-sm shadow-blue-500/20">
+                        <button type="button" onclick="openCarModal()" class="text-[11px] text-white font-bold flex items-center gap-1.5 cursor-pointer bg-[#0b79d0] px-3 py-1.5 rounded-xl shadow-sm">
                             <i class="fa-solid fa-pen-to-square text-[10px]"></i> แก้ไขข้อมูล
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2.5 pt-1 relative z-10">
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 transition-colors duration-200">
-                            <span class="text-[9px] text-slate-500 block uppercase font-semibold tracking-wider">เจ้าของรถยนต์</span>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <span class="text-[9px] text-slate-500 block uppercase font-semibold">เจ้าของรถยนต์</span>
                             <span id="display-car-owner" class="text-xs font-bold text-slate-900 block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
                         </div>
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 transition-colors duration-200">
-                            <span class="text-[9px] text-slate-500 block uppercase font-semibold tracking-wider">เลขทะเบียนรถ</span>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <span class="text-[9px] text-slate-500 block uppercase font-semibold">เลขทะเบียนรถ</span>
                             <span id="display-car-plate" class="text-xs font-bold text-[#0b79d0] block mt-1 truncate">ยังไม่ได้ระบุข้อมูล</span>
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-center gap-3 relative z-10 transition-colors duration-200">
-                        <span class="text-[9px] text-slate-500 uppercase font-semibold tracking-wider">เลขตัวถัง VIN:</span>
-                        <span id="display-car-vin" class="text-xs font-mono text-slate-700 font-bold tracking-widest bg-white px-2.5 py-0.5 rounded border border-slate-300 shadow-sm">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-center gap-3">
+                        <span class="text-[9px] text-slate-500 uppercase font-semibold">เลขตัวถัง VIN:</span>
+                        <span id="display-car-vin" class="text-xs font-mono text-slate-700 font-bold bg-white px-2.5 py-0.5 rounded border border-slate-300">
                             ยังไม่มีข้อมูลในระบบ
                         </span>
                     </div>
@@ -688,37 +438,37 @@
 
                 <!-- เมนูลัดบริการ -->
                 <div class="space-y-2.5">
-                    <h4 class="text-xs font-bold text-slate-600 tracking-wider uppercase flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 bg-[#0b79d0] rounded-full"></span> เข้าถึงง่าย แค่ปลายนิ้ว
+                    <h4 class="text-xs font-bold text-slate-600 uppercase flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-[#0b79d0] rounded-full"></span> เมนูลัดบริการ
                     </h4>
                     <div class="grid grid-cols-2 gap-3">
-                        <a href="https://lin.ee/Ov20t55" target="_blank" class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
-                            <div class="w-9 h-9 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <a href="https://lin.ee/Ov20t55" target="_blank" class="bg-white border border-slate-200 p-4 rounded-xl text-left shadow-sm">
+                            <div class="w-9 h-9 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center mb-3">
                                 <i class="fa-brands fa-line text-xl"></i>
                             </div>
                             <span class="text-xs font-bold text-slate-900 block">จองคิวรับบริการ</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">นัดหมายเช็คระยะและซ่อมทั่วไปผ่าน LINE OA</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">นัดหมายผ่าน LINE OA</span>
                         </a>
-                        <button type="button" onclick="changeView('contact')" class="bg-white hover:bg-sky-50/40 border border-slate-200 hover:border-sky-300 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
-                            <div class="w-9 h-9 bg-sky-50 border border-sky-100 text-[#0b79d0] rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <button type="button" onclick="changeView('contact')" class="bg-white border border-slate-200 p-4 rounded-xl text-left shadow-sm cursor-pointer">
+                            <div class="w-9 h-9 bg-sky-50 text-[#0b79d0] rounded-lg flex items-center justify-center mb-3">
                                 <i class="fa-solid fa-phone text-base"></i>
                             </div>
                             <span class="text-xs font-bold text-slate-900 block">ติดต่อพนักงาน</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">เบอร์โทรศัพท์สายด่วนเจ้าหน้าที่</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">สายด่วนเจ้าหน้าที่</span>
                         </button>
-                        <button type="button" onclick="changeView('location')" class="bg-white hover:bg-amber-50/40 border border-slate-200 hover:border-amber-300 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
-                            <div class="w-9 h-9 bg-amber-50 border border-amber-100 text-amber-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <button type="button" onclick="changeView('location')" class="bg-white border border-slate-200 p-4 rounded-xl text-left shadow-sm cursor-pointer">
+                            <div class="w-9 h-9 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center mb-3">
                                 <i class="fa-solid fa-map-location-dot text-base"></i>
                             </div>
                             <span class="text-xs font-bold text-slate-900 block">ที่ตั้งบริษัท</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">แผนที่และการนำทางมาศูนย์บริการ</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">แผนที่และการนำทาง</span>
                         </button>
-                        <button type="button" onclick="triggerLogout()" class="bg-white hover:bg-red-50/40 border border-slate-200 hover:border-red-300 p-4 rounded-xl text-left transition-all cursor-pointer group shadow-sm">
-                            <div class="w-9 h-9 bg-red-50 border border-red-100 text-red-500 rounded-lg flex items-center justify-center mb-3 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                        <button type="button" onclick="triggerLogout()" class="bg-white border border-slate-200 p-4 rounded-xl text-left shadow-sm cursor-pointer">
+                            <div class="w-9 h-9 bg-red-50 text-red-500 rounded-lg flex items-center justify-center mb-3">
                                 <i class="fa-solid fa-power-off text-base"></i>
                             </div>
-                            <span class="text-xs font-bold text-slate-700 group-hover:text-red-600 block">ออกจากระบบ</span>
-                            <span class="text-[10px] text-slate-500 block mt-0.5 leading-tight">ล็อกเอาท์ปิดเซสชันความปลอดภัย</span>
+                            <span class="text-xs font-bold text-slate-700 block">ออกจากระบบ</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">ปิดเซสชันผู้ใช้งาน</span>
                         </button>
                     </div>
                 </div>
@@ -730,21 +480,21 @@
                     <i class="fa-solid fa-phone text-[#0b79d0]"></i> ติดต่อเจ้าหน้าที่
                 </h3>
                 <div class="space-y-3">
-                    <a href="tel:1267" class="block bg-white hover:bg-emerald-50/30 border border-slate-200 hover:border-emerald-300 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                    <a href="tel:1267" class="block bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
+                            <div class="w-9 h-9 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
                                 <i class="fa-solid fa-building-user"></i>
                             </div>
                             <div>
-                                <span class="text-xs font-bold text-slate-900 block">บริการช่วยเหลือฉุกเฉิน 24 ชั่วโมง</span>
+                                <span class="text-xs font-bold text-slate-900 block">ช่วยเหลือฉุกเฉิน 24 ชั่วโมง</span>
                                 <span class="text-[10px] text-slate-500">โทร. 1267</span>
                             </div>
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
                     </a>
-                    <a href="tel:0930641144" class="block bg-white hover:bg-sky-50/30 border border-slate-200 hover:border-sky-300 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                    <a href="tel:0930641144" class="block bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-sky-50 border border-sky-100 text-[#0b79d0] rounded-full flex items-center justify-center">
+                            <div class="w-9 h-9 bg-sky-50 text-[#0b79d0] rounded-full flex items-center justify-center">
                                 <i class="fa-solid fa-phone-volume"></i>
                             </div>
                             <div>
@@ -754,10 +504,11 @@
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
                     </a>
-                    <a href="tel:0925588055" class="block bg-white hover:bg-sky-50/30 border border-slate-200 hover:border-sky-300 p-4 rounded-xl flex items-center justify-between transition-colors shadow-sm">
+                    </a>
+                    <a href="tel:0925588055" class="block bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-sky-50 border border-sky-100 text-[#0b79d0] rounded-full flex items-center justify-center">
-                                <i class="fa-solid fa-headset"></i>
+                            <div class="w-9 h-9 bg-sky-50 text-[#0b79d0] rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-phone-volume"></i>
                             </div>
                             <div>
                                 <span class="text-xs font-bold text-slate-900 block">ติดต่อฝ่ายขาย</span>
@@ -765,69 +516,22 @@
                             </div>
                         </div>
                         <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
-                    </a>
+                    </a>                    
                 </div>
             </div>
 
-            <!-- ปุ่มติดต่อผู้ดูแล -->
-            <a id="admin-contact-btn" href="https://lin.ee/89EVmkI" target="_blank" 
-               class="fixed right-6 bottom-20 sm:bottom-8 h-14 w-14 bg-white/90 backdrop-blur-md border border-slate-300 hover:border-[#0b79d0] rounded-full flex flex-col items-center justify-center shadow-xl hover:shadow-2xl z-50 select-none transition-all duration-300 opacity-0 pointer-events-none text-center p-1 group hover:scale-105 active:scale-95">
-                <i class="fa-solid fa-user-shield text-slate-700 group-hover:text-[#0b79d0] text-sm mb-0.5 transition-colors"></i>
-                <span class="text-slate-700 group-hover:text-[#0b79d0] text-[9px] font-bold leading-tight z-10 transition-colors">
-                    ติดต่อ<br>ผู้ดูแล
-                </span>
-            </a>
-
-            <script>
-                (function() {
-                    const adminBtn = document.getElementById('admin-contact-btn');
-                    if (!adminBtn) return;
-
-                    let hideTimeout;
-
-                    function showAdminButton() {
-                        adminBtn.classList.remove('opacity-0', 'pointer-events-none');
-                        adminBtn.classList.add('opacity-100', 'pointer-events-auto');
-
-                        clearTimeout(hideTimeout);
-
-                        hideTimeout = setTimeout(() => {
-                            adminBtn.classList.remove('opacity-100', 'pointer-events-auto');
-                            adminBtn.classList.add('opacity-0', 'pointer-events-none');
-                        }, 2000);
-                    }
-
-                    ['touchstart', 'mousedown'].forEach(eventType => {
-                        document.addEventListener(eventType, showAdminButton, { passive: true });
-                    });
-                })();
-            </script>
-
             <!-- หน้าโปรโมชั่น -->
             <div id="page-promo" class="hidden flex-1 min-h-0 flex flex-col page-view bg-slate-50">
-                <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-slate-200 bg-white/95 sticky top-0 z-10 shadow-sm">
-                    <div class="flex items-center gap-2 min-w-0">
-                        <div class="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0b79d0]">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white sticky top-0 z-10 shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-sky-50 text-[#0b79d0] flex items-center justify-center">
                             <i class="fa-solid fa-tags text-sm"></i>
                         </div>
-                        <div class="min-w-0">
-                            <h3 class="text-sm font-bold text-slate-900 truncate">โปรโมชั่น MG</h3>
-                            <p class="text-[9px] text-slate-500">เพื่อนคุณ มีโปรที่ถูกใจหรือยัง?</p>
-                        </div>
+                        <h3 class="text-sm font-bold text-slate-900">โปรโมชั่น MG</h3>
                     </div>
-                    <a href="https://mgubon69.github.io/promotion-mg/" target="_blank" rel="noopener noreferrer" class="shrink-0 text-[9px] font-bold text-slate-700 border border-slate-300 bg-white hover:bg-slate-50 px-2.5 py-1.5 rounded-lg shadow-sm" title="เปิดโปรโมชั่นในหน้าใหม่">
-                        ส่งลิงค์ต่อ
-                    </a>
                 </div>
                 <div class="flex-1 min-h-0 bg-white">
-                    <iframe
-                        id="promoFrame"
-                        src="https://mgubon69.github.io/promotion-mg/"
-                        title="MG โปรโมชั่น"
-                        class="w-full h-full min-h-[620px] border-0 bg-white"
-                        loading="lazy"
-                        referrerpolicy="strict-origin-when-cross-origin">
-                    </iframe>
+                    <iframe id="promoFrame" src="https://mgubon69.github.io/promotion-mg/" title="MG โปรโมชั่น" class="w-full h-full min-h-[620px] border-0"></iframe>
                 </div>
             </div>
 
@@ -836,333 +540,239 @@
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot text-amber-500"></i> ที่ตั้งบริษัท
                 </h3>
-                <div class="w-full h-48 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-center items-center text-center p-4 relative overflow-hidden shadow-inner">
+                <div class="w-full h-48 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-center items-center text-center p-4 shadow-inner">
                     <i class="fa-solid fa-location-crosshairs text-3xl text-red-600 mb-2 animate-bounce"></i>
-                    <span class="text-xs font-bold text-slate-900 block">MG Ubonratchathani (M2 Motorsport)</span>
-                    <span class="text-[10px] text-slate-500 mt-1 max-w-[300px] leading-relaxed">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
+                    <span class="text-xs font-bold text-slate-900">MG Ubonratchathani (M2 Motorsport)</span>
+                    <span class="text-[10px] text-slate-500 mt-1">157/3 หมู่4 ตำบลหนองกินเพล อำเภอวารินชำราบ จังหวัดอุบลราชธานี</span>
                 </div>
-                <div class="bg-white border border-slate-200 p-4 rounded-xl space-y-3 shadow-sm">
-                    <a href="https://goo.gl/maps/Bk3R44FyNjPPNwwE8" target="_blank" class="block w-full bg-slate-50 hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold py-3 rounded-xl text-xs text-center cursor-pointer transition-colors shadow-sm">
-                        <i class="fa-solid fa-route mr-1.5 text-amber-500"></i> เปิดนำทางบน Google Maps
-                    </a>
-                </div>
+                <a href="https://goo.gl/maps/Bk3R44FyNjPPNwwE8" target="_blank" class="block w-full bg-slate-50 border border-slate-300 text-slate-800 font-bold py-3 rounded-xl text-xs text-center shadow-sm">
+                    <i class="fa-solid fa-route mr-1.5 text-amber-500"></i> เปิดนำทางบน Google Maps
+                </a>
             </div>
 
         </main>
 
         <!-- Bottom Navigation Bar -->
         <nav id="bottomNav" class="hidden bg-white/95 backdrop-blur-md border-t border-slate-200 absolute bottom-0 left-0 right-0 z-40 flex justify-around items-center py-2.5 shadow-lg">
-            <button type="button" onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+            <button type="button" onclick="changeView('home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-slate-400 cursor-pointer w-16">
                 <i class="fa-solid fa-house-chimney text-base"></i>
-                <span class="text-[10px] tracking-wide">หน้าแรก</span>
+                <span class="text-[10px]">หน้าแรก</span>
             </button>
-            <button type="button" onclick="changeView('promo')" id="btn-nav-promo" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16" aria-label="โปรโมชั่น">
+            <button type="button" onclick="changeView('promo')" id="btn-nav-promo" class="flex flex-col items-center gap-1 text-slate-400 cursor-pointer w-16">
                 <i class="fa-solid fa-tags text-base"></i>
-                <span class="text-[10px] tracking-wide">โปรโมชั่น</span>
+                <span class="text-[10px]">โปรโมชั่น</span>
             </button>
-            <button type="button" onclick="window.open('https://mg-urban-racer.ai.studio/')" id="btn-nav-game" class="flex flex-col items-center gap-1 text-slate-400 transition-transform active:scale-90 cursor-pointer w-16">
+            <button type="button" onclick="window.open('https://mg-urban-racer.ai.studio/')" id="btn-nav-game" class="flex flex-col items-center gap-1 text-slate-400 cursor-pointer w-16">
                 <i class="fa-solid fa-gamepad text-base"></i>
-                <span class="text-[10px] tracking-wide">เล่นเกม</span>
+                <span class="text-[10px]">เล่นเกม</span>
             </button>
         </nav>
 
-        <div id="customToast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-white/95 border border-slate-300 text-slate-900 px-4 py-3 rounded-2xl flex items-center gap-3 z-50 min-w-[280px] backdrop-blur-xs shadow-2xl">
+        <div id="customToast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-white border border-slate-300 text-slate-900 px-4 py-3 rounded-2xl flex items-center gap-3 z-50 shadow-2xl">
             <div id="toastIcon"></div>
-            <p id="toastMessage" class="text-xs font-semibold leading-snug"></p>
+            <p id="toastMessage" class="text-xs font-semibold"></p>
         </div>
 
     </div>
 
-    <script>
+    <!-- Firebase SDK Modules & Application Core Logic -->
+    <script type="module">
+        // 1. IMPORT FIREBASE LIBRARIES (V10 Modular)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged,
+            sendPasswordResetEmail
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc, 
+            updateDoc 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 0. THEME SYSTEM
-        function applyTheme(theme) {
-            const isDark = theme === 'dark';
-            document.body.classList.toggle('theme-dark', isDark);
+        // 2. FIREBASE CONFIGURATION (แทนที่ด้วยค่าของคุณชินอิจินะคะ)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDVd147RGlcwWlBwlLZmo3KkLqS_kl14R4",
+            authDomain: "web-app-3ef8e.firebaseapp.com",
+            projectId: "web-app-3ef8e",
+            storageBucket: "web-app-3ef8e.firebasestorage.app",
+            messagingSenderId: "51437310705",
+            appId: "1:51437310705:web:29f14edddf6a2942798f50"
+        };
 
-            const icon = document.getElementById('themeToggleIcon');
-            const label = document.getElementById('themeToggleText');
-            if (icon) {
-                icon.className = isDark
-                    ? 'fa-solid fa-sun theme-toggle-icon'
-                    : 'fa-solid fa-moon theme-toggle-icon';
-            }
-            if (label) label.textContent = isDark ? 'โหมดขาว' : 'โหมดดำ';
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-            // ให้ browser/PWA ปรับสี status bar ตามธีม
-            const themeMeta = document.querySelector('meta[name="theme-color"]');
-            if (themeMeta) themeMeta.setAttribute('content', isDark ? '#000000' : '#ffffff');
-
-            localStorage.setItem('mg_theme', theme);
-        }
-
-        function toggleTheme() {
-            const nextTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
-            applyTheme(nextTheme);
-        }
-
-        // โหลดธีมที่ผู้ใช้เลือกไว้ก่อนหน้า
-        (function initTheme() {
-            const savedTheme = localStorage.getItem('mg_theme') || 'light';
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => applyTheme(savedTheme), { once:true });
-            } else {
-                applyTheme(savedTheme);
-            }
-        })();
-
-        // 1. STATE MANAGEMENT
-        let currentUser = JSON.parse(localStorage.getItem('mg_current_user')) || null;
+        // Application State Variables
+        let currentUser = null;
         let deferredPrompt = null;
-        let otpTimerInterval = null;
-        let generatedOTP = '';
-        let targetResetEmail = '';
+        let activeView = null;
 
-        // 2. INITIALIZATION
-        document.addEventListener('DOMContentLoaded', () => {
-            initRealtimeClock();
-            
-            if (currentUser) {
-                checkAndShowView('home');
+        // 3. AUTH STATE OBSERVER (ระบบตรวจสอบสถานะอัตโนมัติ)
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    // ดึงข้อมูลผู้ใช้งานจาก Firestore บน Cloud
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        currentUser = { uid: user.uid, ...userDoc.data() };
+                        document.getElementById('client-name').innerText = currentUser.name || "คุณลูกค้า";
+                        renderCarData();
+                        checkAndShowView('home');
+                    }
+                } catch (error) {
+                    console.error("Firestore Error:", error);
+                    showToast("ไม่สามารถโหลดข้อมูลผู้ใช้ได้", "error");
+                }
             } else {
+                currentUser = null;
                 checkAndShowView('welcome');
             }
-
-            // PWA Setup
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                if(currentUser) {
-                    document.getElementById('pwaAlertBanner').classList.remove('hidden');
-                }
-            });
         });
 
-        function initRealtimeClock() {
-            const clockEl = document.getElementById('realtime-clock');
-            setInterval(() => {
-                const now = new Date();
-                clockEl.innerText = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            }, 1000);
-        }
-
-        // 3. ROUTING & NAVIGATION
-        let activeView = null;
-        let viewTransitionTimer = null;
-
-        function changeView(viewId, options = {}) {
-            const pages = ['welcome', 'register', 'login', 'home', 'contact', 'location', 'promo'];
-            const targetPage = document.getElementById(`page-${viewId}`);
-            if (!targetPage) return;
-            if (activeView === viewId && !options.force) return;
-
-            const oldPage = activeView ? document.getElementById(`page-${activeView}`) : null;
-            if (viewTransitionTimer) clearTimeout(viewTransitionTimer);
-
-            if (oldPage && oldPage !== targetPage) {
-                oldPage.classList.remove('page-active');
-                oldPage.classList.add('page-exit');
-                setTimeout(() => oldPage.classList.add('hidden'), 180);
-            }
-
-            pages.forEach(p => {
-                const el = document.getElementById(`page-${p}`);
-                if (!el || el === targetPage || el === oldPage) return;
-                el.classList.add('hidden');
-                el.classList.remove('page-active','page-exit');
-            });
-
-            targetPage.classList.remove('hidden','page-exit');
-            if (viewId === 'login' || viewId === 'register') targetPage.classList.add('flex');
-            else targetPage.classList.remove('flex');
-
-            requestAnimationFrame(() => {
-                targetPage.classList.add('page-active');
-                targetPage.classList.add('auth-lock-enter');
-                setTimeout(() => targetPage.classList.remove('auth-lock-enter'), 600);
-            });
-
-            activeView = viewId;
-            const main = document.querySelector('main');
-            if (main) main.scrollTop = 0;
-            const header = document.getElementById('appHeader');
-            const bottomNav = document.getElementById('bottomNav');
-            const isAuth = viewId === 'login' || viewId === 'register';
-            const isPublicLanding = viewId === 'welcome';
-            header?.classList.toggle('hidden', isAuth || isPublicLanding);
-            bottomNav?.classList.toggle('hidden', isAuth || isPublicLanding);
-            if (!isAuth) updateNavHighlights(viewId);
-        }
-
-        function updateNavHighlights(active) {
-            const navButtons = { home:'btn-nav-home', contact:'btn-nav-contact', location:'btn-nav-location', promo:'btn-nav-promo', game:'btn-nav-game' };
-            Object.entries(navButtons).forEach(([key,id]) => {
-                const btn=document.getElementById(id); if(!btn) return;
-                btn.classList.toggle('nav-active', key===active);
-                btn.classList.toggle('text-slate-400', key!==active);
-            });
-        }
-
-        function playSecureTransition(message='กำลังตรวจสอบเซสชัน', duration=650) {
-            const overlay=document.getElementById('secureOverlay');
-            if(!overlay) return Promise.resolve();
-            const msg=document.getElementById('secureMessage');
-            if(msg) msg.textContent=message;
-            overlay.classList.add('show');
-            overlay.setAttribute('aria-hidden','false');
-            return new Promise(resolve=>setTimeout(()=>{
-                overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); resolve();
-            },duration));
-        }
-
-        function checkAndShowView(defaultView) {
-            changeView(defaultView, {force:true});
-            if (currentUser) {
-                document.getElementById('client-name').innerText = currentUser.name;
-                renderCarData();
-            }
-        }
-
-        // 4. AUTHENTICATION LOGIC
-        function processRegister(event) {
+        // 4. FIREBASE AUTHENTICATION FUNCTIONS
+        window.processRegister = async function(event) {
             event.preventDefault();
-            const form = event.target;
-            const submitBtn = form.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('btn-register-submit');
             
             const name = document.getElementById('reg-name').value.trim();
             const phone = document.getElementById('reg-phone').value.trim();
             const email = document.getElementById('reg-email').value.trim().toLowerCase();
             const password = document.getElementById('reg-password').value;
 
-            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-            const isEmailDuplicate = users.some(u => u.email === email);
-            
-            if (isEmailDuplicate) {
-                showToast('อีเมลนี้เคยลงทะเบียนในระบบแล้วค่ะ! ❌', 'error');
-                return;
-            }
-
-            if (submitBtn) {
+            try {
                 submitBtn.disabled = true;
-                submitBtn.innerText = "กำลังบันทึกข้อมูล...";
-            }
+                submitBtn.innerText = "กำลังสร้างบัญชีบน Cloud...";
 
-            users.push({ name, phone, email, password, carInfo: null });
-            localStorage.setItem('mg_registered_users', JSON.stringify(users));
+                // สร้างบัญชีผู้ใช้ใน Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-            showToast('สมัครสมาชิกสำเร็จแล้วค่ะ 🎉', 'success');
-            form.reset();
-            
-            if (submitBtn) {
+                // บันทึกโปรไฟล์เริ่มต้นลง Cloud Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    carInfo: null,
+                    createdAt: new Date()
+                });
+
+                showToast('สมัครสมาชิกสำเร็จแล้วค่ะ 🎉', 'success');
+                event.target.reset();
+            } catch (error) {
+                console.error("Register Error:", error);
+                let msg = "เกิดข้อผิดพลาดในการลงทะเบียน";
+                if (error.code === 'auth/email-already-in-use') msg = "อีเมลนี้มีอยู่ในระบบแล้วค่ะ";
+                if (error.code === 'auth/weak-password') msg = "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร";
+                showToast(msg, 'error');
+            } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = "สร้างบัญชีสมาชิก";
             }
-            changeView('login');
-        }
+        };
 
-        async function processLogin(event) {
+        window.processLogin = async function(event) {
             event.preventDefault();
             const email = document.getElementById('login-email').value.toLowerCase();
             const password = document.getElementById('login-password').value;
+            const submitBtn = document.getElementById('btn-login-submit');
 
-            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-            const userFound = users.find(u => u.email === email && u.password === password);
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "กำลังเข้าสู่ระบบ...";
 
-            const loginCard = document.getElementById('page-login');
-            if (userFound) {
-                currentUser = userFound;
-                localStorage.setItem('mg_current_user', JSON.stringify(currentUser));
-                event.target.querySelector('button[type="submit"]')?.setAttribute('disabled','true');
-                await playSecureTransition('ยืนยันตัวตนสำเร็จ • กำลังปลดล็อกระบบ', 900);
+                await signInWithEmailAndPassword(auth, email, password);
+                await playSecureTransition('ยืนยันตัวตนสำเร็จ • กำลังปลดล็อกระบบ', 800);
+                showToast('เข้าสู่ระบบสำเร็จค่ะ ✨', 'success');
                 event.target.reset();
-                document.getElementById('client-name').innerText = currentUser.name;
-                checkAndShowView('home');
-                showToast(`สวัสดีค่ะ คุณ ${currentUser.name} ✨`, 'success');
-                event.target.querySelector('button[type="submit"]')?.removeAttribute('disabled');
-            } else {
+            } catch (error) {
+                console.error("Login Error:", error);
+                const loginCard = document.getElementById('page-login');
                 loginCard?.classList.remove('login-error-shake');
                 void loginCard?.offsetWidth;
                 loginCard?.classList.add('login-error-shake');
                 showToast('อีเมลหรือรหัสผ่านไม่ถูกต้องค่ะ ❌', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "เข้าสู่ระบบผู้ใช้งาน";
             }
-        }
+        };
 
-        // 5. PROFILE EDIT
-        function openEditModal() {
-            document.getElementById('editNameModal').classList.remove('hidden');
-            document.getElementById('editNameModal').firstElementChild?.classList.add('modal-animate');
-            if (currentUser) {
-                document.getElementById('new-profile-name').value = currentUser.name;
-            }
-        }
+        window.confirmLogout = async function() {
+            closeLogoutModal();
+            await playSecureTransition('กำลังล็อกระบบและปิดเซสชัน', 600);
+            await signOut(auth);
+            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
+        };
 
-        function closeEditModal() {
-            document.getElementById('editNameModal').classList.add('hidden');
-        }
-
-        function saveNewName(event) {
+        window.processRequestPasswordReset = async function(event) {
             event.preventDefault();
-            const newName = document.getElementById('new-profile-name').value;
-            if (currentUser) {
-                currentUser.name = newName;
-                localStorage.setItem('mg_current_user', JSON.stringify(currentUser));
-                document.getElementById('client-name').innerText = newName;
+            const email = document.getElementById('forgot-email').value.toLowerCase();
 
-                let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-                users = users.map(u => u.email === currentUser.email ? { ...u, name: newName } : u);
-                localStorage.setItem('mg_registered_users', JSON.stringify(users));
-
-                showToast('อัปเดตชื่อผู้ใช้งานเรียบร้อยค่ะ ✔️', 'success');
-                closeEditModal();
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showToast('ส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้วค่ะ 📧', 'success');
+                closeForgotPasswordModal();
+            } catch (error) {
+                console.error("Reset Error:", error);
+                showToast('ไม่พบอีเมลนี้ในระบบ หรือเกิดข้อผิดพลาด', 'error');
             }
-        }
+        };
 
-        // 6. CAR MANAGEMENT LOGIC
-        function openCarModal() {
-            document.getElementById('carInfoModal').classList.remove('hidden');
-            document.getElementById('carInfoModal').firstElementChild?.classList.add('modal-animate');
-            if (currentUser && currentUser.carInfo) {
-                document.getElementById('car-owner').value = currentUser.carInfo.owner || '';
-                document.getElementById('car-plate').value = currentUser.carInfo.plate || '';
-                document.getElementById('car-vin').value = currentUser.carInfo.vin || '';
-            } else if (currentUser) {
-                document.getElementById('car-owner').value = currentUser.name;
-                document.getElementById('car-plate').value = '';
-                document.getElementById('car-vin').value = '';
+        // 5. FIRESTORE PROFILE & CAR MANAGEMENT
+        window.saveNewName = async function(event) {
+            event.preventDefault();
+            const newName = document.getElementById('new-profile-name').value.trim();
+            const user = auth.currentUser;
+
+            if (user && newName) {
+                try {
+                    await updateDoc(doc(db, "users", user.uid), { name: newName });
+                    currentUser.name = newName;
+                    document.getElementById('client-name').innerText = newName;
+                    showToast('อัปเดตชื่อผู้ใช้งานเรียบร้อยค่ะ ✔️', 'success');
+                    closeEditModal();
+                } catch (error) {
+                    showToast('ไม่สามารถอัปเดตชื่อได้ค่ะ', 'error');
+                }
             }
-        }
+        };
 
-        function closeCarModal() {
-            document.getElementById('carInfoModal').classList.add('hidden');
-        }
-
-        function saveCarInfo(event) {
+        window.saveCarInfo = async function(event) {
             event.preventDefault();
             const owner = document.getElementById('car-owner').value.trim();
             const plate = document.getElementById('car-plate').value.trim();
             const vin = document.getElementById('car-vin').value.trim();
 
-            if (currentUser) {
-                const carObj = { owner, plate, vin };
-                currentUser.carInfo = carObj;
-                
-                localStorage.setItem('mg_current_user', JSON.stringify(currentUser));
-
-                let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-                users = users.map(u => u.email === currentUser.email ? { ...u, carInfo: carObj } : u);
-                localStorage.setItem('mg_registered_users', JSON.stringify(users));
-
-                showToast('บันทึกข้อมูลรถยนต์เรียบร้อยค่ะ 🚗', 'success');
-                renderCarData();
-                closeCarModal();
+            const user = auth.currentUser;
+            if (user) {
+                try {
+                    const carData = { owner, plate, vin };
+                    await updateDoc(doc(db, "users", user.uid), { carInfo: carData });
+                    
+                    currentUser.carInfo = carData;
+                    renderCarData();
+                    showToast('บันทึกข้อมูลรถยนต์ลง Cloud สำเร็จค่ะ 🚗', 'success');
+                    closeCarModal();
+                } catch (error) {
+                    console.error("Save Car Error:", error);
+                    showToast('อัปเดตข้อมูลรถยนต์ล้มเหลว', 'error');
+                }
             }
-        }
+        };
 
         function renderCarData() {
             if (currentUser && currentUser.carInfo) {
-                document.getElementById('display-car-owner').innerText = currentUser.carInfo.owner;
-                document.getElementById('display-car-plate').innerText = currentUser.carInfo.plate;
-                document.getElementById('display-car-vin').innerText = currentUser.carInfo.vin ? currentUser.carInfo.vin : "ไม่ได้ระบุเลข VIN";
+                document.getElementById('display-car-owner').innerText = currentUser.carInfo.owner || "ยังไม่ได้ระบุ";
+                document.getElementById('display-car-plate').innerText = currentUser.carInfo.plate || "ยังไม่ได้ระบุ";
+                document.getElementById('display-car-vin').innerText = currentUser.carInfo.vin || "ไม่ได้ระบุเลข VIN";
             } else {
                 document.getElementById('display-car-owner').innerText = "ยังไม่ได้ระบุข้อมูล";
                 document.getElementById('display-car-plate').innerText = "ยังไม่ได้ระบุข้อมูล";
@@ -1170,124 +780,73 @@
             }
         }
 
-        // 7. PASSWORD RESET (EMAILJS & OTP)
-        function openForgotPasswordModal() {
-            document.getElementById('forgotPasswordModal').classList.remove('hidden');
-            document.getElementById('forgotPasswordModal').firstElementChild?.classList.add('modal-animate');
-            backToStep1();
-        }
+        // 6. UI & ROUTING SYSTEM
+        window.changeView = function(viewId, options = {}) {
+            const pages = ['welcome', 'register', 'login', 'home', 'contact', 'location', 'promo'];
+            const targetPage = document.getElementById(`page-${viewId}`);
+            if (!targetPage) return;
 
-        function closeForgotPasswordModal() {
-            document.getElementById('forgotPasswordModal').classList.add('hidden');
-            clearInterval(otpTimerInterval);
-        }
+            pages.forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if (el) el.classList.add('hidden');
+            });
 
-        function backToStep1() {
-            document.getElementById('forgot-step-1').classList.remove('hidden');
-            document.getElementById('forgot-step-2').classList.add('hidden');
-            document.getElementById('forgot-step-3').classList.add('hidden');
-            document.getElementById('forgot-result-box').classList.add('hidden');
-            clearInterval(otpTimerInterval);
-        }
+            targetPage.classList.remove('hidden');
+            if (viewId === 'login' || viewId === 'register') targetPage.classList.add('flex');
 
-        function processRequestEmailOTP(event) {
-            event.preventDefault();
-            const email = document.getElementById('forgot-email').value.toLowerCase();
-            const resultBox = document.getElementById('forgot-result-box');
-            const btnSubmit = document.getElementById('btn-submit-forgot');
+            requestAnimationFrame(() => {
+                targetPage.classList.add('page-active');
+            });
 
-            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-            const accountExists = users.some(u => u.email === email);
-
-            if (!accountExists) {
-                resultBox.innerText = "ไม่พบอีเมลนี้ในระบบสมาชิกค่ะ กรุณาตรวจสอบอีกครั้ง";
-                resultBox.classList.remove('hidden');
-                return;
-            }
-
-            resultBox.classList.add('hidden');
-            btnSubmit.disabled = true;
-            document.getElementById('text-submit-forgot').innerText = "กำลังส่งรหัส OTP...";
-
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            targetResetEmail = email;
-
-            const templateParams = {
-                to_email: targetResetEmail,
-                otp_code: generatedOTP
-            };
-
-            emailjs.send('service_7etoscl', 'gwsnbje', templateParams)
-                .then(() => {
-                    showToast('ส่งรหัส OTP ไปยังอีเมลของท่านแล้วค่ะ', 'success');
-                    goToStep2();
-                })
-                .catch((error) => {
-                    console.error('EmailJS Error:', error);
-                    showToast('ระบบส่งเมลขัดข้อง กรุณาติดต่อเจ้าหน้าที่ หรือลองใหม่ค่ะ', 'error');
-                })
-                .finally(() => {
-                    btnSubmit.disabled = false;
-                    document.getElementById('text-submit-forgot').innerText = "ส่งคำขอกู้รหัส";
-                });
-        }
-
-        function goToStep2() {
-            document.getElementById('forgot-step-1').classList.add('hidden');
-            document.getElementById('forgot-step-2').classList.remove('hidden');
-            document.getElementById('target-email-display').innerText = `กู้รหัสที่สมัครด้วย: ${targetResetEmail}`;
+            activeView = viewId;
+            const header = document.getElementById('appHeader');
+            const bottomNav = document.getElementById('bottomNav');
+            const isAuth = viewId === 'login' || viewId === 'register';
+            const isPublicLanding = viewId === 'welcome';
             
-            let timeLeft = 60;
-            const timerEl = document.getElementById('otp-timer');
-            timerEl.innerText = `${timeLeft}s`;
-            
-            clearInterval(otpTimerInterval);
-            otpTimerInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.innerText = `${timeLeft}s`;
-                if (timeLeft <= 0) {
-                    clearInterval(otpTimerInterval);
-                    timerEl.innerText = "หมดเวลา";
-                    showToast('รหัส OTP หมดอายุแล้ว กรุณากดส่งใหม่อีกครั้งค่ะ', 'error');
-                }
-            }, 1000);
+            header?.classList.toggle('hidden', isAuth || isPublicLanding);
+            bottomNav?.classList.toggle('hidden', isAuth || isPublicLanding);
+            if (!isAuth && !isPublicLanding) updateNavHighlights(viewId);
+        };
+
+        function updateNavHighlights(active) {
+            const navButtons = { home:'btn-nav-home', promo:'btn-nav-promo', game:'btn-nav-game' };
+            Object.entries(navButtons).forEach(([key, id]) => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                btn.classList.toggle('nav-active', key === active);
+                btn.classList.toggle('text-slate-400', key !== active);
+            });
         }
 
-        function processVerifyOTP(event) {
-            event.preventDefault();
-            const inputOTP = document.getElementById('otp-code').value;
+        window.checkAndShowView = function(defaultView) {
+            changeView(defaultView);
+        };
 
-            if (inputOTP === generatedOTP) {
-                clearInterval(otpTimerInterval);
-                showToast('ตรวจสอบรหัสถูกต้องเรียบร้อยค่ะ ✔️', 'success');
-                document.getElementById('forgot-step-2').classList.add('hidden');
-                document.getElementById('forgot-step-3').classList.remove('hidden');
-            } else {
-                showToast('รหัส OTP ไม่ถูกต้อง กรุณาลองใหม่อีกครั้งค่ะ', 'error');
+        // Modals & Helper Triggers
+        window.openEditModal = () => {
+            document.getElementById('editNameModal').classList.remove('hidden');
+            if (currentUser) document.getElementById('new-profile-name').value = currentUser.name || '';
+        };
+        window.closeEditModal = () => document.getElementById('editNameModal').classList.add('hidden');
+
+        window.openCarModal = () => {
+            document.getElementById('carInfoModal').classList.remove('hidden');
+            if (currentUser && currentUser.carInfo) {
+                document.getElementById('car-owner').value = currentUser.carInfo.owner || '';
+                document.getElementById('car-plate').value = currentUser.carInfo.plate || '';
+                document.getElementById('car-vin').value = currentUser.carInfo.vin || '';
             }
-        }
+        };
+        window.closeCarModal = () => document.getElementById('carInfoModal').classList.add('hidden');
 
-        function processSaveNewPassword(event) {
-            event.preventDefault();
-            const newPass = document.getElementById('new-reset-password').value;
-            const confirmPass = document.getElementById('new-reset-password-confirm').value;
+        window.openForgotPasswordModal = () => document.getElementById('forgotPasswordModal').classList.remove('hidden');
+        window.closeForgotPasswordModal = () => document.getElementById('forgotPasswordModal').classList.add('hidden');
 
-            if (newPass !== confirmPass) {
-                showToast('รหัสผ่านทั้งสองช่องไม่ตรงกันค่ะ ❌', 'error');
-                return;
-            }
+        window.triggerLogout = () => document.getElementById('logoutConfirmModal').classList.remove('hidden');
+        window.closeLogoutModal = () => document.getElementById('logoutConfirmModal').classList.add('hidden');
 
-            let users = JSON.parse(localStorage.getItem('mg_registered_users')) || [];
-            users = users.map(u => u.email === targetResetEmail ? { ...u, password: newPass } : u);
-            localStorage.setItem('mg_registered_users', JSON.stringify(users));
-
-            showToast('เปลี่ยนรหัสผ่านใหม่สำเร็จแล้วค่ะ 🔒', 'success');
-            event.target.reset();
-            closeForgotPasswordModal();
-            changeView('login');
-        }
-
-        function togglePasswordVisibility(inputId, iconId) {
+        window.togglePasswordVisibility = (inputId, iconId) => {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
             if (input.type === 'password') {
@@ -1297,128 +856,59 @@
                 input.type = 'password';
                 icon.classList.replace('fa-eye', 'fa-eye-slash');
             }
-        }
+        };
 
-        // 8. LOGOUT SYSTEM
-        function triggerLogout() {
-            document.getElementById('logoutConfirmModal').classList.remove('hidden');
-            document.getElementById('logoutConfirmModal').firstElementChild?.classList.add('modal-animate');
-        }
-
-        function closeLogoutModal() {
-            document.getElementById('logoutConfirmModal').classList.add('hidden');
-        }
-
-        async function confirmLogout() {
-            currentUser = null;
-            localStorage.removeItem('mg_current_user');
-            localStorage.removeItem('mg_tos_accepted');
-
-            closeLogoutModal();
-            await playSecureTransition('กำลังล็อกระบบและปิดเซสชัน', 700);
-            showToast('ออกจากระบบเรียบร้อยแล้วค่ะ', 'success');
-            changeView('welcome');
-            if (typeof checkTosStatus === 'function') checkTosStatus();
-        }
-
-        // 9. CUSTOM TOAST NOTIFICATION
-        function showToast(message, type = 'success') {
+        window.showToast = function(message, type = 'success') {
             const toastContainer = document.createElement('div');
             toastContainer.className = "fixed inset-0 z-[9999] flex justify-center items-center p-4 pointer-events-none";
-
-            const bgColor = type === 'success' ? 'bg-white border border-emerald-500 text-emerald-700 shadow-xl' : 'bg-white border border-red-500 text-red-600 shadow-xl';
+            const bgColor = type === 'success' ? 'bg-white border-emerald-500 text-emerald-700' : 'bg-white border-red-500 text-red-600';
 
             toastContainer.innerHTML = `
-                <div class="${bgColor} px-6 py-3 rounded-2xl font-bold text-sm pointer-events-auto backdrop-blur-sm shadow-2xl">
+                <div class="${bgColor} border px-6 py-3 rounded-2xl font-bold text-sm pointer-events-auto shadow-2xl">
                     ${message}
                 </div>
             `;
-
             document.body.appendChild(toastContainer);
+            setTimeout(() => toastContainer.remove(), 2500);
+        };
 
-            setTimeout(() => {
-                toastContainer.remove();
-            }, 2500);
+        function playSecureTransition(message = 'กำลังตรวจสอบเซสชัน', duration = 650) {
+            const overlay = document.getElementById('secureOverlay');
+            if (!overlay) return Promise.resolve();
+            document.getElementById('secureMessage').textContent = message;
+            overlay.classList.add('show');
+            return new Promise(resolve => setTimeout(() => {
+                overlay.classList.remove('show');
+                resolve();
+            }, duration));
         }
 
-        // 10. PWA INSTALLATION BANNER
-        function closePwaBanner() {
-            document.getElementById('pwaAlertBanner').classList.add('hidden');
-        }
+        // Theme Switcher Logic
+        window.toggleTheme = function() {
+            const isDark = document.body.classList.toggle('theme-dark');
+            document.getElementById('themeToggleText').textContent = isDark ? 'โหมดขาว' : 'โหมดดำ';
+            document.getElementById('themeToggleIcon').className = isDark ? 'fa-solid fa-sun theme-toggle-icon' : 'fa-solid fa-moon theme-toggle-icon';
+        };
 
-        function executePwaInstall() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    deferredPrompt = null;
-                    closePwaBanner();
-                });
-            } else {
-                showToast('ระบบพร้อมติดตั้งบนอุปกรณ์ของคุณแล้วค่ะ!', 'success');
-                closePwaBanner();
-            }
-        }
+        // Realtime Clock
+        setInterval(() => {
+            const clockEl = document.getElementById('realtime-clock');
+            if (clockEl) clockEl.innerText = new Date().toLocaleTimeString('th-TH');
+        }, 1000);
 
-        // 11. REGISTER SERVICE WORKER
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('🚀 Service Worker ลงทะเบียนสำเร็จ!', reg.scope))
-                    .catch(err => console.error('❌ Service Worker ล้มเหลว:', err));
-            });
-        }
-
-        // --- ระบบจัดการเงื่อนไขการให้บริการ ---
-        document.addEventListener("DOMContentLoaded", function() {
+        // TOS System
+        document.addEventListener("DOMContentLoaded", () => {
             const tosModal = document.getElementById("tosModal");
-            const acceptTosBtn = document.getElementById("acceptTosBtn");
+            const acceptBtn = document.getElementById("acceptTosBtn");
 
-            if (!tosModal || !acceptTosBtn) return;
-
-            window.openTosModal = function() {
-                tosModal.classList.remove("hidden");
-                tosModal.style.opacity = '1';
-                tosModal.style.pointerEvents = 'auto';
-            };
-
-            window.checkTosStatus = function() {
-                const accepted = localStorage.getItem("mg_tos_accepted") === "true";
-
-                if (!accepted) {
-                    tosModal.classList.remove("hidden");
-                    tosModal.style.opacity = '1';
-                    tosModal.style.pointerEvents = 'auto';
-                } else {
+            window.openTosModal = () => tosModal?.classList.remove("hidden");
+            
+            if (acceptBtn) {
+                acceptBtn.addEventListener("click", () => {
+                    localStorage.setItem("mg_tos_accepted", "true");
                     tosModal.classList.add("hidden");
-                    tosModal.style.opacity = '1';
-                    tosModal.style.pointerEvents = 'none';
-                }
-            };
-
-            if (!currentUser && localStorage.getItem("mg_tos_accepted") !== "true") {
-                changeView('welcome', {force:true});
+                });
             }
-
-            checkTosStatus();
-
-            acceptTosBtn.addEventListener("click", function() {
-                localStorage.setItem("mg_tos_accepted", "true");
-
-                tosModal.style.opacity = '0';
-                tosModal.style.transition = 'opacity 0.3s ease-out';
-
-                setTimeout(() => {
-                    tosModal.classList.add("hidden");
-                    tosModal.style.opacity = '1';
-                    tosModal.style.pointerEvents = 'none';
-
-                    if (currentUser) {
-                        checkAndShowView('home');
-                    } else {
-                        changeView('welcome', {force:true});
-                    }
-                }, 300);
-            });
         });
     </script>
 </body>
