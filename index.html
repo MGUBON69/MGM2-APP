@@ -143,7 +143,7 @@
     <!-- Theme Switcher -->
     <button type="button" id="themeToggle" onclick="toggleTheme()" aria-label="เปลี่ยนธีม">
         <i id="themeToggleIcon" class="fa-solid fa-moon theme-toggle-icon"></i>
-        <span id="themeToggleText">โหมดดำ</span>
+        <span id="themeToggleText">โหมดมืด</span>
     </button>
 
     <!-- Main Container -->
@@ -886,7 +886,7 @@
         // Theme Switcher Logic
         window.toggleTheme = function() {
             const isDark = document.body.classList.toggle('theme-dark');
-            document.getElementById('themeToggleText').textContent = isDark ? 'โหมดขาว' : 'โหมดดำ';
+            document.getElementById('themeToggleText').textContent = isDark ? 'โหมดสว่าง' : 'โหมดมืด';
             document.getElementById('themeToggleIcon').className = isDark ? 'fa-solid fa-sun theme-toggle-icon' : 'fa-solid fa-moon theme-toggle-icon';
         };
 
