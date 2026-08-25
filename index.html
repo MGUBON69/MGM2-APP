@@ -97,33 +97,103 @@
         }
         .modal-animate { animation:lockIn .35s cubic-bezier(.2,.8,.2,1) both; }
 
-        /* Dark Theme Styles */
+        /* Refined Theme System — จำกัดการแก้ไขเฉพาะสี/ผิว UI */
         body { transition: background-color .35s ease, color .35s ease; }
         #themeToggle {
-            position: absolute; left: 12px; bottom: 76px; z-index: 80;
-            display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px;
-            border-radius: 999px; border: 1px solid #cbd5e1; background: rgba(255,255,255,.94);
-            color: #334155; box-shadow: 0 8px 24px rgba(15,23,42,.12); backdrop-filter: blur(10px);
-            font-size: 10px; font-weight: 700; cursor: pointer; transition: all .3s ease;
+            position:absolute; left:12px; bottom:76px; z-index:80;
+            display:inline-flex; align-items:center; gap:7px; padding:8px 11px;
+            border-radius:999px; border:1px solid #cbd5e1; background:rgba(255,255,255,.94);
+            color:#334155; box-shadow:0 8px 24px rgba(15,23,42,.12); backdrop-filter:blur(10px);
+            font-size:10px; font-weight:700; cursor:pointer; transition:all .3s ease;
         }
-        #themeToggle:hover { transform: translateY(-1px); }
+        #themeToggle:hover { transform:translateY(-1px); }
         #themeToggle .theme-toggle-icon { color:#0b79d0; }
 
-        body.theme-dark { background-color: #000 !important; color: #f8fafc !important; }
-        body.theme-dark #themeToggle { background: rgba(15,23,42,.96); border-color: #334155; color: #e2e8f0; }
-        body.theme-dark #themeToggle .theme-toggle-icon { color:#38bdf8; }
-        body.theme-dark .bg-white { background-color:#0a0a0a !important; }
-        body.theme-dark .bg-slate-50 { background-color:#1e293b !important; }
-        body.theme-dark .text-slate-900 { color:#f8fafc !important; }
-        body.theme-dark .text-slate-700 { color:#cbd5e1 !important; }
-        body.theme-dark .text-slate-500 { color:#94a3b8 !important; }
-        body.theme-dark .border-slate-200 { border-color:#1e293b !important; }
-        body.theme-dark input, body.theme-dark textarea, body.theme-dark select {
-            background-color:#1e293b !important; border-color:#334155 !important; color:#fff !important;
+        /* Light mode: เพิ่ม contrast โดยไม่เปลี่ยนโครงสร้าง */
+        body:not(.theme-dark) .bg-slate-100 { background-color:#f8fafc !important; }
+        body:not(.theme-dark) input,
+        body:not(.theme-dark) textarea,
+        body:not(.theme-dark) select { color:#0f172a; }
+        body:not(.theme-dark) button:focus-visible,
+        body:not(.theme-dark) a:focus-visible,
+        body:not(.theme-dark) input:focus-visible,
+        body:not(.theme-dark) textarea:focus-visible,
+        body:not(.theme-dark) select:focus-visible {
+            outline:2px solid rgba(11,121,208,.45); outline-offset:2px;
         }
-        body.theme-dark #appHeader, body.theme-dark #bottomNav { background:#0a0a0a !important; border-color:#1e293b !important; }
-        body.theme-dark .nav-active { color:#38bdf8 !important; }
 
+        /* Dark mode */
+        body.theme-dark { background-color:#020617 !important; color:#e5e7eb !important; }
+        body.theme-dark #themeToggle {
+            background:rgba(15,23,42,.96); border-color:#334155; color:#e2e8f0;
+            box-shadow:0 10px 28px rgba(0,0,0,.35);
+        }
+        body.theme-dark #themeToggle .theme-toggle-icon { color:#38bdf8; }
+
+        /* Main shell / surfaces */
+        body.theme-dark .bg-white { background-color:#0f172a !important; }
+        body.theme-dark .bg-white\/95 { background-color:rgba(15,23,42,.96) !important; }
+        body.theme-dark .bg-slate-50 { background-color:#111827 !important; }
+        body.theme-dark .bg-slate-100 { background-color:#1e293b !important; }
+        body.theme-dark .from-slate-50 { --tw-gradient-from:#111827 var(--tw-gradient-from-position) !important; }
+        body.theme-dark .to-sky-50\/50 { --tw-gradient-to:rgba(15,23,42,.75) var(--tw-gradient-to-position) !important; }
+
+        /* Text */
+        body.theme-dark .text-slate-900 { color:#f8fafc !important; }
+        body.theme-dark .text-slate-800 { color:#e2e8f0 !important; }
+        body.theme-dark .text-slate-700 { color:#cbd5e1 !important; }
+        body.theme-dark .text-slate-600 { color:#b6c2d2 !important; }
+        body.theme-dark .text-slate-500 { color:#94a3b8 !important; }
+        body.theme-dark .text-slate-400 { color:#a8b5c7 !important; }
+
+        /* Borders / cards */
+        body.theme-dark .border-slate-100 { border-color:#1f2937 !important; }
+        body.theme-dark .border-slate-200 { border-color:#263244 !important; }
+        body.theme-dark .border-slate-300 { border-color:#475569 !important; }
+        body.theme-dark .border-slate-900 { border-color:#334155 !important; }
+        body.theme-dark .shadow-sm,
+        body.theme-dark .shadow-md,
+        body.theme-dark .shadow-lg,
+        body.theme-dark .shadow-xl,
+        body.theme-dark .shadow-2xl { box-shadow:0 12px 28px rgba(0,0,0,.28) !important; }
+
+        /* Form controls */
+        body.theme-dark input,
+        body.theme-dark textarea,
+        body.theme-dark select {
+            background-color:#111827 !important; border-color:#334155 !important; color:#f8fafc !important;
+        }
+        body.theme-dark input::placeholder,
+        body.theme-dark textarea::placeholder { color:#64748b !important; }
+        body.theme-dark input:focus,
+        body.theme-dark textarea:focus,
+        body.theme-dark select:focus {
+            border-color:#38bdf8 !important;
+            box-shadow:0 0 0 3px rgba(56,189,248,.14);
+        }
+
+        /* Accent buttons / status */
+        body.theme-dark .bg-\[\#0b79d0\] { background-color:#1689df !important; }
+        body.theme-dark .text-\[\#0b79d0\] { color:#38bdf8 !important; }
+        body.theme-dark .bg-sky-50 { background-color:rgba(14,116,144,.18) !important; }
+        body.theme-dark .border-sky-100,
+        body.theme-dark .border-sky-200 { border-color:rgba(56,189,248,.24) !important; }
+        body.theme-dark .bg-emerald-50 { background-color:rgba(6,95,70,.22) !important; }
+        body.theme-dark .bg-amber-50 { background-color:rgba(120,53,15,.20) !important; }
+        body.theme-dark .bg-red-50 { background-color:rgba(127,29,29,.22) !important; }
+
+        /* Navigation / overlays / toast */
+        body.theme-dark #appHeader,
+        body.theme-dark #bottomNav { background:rgba(15,23,42,.97) !important; border-color:#263244 !important; }
+        body.theme-dark .nav-active { color:#38bdf8 !important; }
+        body.theme-dark .secure-overlay { background:rgba(2,6,23,.90); }
+        body.theme-dark .secure-overlay .secure-box { background:#0f172a; border-color:#263244; }
+        body.theme-dark .secure-progress { background:#263244; }
+        body.theme-dark #customToast { background:#0f172a !important; border-color:#334155 !important; color:#f8fafc !important; }
+
+        /* Modal backdrop + button hover consistency */
+        body.theme-dark [id$="Modal"] > .bg-white { background-color:#0f172a !important; }
+        body.theme-dark button:hover:not(:disabled) { filter:brightness(1.06); }
         @media (max-width: 640px) { #themeToggle { left: 10px; bottom: 78px; padding: 8px 10px; } }
     </style>
 </head>
@@ -885,9 +955,18 @@
         // Theme Switcher Logic
         window.toggleTheme = function() {
             const isDark = document.body.classList.toggle('theme-dark');
+            localStorage.setItem('mg_theme', isDark ? 'dark' : 'light');
             document.getElementById('themeToggleText').textContent = isDark ? 'โหมดสว่าง' : 'โหมดมืด';
             document.getElementById('themeToggleIcon').className = isDark ? 'fa-solid fa-sun theme-toggle-icon' : 'fa-solid fa-moon theme-toggle-icon';
         };
+
+        (function restoreTheme() {
+            if (localStorage.getItem('mg_theme') === 'dark') {
+                document.body.classList.add('theme-dark');
+                document.getElementById('themeToggleText').textContent = 'โหมดสว่าง';
+                document.getElementById('themeToggleIcon').className = 'fa-solid fa-sun theme-toggle-icon';
+            }
+        })();
 
         // Realtime Clock
         setInterval(() => {
