@@ -345,6 +345,22 @@
             </div>
         </div>
 
+
+        <!-- Browser Install Modal -->
+        <div id="browserInstallModal" class="hidden fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex justify-center items-center p-5">
+            <div class="bg-white border border-slate-200 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center">
+                <div class="w-14 h-14 mx-auto mb-4 bg-sky-50 text-[#0b79d0] rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-mobile-screen-button text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">ติดตั้งแอปพลิเคชัน</h3>
+                <p class="text-xs text-slate-500 mt-2">เพิ่มแอปไว้บนหน้าจอ เพื่อเข้าใช้งานได้รวดเร็วขึ้น</p>
+                <div class="grid grid-cols-2 gap-3 mt-5">
+                    <button type="button" onclick="closeBrowserInstallModal()" class="bg-slate-100 text-slate-700 py-3 rounded-xl text-sm font-bold cursor-pointer">ไว้ก่อน</button>
+                    <button type="button" onclick="executePwaInstall()" class="bg-[#0b79d0] text-white py-3 rounded-xl text-sm font-bold cursor-pointer">ติดตั้ง</button>
+                </div>
+            </div>
+        </div>
+
         <!-- PWA Banner -->
         <div id="pwaAlertBanner" class="hidden bg-slate-50 border border-slate-200 p-3.5 mx-4 mt-3 rounded-xl flex items-center justify-between z-30 shadow-sm">
             <div class="flex items-center gap-2.5">
@@ -684,6 +700,36 @@
         let deferredPrompt = null;
         let activeView = null;
 
+        // PWA Install Prompt
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
+
+            setTimeout(() => {
+                window.openBrowserInstallModal?.();
+            }, 1500);
+        });
+
+        window.executePwaInstall = async function() {
+            if (!deferredPrompt) {
+                closeBrowserInstallModal();
+                document.getElementById('pwaAlertBanner')?.classList.remove('hidden');
+                return;
+            }
+
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            closeBrowserInstallModal();
+            document.getElementById('pwaAlertBanner')?.classList.add('hidden');
+        };
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            closeBrowserInstallModal();
+            document.getElementById('pwaAlertBanner')?.classList.add('hidden');
+        });
+
         // 3. AUTH STATE OBSERVER (ระบบตรวจสอบสถานะอัตโนมัติ)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -914,6 +960,15 @@
 
         window.triggerLogout = () => document.getElementById('logoutConfirmModal').classList.remove('hidden');
         window.closeLogoutModal = () => document.getElementById('logoutConfirmModal').classList.add('hidden');
+
+        window.openBrowserInstallModal = () => {
+            if (deferredPrompt) {
+                document.getElementById('browserInstallModal')?.classList.remove('hidden');
+            }
+        };
+        window.closeBrowserInstallModal = () => document.getElementById('browserInstallModal')?.classList.add('hidden');
+
+        window.closePwaBanner = () => document.getElementById('pwaAlertBanner')?.classList.add('hidden');
 
         window.togglePasswordVisibility = (inputId, iconId) => {
             const input = document.getElementById(inputId);
