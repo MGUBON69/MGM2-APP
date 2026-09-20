@@ -55,6 +55,8 @@
         }
         #page-promo { min-height: 0; }
         #page-promo .min-h-\[620px\] { min-height: calc(100vh - 180px); }
+        #page-catalog { min-height: 0; }
+        #page-catalog .min-h-\[620px\] { min-height: calc(100vh - 180px); }
 
         .page-view.page-exit {
             opacity: 0 !important;
@@ -621,6 +623,21 @@
                 </div>
             </div>
 
+            <!-- หน้าแคตตาล็อค -->
+            <div id="page-catalog" class="hidden flex-1 min-h-0 flex flex-col page-view bg-slate-50">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white sticky top-0 z-10 shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                            <i class="fa-solid fa-book-open text-sm"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900">แคตตาล็อค MG</h3>
+                    </div>
+                </div>
+                <div class="flex-1 min-h-0 bg-white">
+                    <iframe id="catalogFrame" src="https://mgubon69.github.io/brochure-mg/" title="MG แคตตาล็อค" class="w-full h-full min-h-[620px] border-0"></iframe>
+                </div>
+            </div>
+
             <!-- หน้าที่ตั้งบริษัท -->
             <div id="page-location" class="hidden p-5 space-y-4 page-view">
                 <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
@@ -647,8 +664,8 @@
                 <i class="fa-solid fa-tags text-base"></i>
                 <span class="text-[10px]">โปรโมชั่น</span>
             </button>
-            <!-- ปุ่มแคตตาล็อค: แก้ไขลิงค์ตรง window.open('...') ได้เลย -->
-            <button type="button" onclick="window.open('https://mgubon69.github.io/brochure-mg/', '_blank')" id="btn-nav-catalog" class="flex flex-col items-center gap-1 text-slate-400 cursor-pointer w-16">
+            <!-- ปุ่มแคตตาล็อค: แก้ไขให้แสดงผลในหน้าเดียวกัน -->
+            <button type="button" onclick="changeView('catalog')" id="btn-nav-catalog" class="flex flex-col items-center gap-1 text-slate-400 cursor-pointer w-16">
                 <i class="fa-solid fa-book-open text-base"></i>
                 <span class="text-[10px]">แคตตาล็อค</span>
             </button>
@@ -896,7 +913,7 @@
 
         // 6. UI & ROUTING SYSTEM
         window.changeView = function(viewId, options = {}) {
-            const pages = ['welcome', 'register', 'login', 'home', 'contact', 'location', 'promo'];
+            const pages = ['welcome', 'register', 'login', 'home', 'contact', 'location', 'promo', 'catalog'];
             const targetPage = document.getElementById(`page-${viewId}`);
             if (!targetPage) return;
 
@@ -924,7 +941,7 @@
         };
 
         function updateNavHighlights(active) {
-            const navButtons = { home:'btn-nav-home', promo:'btn-nav-promo', game:'btn-nav-game' };
+            const navButtons = { home:'btn-nav-home', promo:'btn-nav-promo', catalog:'btn-nav-catalog' };
             Object.entries(navButtons).forEach(([key, id]) => {
                 const btn = document.getElementById(id);
                 if (!btn) return;
