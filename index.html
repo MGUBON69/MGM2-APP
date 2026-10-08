@@ -849,11 +849,12 @@
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                showToast('ส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้วค่ะ 📧', 'success');
+                showToast('หากระบบพบอีเมลนี้ ลิงก์รีเซ็ตรหัสผ่านจะถูกส่งไปค่ะ 📧', 'success');
                 closeForgotPasswordModal();
             } catch (error) {
                 console.error("Reset Error:", error);
-                showToast('ไม่พบอีเมลนี้ในระบบ หรือเกิดข้อผิดพลาด', 'error');
+                showToast('หากระบบพบอีเมลนี้ ลิงก์รีเซ็ตรหัสผ่านจะถูกส่งไปค่ะ 📧', 'success');
+                closeForgotPasswordModal();
             }
         };
 
