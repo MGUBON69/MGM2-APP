@@ -55,6 +55,7 @@
             background-color: #f8fafc;
             overflow-x: hidden;
             position: relative;
+            transition: background-color .35s ease, color .35s ease;
         }
         
         /* ============================================
@@ -422,7 +423,6 @@
         }
         .modal-animate { animation:lockIn .35s cubic-bezier(.2,.8,.2,1) both; }
 
-        body { transition: background-color .35s ease, color .35s ease; }
         #themeToggle {
             position:absolute; left:12px; bottom:76px; z-index:80;
             display:inline-flex; align-items:center; gap:7px; padding:8px 11px;
@@ -445,70 +445,391 @@
             outline:2px solid rgba(11,121,208,.45); outline-offset:2px;
         }
 
-        body.theme-dark { background-color:#020617 !important; color:#e5e7eb !important; }
-        body.theme-dark #themeToggle {
-            background:rgba(15,23,42,.96); border-color:#334155; color:#e2e8f0;
-            box-shadow:0 10px 28px rgba(0,0,0,.35);
+        /* ============================================
+           🌙 ENHANCED DARK MODE - HIGH CONTRAST
+           ============================================ */
+        body.theme-dark { 
+            background-color: #0a0e1a !important; 
+            color: #f1f5f9 !important; 
         }
-        body.theme-dark #themeToggle .theme-toggle-icon { color:#38bdf8; }
+        
+        /* ปรับ Floating Orbs ให้สว่างขึ้นใน Dark Mode */
+        body.theme-dark .floating-orb {
+            opacity: 0.25;
+            mix-blend-mode: screen;
+        }
+        
+        body.theme-dark .orb-1 {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        }
+        
+        body.theme-dark .orb-2 {
+            background: linear-gradient(135deg, #a78bfa, #06b6d4);
+        }
+        
+        /* Aurora Background ใน Dark Mode - สว่างขึ้น */
+        body.theme-dark::before {
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.20) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.12) 0%, transparent 50%);
+        }
+        
+        /* Noise Texture เข้มขึ้นเล็กน้อยใน Dark Mode */
+        body.theme-dark::after {
+            opacity: 0.03;
+        }
+        
+        /* Theme Toggle Button */
+        body.theme-dark #themeToggle {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: #475569;
+            color: #e2e8f0;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+        }
+        body.theme-dark #themeToggle:hover {
+            background: rgba(51, 65, 85, 0.95);
+            border-color: #64748b;
+        }
+        body.theme-dark #themeToggle .theme-toggle-icon { 
+            color: #38bdf8; 
+        }
 
-        body.theme-dark .bg-white { background-color:#0f172a !important; }
-        body.theme-dark .bg-white\/95 { background-color:rgba(15,23,42,.96) !important; }
-        body.theme-dark .bg-slate-50 { background-color:#111827 !important; }
-        body.theme-dark .bg-slate-100 { background-color:#1e293b !important; }
-        body.theme-dark .from-slate-50 { --tw-gradient-from:#111827 var(--tw-gradient-from-position) !important; }
-        body.theme-dark .to-sky-50\/50 { --tw-gradient-to:rgba(15,23,42,.75) var(--tw-gradient-to-position) !important; }
+        /* ============================================
+           📦 MAIN CONTAINER & SURFACES
+           ============================================ */
+        body.theme-dark .bg-white { 
+            background-color: #1e293b !important; 
+        }
+        body.theme-dark .bg-white\/95 { 
+            background-color: rgba(30, 41, 59, 0.98) !important; 
+        }
+        
+        /* การ์ดหลัก - Contrast สูงขึ้น */
+        body.theme-dark .glass-card {
+            background: rgba(30, 41, 59, 0.75) !important;
+            border: 1px solid rgba(71, 85, 105, 0.5) !important;
+            backdrop-filter: blur(20px) saturate(150%);
+        }
+        
+        body.theme-dark .glass-card-strong {
+            background: rgba(30, 41, 59, 0.90) !important;
+            border: 1px solid rgba(100, 116, 139, 0.4) !important;
+            backdrop-filter: blur(30px) saturate(180%);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        
+        body.theme-dark .bg-slate-50 { 
+            background-color: #1e293b !important; 
+            border-color: #334155 !important;
+        }
+        body.theme-dark .bg-slate-100 { 
+            background-color: #334155 !important; 
+        }
+        body.theme-dark .from-slate-50 { 
+            --tw-gradient-from: #1e293b var(--tw-gradient-from-position) !important; 
+        }
+        body.theme-dark .to-sky-50\/50 { 
+            --tw-gradient-to: rgba(30, 41, 59, 0.75) var(--tw-gradient-to-position) !important; 
+        }
 
-        body.theme-dark .text-slate-900 { color:#f8fafc !important; }
-        body.theme-dark .text-slate-800 { color:#e2e8f0 !important; }
-        body.theme-dark .text-slate-700 { color:#cbd5e1 !important; }
-        body.theme-dark .text-slate-600 { color:#b6c2d2 !important; }
-        body.theme-dark .text-slate-500 { color:#94a3b8 !important; }
-        body.theme-dark .text-slate-400 { color:#a8b5c7 !important; }
+        /* ============================================
+           🔤 TEXT COLORS - HIGH CONTRAST
+           ============================================ */
+        body.theme-dark .text-slate-900 { 
+            color: #f8fafc !important; 
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        body.theme-dark .text-slate-800 { 
+            color: #f1f5f9 !important; 
+        }
+        body.theme-dark .text-slate-700 { 
+            color: #e2e8f0 !important; 
+        }
+        body.theme-dark .text-slate-600 { 
+            color: #cbd5e1 !important; 
+        }
+        body.theme-dark .text-slate-500 { 
+            color: #94a3b8 !important;
+        }
+        body.theme-dark .text-slate-400 { 
+            color: #cbd5e1 !important;
+        }
+        
+        /* Gradient Text ใน Dark Mode - สีสดและสว่างขึ้น */
+        body.theme-dark .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%) !important;
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(56, 189, 248, 0.3));
+        }
 
-        body.theme-dark .border-slate-100 { border-color:#1f2937 !important; }
-        body.theme-dark .border-slate-200 { border-color:#263244 !important; }
-        body.theme-dark .border-slate-300 { border-color:#475569 !important; }
-        body.theme-dark .border-slate-900 { border-color:#334155 !important; }
-        body.theme-dark .shadow-sm,
-        body.theme-dark .shadow-md,
-        body.theme-dark .shadow-lg,
-        body.theme-dark .shadow-xl,
-        body.theme-dark .shadow-2xl { box-shadow:0 12px 28px rgba(0,0,0,.28) !important; }
+        /* ============================================
+           📏 BORDERS & DIVIDERS
+           ============================================ */
+        body.theme-dark .border-slate-100 { 
+            border-color: #334155 !important; 
+        }
+        body.theme-dark .border-slate-200 { 
+            border-color: #475569 !important; 
+        }
+        body.theme-dark .border-slate-300 { 
+            border-color: #64748b !important; 
+        }
+        body.theme-dark .border-slate-900 { 
+            border-color: #475569 !important; 
+        }
+        
+        /* Shadows ใน Dark Mode - ลึกและชัดเจน */
+        body.theme-dark .shadow-sm {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        }
+        body.theme-dark .shadow-md {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+        }
+        body.theme-dark .shadow-lg {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+        }
+        body.theme-dark .shadow-xl {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6) !important;
+        }
+        body.theme-dark .shadow-2xl { 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7) !important; 
+        }
 
+        /* ============================================
+           📝 FORM CONTROLS - ENHANCED VISIBILITY
+           ============================================ */
         body.theme-dark input,
         body.theme-dark textarea,
         body.theme-dark select {
-            background-color:#111827 !important; border-color:#334155 !important; color:#f8fafc !important;
+            background-color: #0f172a !important; 
+            border: 1.5px solid #475569 !important; 
+            color: #f8fafc !important;
         }
+        
+        body.theme-dark input:hover,
+        body.theme-dark textarea:hover,
+        body.theme-dark select:hover {
+            border-color: #64748b !important;
+            background-color: #1e293b !important;
+        }
+        
         body.theme-dark input::placeholder,
-        body.theme-dark textarea::placeholder { color:#64748b !important; }
+        body.theme-dark textarea::placeholder { 
+            color: #94a3b8 !important;
+        }
+        
         body.theme-dark input:focus,
         body.theme-dark textarea:focus,
         body.theme-dark select:focus {
-            border-color:#38bdf8 !important;
-            box-shadow:0 0 0 3px rgba(56,189,248,.14);
+            border-color: #38bdf8 !important;
+            box-shadow: 
+                0 0 0 3px rgba(56, 189, 248, 0.25),
+                0 0 20px rgba(56, 189, 248, 0.15);
+            background-color: #0f172a !important;
+        }
+        
+        /* Label ใน Dark Mode */
+        body.theme-dark label {
+            color: #cbd5e1 !important;
         }
 
-        body.theme-dark .bg-\[\#0b79d0\] { background-color:#1689df !important; }
-        body.theme-dark .text-\[\#0b79d0\] { color:#38bdf8 !important; }
-        body.theme-dark .bg-sky-50 { background-color:rgba(14,116,144,.18) !important; }
+        /* ============================================
+           🎨 ACCENT COLORS & STATUS
+           ============================================ */
+        body.theme-dark .bg-\[\#0b79d0\] { 
+            background-color: #0ea5e9 !important; 
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+        }
+        body.theme-dark .text-\[\#0b79d0\] { 
+            color: #38bdf8 !important; 
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+        
+        /* Sky colors */
+        body.theme-dark .bg-sky-50 { 
+            background-color: rgba(14, 165, 233, 0.15) !important; 
+            border-color: rgba(56, 189, 248, 0.3) !important;
+        }
         body.theme-dark .border-sky-100,
-        body.theme-dark .border-sky-200 { border-color:rgba(56,189,248,.24) !important; }
-        body.theme-dark .bg-emerald-50 { background-color:rgba(6,95,70,.22) !important; }
-        body.theme-dark .bg-amber-50 { background-color:rgba(120,53,15,.20) !important; }
-        body.theme-dark .bg-red-50 { background-color:rgba(127,29,29,.22) !important; }
+        body.theme-dark .border-sky-200 { 
+            border-color: rgba(56, 189, 248, 0.4) !important; 
+        }
+        
+        /* Status colors - สว่างและสดขึ้น */
+        body.theme-dark .bg-emerald-50 { 
+            background-color: rgba(16, 185, 129, 0.18) !important; 
+        }
+        body.theme-dark .text-emerald-600 {
+            color: #34d399 !important;
+        }
+        
+        body.theme-dark .bg-amber-50 { 
+            background-color: rgba(245, 158, 11, 0.18) !important; 
+        }
+        body.theme-dark .text-amber-600 {
+            color: #fbbf24 !important;
+        }
+        
+        body.theme-dark .bg-red-50 { 
+            background-color: rgba(239, 68, 68, 0.18) !important; 
+        }
+        body.theme-dark .text-red-500 {
+            color: #f87171 !important;
+        }
 
+        /* ============================================
+           🧭 NAVIGATION & OVERLAYS
+           ============================================ */
         body.theme-dark #appHeader,
-        body.theme-dark #bottomNav { background:rgba(15,23,42,.97) !important; border-color:#263244 !important; }
-        body.theme-dark .nav-active { color:#38bdf8 !important; }
-        body.theme-dark .secure-overlay { background:rgba(2,6,23,.90); }
-        body.theme-dark .secure-overlay .secure-box { background:#0f172a; border-color:#263244; }
-        body.theme-dark .secure-progress { background:#263244; }
-        body.theme-dark #customToast { background:#0f172a !important; border-color:#334155 !important; color:#f8fafc !important; }
+        body.theme-dark #bottomNav { 
+            background: rgba(15, 23, 42, 0.98) !important; 
+            border-color: #334155 !important;
+            backdrop-filter: blur(20px);
+        }
+        
+        body.theme-dark .nav-active { 
+            color: #38bdf8 !important; 
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+        }
+        
+        /* Secure Overlay */
+        body.theme-dark .secure-overlay { 
+            background: rgba(2, 6, 23, 0.92); 
+            backdrop-filter: blur(20px);
+        }
+        body.theme-dark .secure-overlay .secure-box { 
+            background: #1e293b; 
+            border-color: #475569;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        }
+        body.theme-dark .secure-ring {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: #38bdf8;
+            color: #38bdf8;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+        body.theme-dark .secure-progress { 
+            background: #334155; 
+        }
+        body.theme-dark .secure-progress span {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+        }
+        
+        /* Custom Toast */
+        body.theme-dark #customToast { 
+            background: #1e293b !important; 
+            border-color: #475569 !important; 
+            color: #f8fafc !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
 
-        body.theme-dark [id$="Modal"] > .bg-white { background-color:#0f172a !important; }
-        body.theme-dark button:hover:not(:disabled) { filter:brightness(1.06); }
+        /* ============================================
+           🪟 MODALS & CARDS
+           ============================================ */
+        body.theme-dark [id$="Modal"] > .bg-white { 
+            background-color: #1e293b !important; 
+            border-color: #475569 !important;
+        }
+        
+        body.theme-dark .modal-animate {
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+        }
+        
+        /* การ์ดข้อมูลรถและเมนูลัด */
+        body.theme-dark #car-display-card,
+        body.theme-dark .glass-card {
+            border: 1px solid rgba(71, 85, 105, 0.5) !important;
+        }
+        
+        /* ปุ่มใน Dark Mode */
+        body.theme-dark button:not(:disabled) {
+            transition: all 0.3s ease;
+        }
+        
+        body.theme-dark button:hover:not(:disabled) { 
+            filter: brightness(1.15);
+            transform: translateY(-1px);
+        }
+        
+        body.theme-dark .magnetic-btn:hover {
+            box-shadow: 
+                0 15px 40px rgba(56, 189, 248, 0.3),
+                0 0 0 1px rgba(56, 189, 248, 0.2);
+        }
+        
+        /* Pulse Glow ใน Dark Mode - ชัดเจนขึ้น */
+        body.theme-dark .pulse-glow::after {
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
+        }
+        
+        /* Hover Lift Shadow ใน Dark Mode */
+        body.theme-dark .hover-lift:hover {
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(56, 189, 248, 0.2);
+        }
+        
+        /* Gradient Border ใน Dark Mode */
+        body.theme-dark .gradient-border {
+            background: #1e293b;
+        }
+        
+        body.theme-dark .gradient-border::before {
+            background: linear-gradient(
+                var(--gradient-angle, 0deg),
+                #38bdf8,
+                #818cf8,
+                #c084fc,
+                #38bdf8
+            );
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+        }
+
+        /* ============================================
+           🎯 SPECIFIC ELEMENT FIXES
+           ============================================ */
+        /* Welcome page MG Logo */
+        body.theme-dark #page-welcome .bg-black {
+            background: #0f172a !important;
+            border-color: #475569 !important;
+        }
+        
+        /* Clock display */
+        body.theme-dark #realtime-clock {
+            color: #e2e8f0 !important;
+        }
+        
+        body.theme-dark .bg-slate-100.border-slate-200 {
+            background-color: rgba(30, 41, 59, 0.8) !important;
+            border-color: #475569 !important;
+        }
+        
+        /* Iframe background */
+        body.theme-dark #page-promo .bg-white,
+        body.theme-dark #page-catalog .bg-white {
+            background-color: #f8fafc !important;
+        }
+        
+        /* Links */
+        body.theme-dark a {
+            color: #38bdf8;
+        }
+        
+        body.theme-dark a:hover {
+            color: #7dd3fc;
+        }
+        
+        /* Strong text */
+        body.theme-dark strong {
+            color: #f1f5f9;
+        }
+        
         @media (max-width: 640px) { #themeToggle { left: 10px; bottom: 78px; padding: 8px 10px; } }
     </style>
 </head>
@@ -994,7 +1315,6 @@
 
     <!-- Firebase SDK Modules & Application Core Logic -->
     <script type="module">
-        // ... (Firebase imports และ logic เดิมทั้งหมด)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
             getAuth, 
@@ -1030,10 +1350,9 @@
         let activeView = null;
 
         // ============================================
-        // 🎨 NEW: Modern UI Enhancement JavaScript
+        // 🎨 Modern UI Enhancement JavaScript
         // ============================================
         
-        // Ripple Effect Handler
         function initRippleEffect() {
             document.addEventListener('click', (e) => {
                 const btn = e.target.closest('.ripple-btn');
@@ -1046,14 +1365,13 @@
                 btn.style.setProperty('--ripple-x', x + '%');
                 btn.style.setProperty('--ripple-y', y + '%');
                 btn.classList.remove('ripple-active');
-                void btn.offsetWidth; // force reflow
+                void btn.offsetWidth;
                 btn.classList.add('ripple-active');
                 
                 setTimeout(() => btn.classList.remove('ripple-active'), 600);
             });
         }
         
-        // Reveal Animation on Page Change
         function triggerRevealAnimations(container) {
             const elements = container.querySelectorAll('.reveal-up');
             elements.forEach((el, index) => {
@@ -1063,7 +1381,6 @@
             });
         }
         
-        // Magnetic Button Effect
         function initMagneticButtons() {
             document.addEventListener('mousemove', (e) => {
                 const buttons = document.querySelectorAll('.magnetic-btn');
@@ -1081,7 +1398,6 @@
             });
         }
         
-        // Initialize all effects
         document.addEventListener('DOMContentLoaded', () => {
             initRippleEffect();
             initMagneticButtons();
@@ -1282,7 +1598,6 @@
 
             requestAnimationFrame(() => {
                 targetPage.classList.add('page-active');
-                // 🎬 Trigger reveal animations
                 triggerRevealAnimations(targetPage);
             });
 
