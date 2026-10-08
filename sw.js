@@ -1,6 +1,10 @@
-const CACHE_NAME = 'mg-ubon-m2-v3.1.1';
+// ============================================
+// 🚀 MG M2 MOTORSPORT - SERVICE WORKER
+// ============================================
 
-// 1. Assets ที่ต้อง Cache (App Shell)
+const CACHE_NAME = 'mg-ubon-m2-v3.1.1'; // เปลี่ยนเวอร์ชันเมื่ออัปเดต
+
+// 1. แคชเฉพาะไฟล์ในเครื่องเราเท่านั้น (ปลอดภัยชัวร์)
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -9,32 +13,30 @@ const ASSETS_TO_CACHE = [
   './MG_profile.png'
 ];
 
-// 2. Install Event: Cache App Shell
+// 2. Install Event: บันทึก App Shell ลงแคช
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('⚡️ SW: กำลังบันทึก App Shell ลงแคช...');
+        console.log('⚡️ SW: กำลังบันทึก App Shell ของ MG UBON ลงในแคช...');
         return cache.addAll(ASSETS_TO_CACHE);
       })
       .then(() => {
         console.log('✅ SW: บันทึก App Shell เรียบร้อยค่ะ');
         return self.skipWaiting();
       })
-      .catch(err => {
-        console.error('❌ SW: เกิดข้อผิดพลาดในการเก็บแคช:', err);
-      })
+      .catch(err => console.error('❌ SW: เกิดข้อผิดพลาดในการเก็บแคช:', err))
   );
 });
 
-// 3. Activate Event: ล้าง Cache เก่า
+// 3. Activate Event: ล้างแคชเวอร์ชันเก่าออก
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('🧹 SW: ล้างแคชเวอร์ชันเก่า:', cache);
+            console.log('🧹 SW: ล้างแคชเวอร์ชันเก่าออกเรียบร้อยค่ะ:', cache);
             return caches.delete(cache);
           }
         })
@@ -46,19 +48,19 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 4. Fetch Event: Network First, Fallback to Cache
+// 4. Fetch Event: Network First, fallback to Cache
 self.addEventListener('fetch', (event) => {
   // ข้าม non-GET requests
   if (event.request.method !== 'GET') return;
   
-  // ข้าม Chrome extensions และ non-HTTP
+  // ข้าม non-HTTP requests
   if (!event.request.url.startsWith('http')) return;
 
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
-        // ถ้า fetch สำเร็จ ให้ cache response ไว้
-        if (networkResponse.status === 200) {
+        // ถ้า fetch สำเร็จ ให้เก็บลงแคชด้วย (Runtime Caching)
+        if (networkResponse && networkResponse.status === 200) {
           const responseClone = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseClone);
@@ -67,24 +69,23 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       })
       .catch(() => {
-        // ถ้า offline ให้ลองดึงจาก cache
+        // ถ้า offline ให้ดึงจากแคช
+        console.log('🌐 SW: อุปกรณ์อยู่ในสถานะ Offline ค่ะคุณชินอิจิ');
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) {
             return cachedResponse;
           }
           
-          // ถ้าเป็น navigation request ให้แสดง offline page
+          // ถ้าเป็นหน้าเว็บ ให้แสดง index.html จากแคช
           if (event.request.mode === 'navigate') {
             return caches.match('./index.html');
           }
           
-          // สำหรับ resources อื่นที่ไม่อยู่ใน cache
+          // สำหรับ resources อื่นที่ไม่อยู่ในแคช
           return new Response('Offline - MG M2 Motorsport', {
             status: 503,
             statusText: 'Service Unavailable',
-            headers: new Headers({
-              'Content-Type': 'text/plain'
-            })
+            headers: new Headers({ 'Content-Type': 'text/plain' })
           });
         });
       })
